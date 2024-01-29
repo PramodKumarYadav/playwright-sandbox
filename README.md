@@ -2,7 +2,7 @@
 
 I have created this repo to both practice playwright and in the process create a template project that can be used by teams to work on real projects for doing end to end test automation. 
 
-## Setup
+## ⚙️ Setup
 
 ### Clone Project
 
@@ -16,7 +16,7 @@ Install project dependencies by running below command:
 npm install
 ```
 
-## Getting Started
+## 🔢 Getting Started
 
 ### Running tests
 
@@ -26,10 +26,10 @@ Use the [VS Code Extension](https://marketplace.visualstudio.com/items?itemName=
 npx playwright test --ui
 ```
 
-## Test report 
+## 🐞 Test report 
 
 - [Test report from latest CI run on GitHub Pages](https://pramodkumaryadav.github.io/playwright-sandbox/)
 
-## Reference
+## ※ Reference
 
 - [Playwright Home Page](https://playwright.dev/) 🎭 with Node.js.
