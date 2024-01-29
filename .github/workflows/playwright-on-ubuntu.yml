@@ -8,6 +8,9 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
+permissions: 
+  contents: write
+
 jobs:
   test:
     timeout-minutes: 60
@@ -35,24 +38,10 @@ jobs:
         path: playwright-report/
         retention-days: 30
   
-  # Deploy test results to GitHub Pages
-  publish-test-results:
-    # Add a dependency to the test job
-    needs: test
-
-    # Grant GITHUB_TOKEN the permissions required to make a Pages deployment
-    permissions:
-      pages: write      # to deploy to Pages
-      id-token: write   # to verify the deployment originates from an appropriate source
-
-    # Deploy to the github-pages environment
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-
-    # Specify runner + deployment step
-    runs-on: ubuntu-latest
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4 # or specific "vX.X.X" version tag for this action
+    - name: Deploy to GitHub Pages
+      uses: crazy-max/ghaction-github-pages@v4
+      with:
+        target_branch: gh-pages
+        build_dir: playwright-report
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
