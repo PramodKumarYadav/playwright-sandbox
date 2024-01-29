@@ -57,7 +57,8 @@ jobs:
   publish-results:
     # Add a dependency to the test job
     needs: test
-
+    if: always()
+    
     # Deploy to the github-pages environment
     environment:
       name: github-pages
