@@ -8,6 +8,7 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
+# Required to deploy to GitHub Pages 
 permissions: 
   contents: write
 
@@ -38,15 +39,6 @@ jobs:
         path: playwright-report/
         retention-days: 30
     
-    # After pushing this step to main branch, this step will create a new "gh-pages" named remote branch. 
-    # This is the default branch to do github pages deployment of test results.
-    # Once this branch is created, 
-    #   Go to Project Settings -> then -> Pages -> Build and deployment -> Source -> Select deploy from a branch 
-    #   -> Branch select -> gh-pages branch
-    # Now, automatically a new deployment with name "pages-build-deployment" will be created and visible under Actions tab.
-    # and the pages will be deployed to: https://pramodkumaryadav.github.io/playwright-sandbox/
-    # From now on, whenever you push to main branch, the pages will be deployed automatically under above workflow and URL.
-    # NOTE: You do NOT need to set the GIT_TOKEN in secrets for this to work. It works out of box automatically.
     - name: Deploy to GitHub Pages
       uses: crazy-max/ghaction-github-pages@v4
       with:
