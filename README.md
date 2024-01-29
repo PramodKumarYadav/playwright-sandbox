@@ -28,14 +28,14 @@ npx playwright test --ui
 
 ## 🐞 Playwright Test report 
 
-- Test report in CI is available in the latest workflow run as a URL under `publish-results` step (as shown in below image). You can also refer the latest report from [here](https://pramodkumaryadav.github.io/playwright-sandbox/).
+Test report in CI is available in the latest workflow run as a URL under `publish-results` step (as shown in below image). You can also refer the latest report from [here](https://pramodkumaryadav.github.io/playwright-sandbox/).
 
 <img src="./docs/results-url.png" alt="Image Alt Text" width="600" height="200">
 
 
 > [!TIP]
 > - To get a similar test report for your project, [follow step 1 till step 4 of this article](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site#publishing-with-a-custom-github-actions-workflow). Thats it!
-> -  Now every time the workflow runs, you will have test results published on GitHub Pages with the link of URL mentioned in the publish-results step as show in above image. 
+> -  Now every time the workflow runs, you will have test results published and available as mentioned in this section. 
 
 ## ※ Reference
 
