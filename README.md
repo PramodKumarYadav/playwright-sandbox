@@ -29,6 +29,7 @@ npx playwright test --ui
 ## Test report 
 
 - [Test report from latest CI run on GitHub Pages](https://pramodkumaryadav.github.io/playwright-sandbox/)
+
 ## Reference
 
 - [Playwright Home Page](https://playwright.dev/) 🎭 with Node.js.
