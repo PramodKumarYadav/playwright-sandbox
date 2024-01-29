@@ -28,17 +28,11 @@ npx playwright test --ui
 
 ## 🐞 Playwright Test report 
 
-- The latest Playwright test report for last CI run on GitHub Actions is available [here](https://pramodkumaryadav.github.io/playwright-sandbox/).
+- Test report in CI is available in the latest workflow run as a URL under `publish-results` step. You can also refer the latest report [here](https://pramodkumaryadav.github.io/playwright-sandbox/).
 
 > [!TIP]
-> - If you want to get a similar report for your project repository, then after first run of workflow in CI, follow the steps [mentioned here](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site#publishing-from-a-branch). In step6, select `gh-pages` branch (and not the main branch). Select /(root) and Save.
-> - Once you save the above step; automatically a new deployment with name `pages-build-deployment` will be created, triggered and get visible under Actions tab. 
-> - At completion of this workflow, the `playwright-report` test report will be deployed to: https://your-github-user-name.github.io/your-project-name/ . Example, for the current project it is: https://pramodkumaryadav.github.io/playwright-sandbox/).
-> - From now on, whenever you push to main branch, the pages will be deployed automatically under above workflow and URL.
-
-> [!IMPORTANT]
-> - Note that, the very first CI run of workflow `playwright-on-ubuntu` will create a new branch named `gh-pages` in remote repository. This is created by workflow action `crazy-max/ghaction-github-pages@v4`. You do not need to (and should not need to) create the `gh-pages` branch manually. 
-> - You also do NOT need to set the ${{ secrets.GITHUB_TOKEN }} in secrets for this to work. It works out of box automatically.
+> - To get a similar test report for your project, [follow step 1 till step3 of this article](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site#publishing-with-a-custom-github-actions-workflow). Thats it!
+> -  Now every time the workflow runs, you will have test results published on GitHub Pages with the link of URL mentioned in the publish-results step as show in below image. ![results-url](./docs/results-url.png)
 
 ## ※ Reference
 
