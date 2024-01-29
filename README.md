@@ -28,7 +28,7 @@ npx playwright test --ui
 
 ## 🐞 Playwright Test report 
 
-- The latest [Playwright HTML Test report ](https://pramodkumaryadav.github.io/playwright-sandbox/) for the latest CI run on GitHub Actions is available on projects GitHub hosted Page.
+- The latest Playwright test report for last CI run on GitHub Actions is available [here](https://pramodkumaryadav.github.io/playwright-sandbox/).
 
 > [!TIP]
 > - If you want to get a similar report for your project repository, then after first run of workflow in CI, follow the steps [mentioned here](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site#publishing-from-a-branch). In step6, select `gh-pages` branch (and not the main branch). Select /(root) and Save.
