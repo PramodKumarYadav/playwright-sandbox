@@ -1,0 +1,14 @@
+{
+  "name": "playwright-sandbox",
+  "version": "1.0.0",
+  "description": "My Playground for learning Playwright",
+  "main": "index.js",
+  "scripts": {},
+  "keywords": ["playwright", "typescript", "test"],
+  "author": "Power Tester",
+  "license": "ISC",
+  "devDependencies": {
+    "@playwright/test": "^1.41.1",
+    "@types/node": "^20.11.10"
+  }
+}
