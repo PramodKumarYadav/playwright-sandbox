@@ -24,9 +24,9 @@ concurrency:
 jobs:
   test:
     timeout-minutes: 60
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+    # environment:
+    #   name: github-pages
+    #   url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
@@ -47,16 +47,13 @@ jobs:
         run: npx playwright test
       
       - name: Setup and Enable Pages
+        if: always()
         uses: actions/configure-pages@v4
         
-      - name: Upload artifact
+      - name: Upload artifact playwright-report
         uses: actions/upload-pages-artifact@v3
         with:
           path: 'playwright-report'
-          
-      # - name: Deploy to GitHub Pages
-      #   id: deployment
-      #   uses: actions/deploy-pages@v4
   
   # Publish test results job
   publish-test-results:
