@@ -37,7 +37,13 @@ jobs:
         name: playwright-report
         path: playwright-report/
         retention-days: 30
-  
+    
+    # After adding this step, the first run will pass but will only create a gh-pages remote branch. 
+    # Note that there will be no deployemnt to verify yet at https://pramodkumaryadav.github.io/playwright-sandbox/. 
+    # Once you have the gh-pages branch, you need to go to  Project Settings 
+    #  then -> Pages -> Build and deployment -> Source -> Select deploy from a branch -> Branch select -> gh-pages branch
+    # Now, if there is new run, the pages will be deployed to: https://pramodkumaryadav.github.io/playwright-sandbox/
+
     - name: Deploy to GitHub Pages
       uses: crazy-max/ghaction-github-pages@v4
       with:
