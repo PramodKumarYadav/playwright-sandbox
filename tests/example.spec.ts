@@ -8,6 +8,8 @@ test('has title', async ({ page }) => {
 });
 
 test('get started link', async ({ page }) => {
+  test.fail(); // To test CI reports for failing runs.
+
   await page.goto('https://playwright.dev/');
 
   // Click the get started link.
