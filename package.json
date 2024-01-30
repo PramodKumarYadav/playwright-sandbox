@@ -5,7 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "npx playwright test",
-    "test:headed": "npx playwright test --headed"
+    "test:headed": "npx playwright test --headed",
+    "prettier": "npx prettier --write .",
+    "prettier:check": "npx prettier --check .",
+    "prepare": "husky install"
   },
   "keywords": [
     "playwright",
@@ -17,6 +20,12 @@
   "devDependencies": {
     "@playwright/test": "^1.41.1",
     "@types/node": "^20.11.10",
+    "eslint-config-prettier": "^9.1.0",
+    "husky": "^9.0.7",
+    "lint-staged": "^15.2.0",
     "prettier": "3.2.4"
+  },
+  "lint-staged": {
+    "*.{ts,js,json,yml,css,md}": "prettier --write"
   }
 }
