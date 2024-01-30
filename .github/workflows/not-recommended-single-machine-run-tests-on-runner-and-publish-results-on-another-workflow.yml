@@ -1,6 +1,8 @@
-# This workflow is not recommended to be used. Reason is, it creates another automated workflow to deploy the test results to GitHub Pages. Which means the results URL is not in context with the pipeline that runs the test. Thus this is for educations purposes only.
+# This workflow is not recommended to be used and is for educations purposes only.
+# Reason is, it creates another automated workflow to deploy the test results to GitHub Pages. 
+# Which means the results URL is not in context with the pipeline that runs the test. 
 # Reference: https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site#publishing-from-a-branch
-name: Test and Publish test results to GitHub Pages
+name: Single machine - Run Tests and Publish test results to GitHub Pages
 on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -9,26 +11,34 @@ on:
 permissions: 
     contents: write
 
+# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
+# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
 jobs:
   playwright:
     name: 'Playwright Tests'
+    timeout-minutes: 60
     runs-on: ubuntu-latest
-    container:
-      image: mcr.microsoft.com/playwright:v1.41.1-jammy
     steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+      
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
           node-version: 18
-
-      - name: Install dependencies
+  
+      - name: Install project dependencies
         run: npm ci
 
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+  
       - name: Run Playwright tests
         run: npx playwright test
-        env:
-          HOME: /root
 
       - uses: actions/upload-artifact@v4
         if: always()
