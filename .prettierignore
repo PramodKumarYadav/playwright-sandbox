@@ -1,0 +1,20 @@
+# NOTE: Prettier also uses .gitignore file to determine which files to ignore. So there is a bit of redundancy here.
+# Reference: https://prettier.io/docs/en/ignore
+
+# Ignores version control files and node_modules by default
+
+# Ignore Playwright artifacts:
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+
+# IDE Specific
+.vscode/*
+.idea/*
+
+# System Files
+.DS_Store
+
+# Ignore all HTML files:
+**/*.html

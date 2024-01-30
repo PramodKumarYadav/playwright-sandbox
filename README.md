@@ -41,3 +41,4 @@ Test report URL for the latest run in CI is available in the run itself and here
 
 - [Playwright Home Page](https://playwright.dev/) 🎭 with Node.js.
 - [Pre Commit hook for Linting](https://prettier.io/docs/en/precommit#option-1-lint-stagedhttpsgithubcomokonetlint-staged). We use option 1 and as recommended in their docs, commit `.husky` directory in git to share with all team members.
+- [All prettier options that can be overriden are here](https://prettier.io/docs/en/options). However note that defaults are good enough and need no further changes except one made in `.prettierrc` file for both practical reasons and demo purposes.
