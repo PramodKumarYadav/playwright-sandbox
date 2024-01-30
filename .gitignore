@@ -1,3 +1,6 @@
+# NOTE: Prettier also uses this file to determine which files to ignore
+# Reference: https://prettier.io/docs/en/install
+
 # Project Specific
 node_modules/
 /test-results/
@@ -11,3 +14,6 @@ node_modules/
 
 # System Files
 .DS_Store
+
+# Skip html files
+*.html

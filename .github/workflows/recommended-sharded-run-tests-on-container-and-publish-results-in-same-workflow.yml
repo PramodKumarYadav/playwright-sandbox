@@ -32,16 +32,16 @@ jobs:
       fail-fast: false
       matrix:
         # Give same names as of projects in playwright.config.ts since all those projects are being tested.
-        browser-type: ['chromium', 'firefox', 'webkit']
+        browser-type: ["chromium", "firefox", "webkit"]
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
-      
+
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 18
-  
+
       - name: Install project dependencies
         run: npm ci
 
@@ -55,10 +55,10 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: blob-report-${{ matrix.browser-type }} 
+          name: blob-report-${{ matrix.browser-type }}
           path: blob-report
           retention-days: 1
-  
+
   merge-reports:
     # Merge reports after playwright-tests, even if some shards have failed
     needs: [test]
@@ -68,7 +68,7 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
-    
+
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
@@ -85,7 +85,7 @@ jobs:
           merge-multiple: true
 
       - name: Merge into HTML Report
-        run: npx playwright merge-reports --reporter html ./all-blob-reports 
+        run: npx playwright merge-reports --reporter html ./all-blob-reports
 
       - name: Upload HTML report
         uses: actions/upload-artifact@v4
@@ -93,21 +93,21 @@ jobs:
           name: html-report--attempt-${{ github.run_attempt }}
           path: playwright-report
           retention-days: 14
-  
+
       - name: Setup and Enable Pages
         uses: actions/configure-pages@v4
-        
+
       - name: Upload artifact playwright-report
         uses: actions/upload-pages-artifact@v3
         with:
-          path: 'playwright-report'
-  
+          path: "playwright-report"
+
   # Publish test results job
   publish-results:
     # Add a dependency to the test job
     needs: merge-reports
     if: always()
-    
+
     # Deploy to the github-pages environment
     environment:
       name: github-pages
