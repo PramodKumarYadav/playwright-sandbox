@@ -1,6 +1,4 @@
-# This workflow is not recommended to be used. Reason is, it creates another automated 
-# workflow to deploy the test results to GitHub Pages. Which means the results URL is not in context
-# with the pipeline that runs the test. This is for educations purposes only.
+# This workflow is not recommended to be used. Reason is, it creates another automated workflow to deploy the test results to GitHub Pages. Which means the results URL is not in context with the pipeline that runs the test. Thus this is for educations purposes only.
 # Reference: https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site#publishing-from-a-branch
 name: Test and Publish test results to GitHub Pages
 on:
