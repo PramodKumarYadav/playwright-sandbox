@@ -24,6 +24,7 @@ concurrency:
 
 jobs:
   test:
+    name: test (${{ matrix.shardIndex }}/${{ strategy.job-total }})
     timeout-minutes: 60
     runs-on: ubuntu-latest
     strategy:
@@ -31,7 +32,6 @@ jobs:
       matrix:
         # browser-type: ['chromium', 'firefox', 'webkit']
         shardIndex: [1, 2, 3, 4]
-        # shardTotal: [4]
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
