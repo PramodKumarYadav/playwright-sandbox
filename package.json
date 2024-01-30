@@ -3,7 +3,10 @@
   "version": "1.0.0",
   "description": "My Playground for learning Playwright",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "test": "npx playwright test",
+    "test:ci": "npx playwright test --shard=$((${{ strategy.job-index }} + 1))/${{ strategy.job-total }} --reporter=blob"
+  },
   "keywords": ["playwright", "typescript", "test"],
   "author": "Power Tester",
   "license": "ISC",
