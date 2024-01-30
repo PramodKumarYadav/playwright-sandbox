@@ -1,6 +1,8 @@
 # 🎭 Playwright Sandbox
 
-I have created this repo to both practice playwright and in the process create a template project that can be used by teams to work on real projects for doing end to end test automation. 
+I have created this repo to both practice playwright and in the process create a feature rich template project that QAs can use for their real projects for doing end to end test automation. 
+
+![example workflow](https://github.com/PramodKumarYadav/playwright-sandbox/actions/workflows/run-tests-and-publish-results.yml/badge.svg)
 
 ## 🚀 Getting Started
 
