@@ -31,15 +31,18 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # browser-type: ['chromium', 'firefox', 'webkit']
-        browser-type: ['chromium']
+        browser-type: ['chromium', 'firefox', 'webkit']
+        # browser-type: ['chromium']
         # shardIndex: [1, 2, 3, 4]
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
       
       - name: Get job number
-        run: echo "Job number is ${{ strategy.job-index }}"
+        run: |
+          echo "Job number is ${{ strategy.job-index }}"
+          echo "::set-env name=UPDATED_VALUE::$((${{ strategy.job-index }} + 1))" >> $GITHUB_ENV
+          echo "Updated value is $(env.UPDATED_VALUE)"
 
       - name: Setup Node
         uses: actions/setup-node@v4
