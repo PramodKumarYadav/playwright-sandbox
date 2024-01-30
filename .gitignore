@@ -1,8 +1,13 @@
+# Project Specific
 node_modules/
 /test-results/
 /playwright-report/
 /blob-report/
 /playwright/.cache/
 
-# MAC files
+# IDE Specific
+.vscode/*
+.idea/*
+
+# System Files
 .DS_Store

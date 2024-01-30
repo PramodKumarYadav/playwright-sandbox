@@ -7,11 +7,16 @@
     "test": "npx playwright test",
     "test:headed": "npx playwright test --headed"
   },
-  "keywords": ["playwright", "typescript", "test"],
+  "keywords": [
+    "playwright",
+    "typescript",
+    "test"
+  ],
   "author": "Power Tester",
   "license": "ISC",
   "devDependencies": {
     "@playwright/test": "^1.41.1",
-    "@types/node": "^20.11.10"
+    "@types/node": "^20.11.10",
+    "prettier": "3.2.4"
   }
 }
