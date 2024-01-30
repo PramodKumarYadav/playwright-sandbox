@@ -42,10 +42,10 @@ jobs:
       - name: Set Job Index
         env:
           JOB_INDEX_ZERO_BASED: ${{ strategy.job-index }}
-          JOB_INDEX: $(($JOB_INDEX_ZERO_BASED+1))
+          JOB_INDEX: 
         run: |
           echo "JOB_INDEX=$(($JOB_INDEX_ZERO_BASED+1))" >> "$GITHUB_ENV"
-      - run: echo $JOB_INDEX
+          echo $JOB_INDEX
 
       - name: Setup Node
         uses: actions/setup-node@v4
