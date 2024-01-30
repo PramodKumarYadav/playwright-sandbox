@@ -56,16 +56,6 @@ jobs:
           name: blob-report-${{ matrix.shardIndex }}
           path: blob-report
           retention-days: 1
-
-      # - name: Setup and Enable Pages
-      #   if: always()
-      #   uses: actions/configure-pages@v4
-        
-      # - name: Upload artifact playwright-report
-      #   if: always()
-      #   uses: actions/upload-pages-artifact@v3
-      #   with:
-      #     path: 'playwright-report'
   
   merge-reports:
     # Merge reports after playwright-tests, even if some shards have failed
