@@ -28,14 +28,12 @@ npx playwright test --ui
 
 ## 🐞 Playwright Test report 
 
-Test report for the latest run in CI is available in the run itself and here: https://pramodkumaryadav.github.io/playwright-sandbox/
-
-<!-- <img src="./docs/results-url.png" alt="Image Alt Text" width="600" height="200"> -->
+Test report URL for the latest run in CI is available in the run itself (as shown below) and here: https://pramodkumaryadav.github.io/playwright-sandbox/
 
 ![test-result](./docs/pass-results.png)
 
 > [!NOTE]
-> For the above report to be available, as a one time measure, a project admin or maintainer has to manually enable `Pages` settings to use `GithHub Actions` as a source for Build and Deployment. The detailed steps are mentioned here in github official docs. [Follow step 1 till step 4 of this article](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site#publishing-with-a-custom-github-actions-workflow). 
+> For the above report to be available, as a one time measure, a project admin or maintainer has to manually enable `Pages` settings to use `GithHub Actions` as a source for `Build and Deployment`. The detailed steps are mentioned in github official docs [here. Perform only step 1 till 4 of this article](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site#publishing-with-a-custom-github-actions-workflow). 
 
 
 ## ※ Reference
