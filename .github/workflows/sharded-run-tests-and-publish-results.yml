@@ -40,8 +40,8 @@ jobs:
       
       - name: Set Job Index
         env:
-          # JOB_INDEX_ZERO_BASED: ${{ strategy.job-index }}
-          JOB_INDEX: ${{ strategy.job-index }}
+          JOB_INDEX_ZERO_BASED: ${{ strategy.job-index }}
+          JOB_INDEX: $(($JOB_INDEX_ZERO_BASED+1))
         run: |
           echo "JOB_INDEX=$(($JOB_INDEX_ZERO_BASED+1))" >> "$GITHUB_ENV"
       - run: echo $JOB_INDEX
