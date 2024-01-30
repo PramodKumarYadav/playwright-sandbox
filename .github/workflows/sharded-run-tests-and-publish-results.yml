@@ -32,7 +32,7 @@ jobs:
       fail-fast: false
       matrix:
         browser-type: ['chromium', 'firefox', 'webkit']
-        shardIndex: [1, 2, 3, 4]
+        # shardIndex: [1, 2, 3, 4]
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -49,8 +49,8 @@ jobs:
         run: npx playwright install --with-deps
   
       - name: Run Playwright tests
-        run: npx playwright test --project=${{ matrix.browser-type }} --shard=${{ matrix.shardIndex }}/${{ strategy.job-total }} --reporter=blob
-        # run: npx playwright test --project=${{ matrix.browser-type }} --shard=${{ matrix.browser-type }} --reporter=blob
+        # run: npx playwright test --shard=${{ matrix.shardIndex }}/${{ strategy.job-total }} --reporter=blob
+        run: npx playwright test --project=${{ matrix.browser-type }} --reporter=blob
       
       - name: Upload blob report to GitHub Actions Artifacts
         if: always()
