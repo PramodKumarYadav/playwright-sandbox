@@ -47,13 +47,6 @@ jobs:
   
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
-  
-      - name: Add a number to the variable
-        run: |
-          # Add a number to the variable
-          job-index=$((${{ strategy.job-index }} + 1))
-          echo "job-index: $job-index"
-        shell: bash
 
       - name: Run Playwright tests
         # run: npx playwright test --shard=${{ matrix.shardIndex }}/${{ strategy.job-total }} --reporter=blob
