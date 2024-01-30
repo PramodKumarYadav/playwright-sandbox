@@ -4,9 +4,8 @@ name: Test and Publish test results to GitHub Pages
 
 on:
   # Runs on pushes targeting the default branch
-  # Commenting for now to test the sharding workflow.
-  # push:
-  #   branches: ["main"]
+  push:
+    branches: ["main"]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -27,6 +26,11 @@ jobs:
   test:
     timeout-minutes: 60
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        shardIndex: [1, 2, 3, 4]
+        shardTotal: [4]
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -43,14 +47,65 @@ jobs:
         run: npx playwright install --with-deps
   
       - name: Run Playwright tests
-        run: npx playwright test
+        run: npx playwright test --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }} --reporter=blob
       
-      - name: Setup and Enable Pages
+      - name: Upload blob report to GitHub Actions Artifacts
         if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: blob-report-${{ matrix.shardIndex }}
+          path: blob-report
+          retention-days: 1
+
+      # - name: Setup and Enable Pages
+      #   if: always()
+      #   uses: actions/configure-pages@v4
+        
+      # - name: Upload artifact playwright-report
+      #   if: always()
+      #   uses: actions/upload-pages-artifact@v3
+      #   with:
+      #     path: 'playwright-report'
+  
+  merge-reports:
+    # Merge reports after playwright-tests, even if some shards have failed
+    needs: [test]
+    if: always()
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+    
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install project dependencies
+        run: npm ci
+
+      - name: Download blob reports from GitHub Actions Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: all-blob-reports
+          pattern: blob-report-*
+          merge-multiple: true
+
+      - name: Merge into HTML Report
+        run: npx playwright merge-reports --reporter html ./all-blob-reports 
+
+      - name: Upload HTML report
+        uses: actions/upload-artifact@v4
+        with:
+          name: html-report--attempt-${{ github.run_attempt }}
+          path: playwright-report
+          retention-days: 14
+  
+      - name: Setup and Enable Pages
         uses: actions/configure-pages@v4
         
       - name: Upload artifact playwright-report
-        if: always()
         uses: actions/upload-pages-artifact@v3
         with:
           path: 'playwright-report'
@@ -58,7 +113,7 @@ jobs:
   # Publish test results job
   publish-results:
     # Add a dependency to the test job
-    needs: test
+    needs: merge-reports
     if: always()
     
     # Deploy to the github-pages environment
