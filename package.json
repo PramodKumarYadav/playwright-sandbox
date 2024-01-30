@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "npx playwright test",
-    "test:ci": "npx playwright test --shard=$((${{ strategy.job-index }} + 1))/${{ strategy.job-total }} --reporter=blob"
+    "test:blob": "npx playwright test --reporter=blob"
   },
   "keywords": ["playwright", "typescript", "test"],
   "author": "Power Tester",
