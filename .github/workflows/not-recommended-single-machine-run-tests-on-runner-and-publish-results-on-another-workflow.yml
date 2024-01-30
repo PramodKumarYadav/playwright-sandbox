@@ -1,7 +1,12 @@
-# This workflow is not recommended to be used and is for educations purposes only.
-# Reason is, it creates another automated workflow to deploy the test results to GitHub Pages. 
-# Which means the results URL is not in context with the pipeline that runs the test. 
-# Reference: https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site#publishing-from-a-branch
+# This workflow is not recommended to be used and is for educational purposes only.
+# Reason is, 
+# 1. It uses "publishing-from-a-branch" strategy that creates another automated workflow to deploy the test results to GitHub Pages. 
+#   Which means the results URL is not in context with the pipeline that runs the test. This is not very useful.
+#   Reference: https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site#publishing-from-a-branch
+# 2. It uses "crazy-max/ghaction-github-pages@v4" action to deploy the test results to GitHub Pages. This action is not verified (compared to the actions provided by GitHub).
+# 3. This does not use container but installs Playwright browsers on the runner machine. This is slower compared to using docker containe which comes with pre installed browsers and dependencies. 
+#   Also this approach is not as consistent as using docker container.
+
 name: Single machine - Run Tests and Publish test results to GitHub Pages
 on:
   # Allows you to run this workflow manually from the Actions tab
