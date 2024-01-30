@@ -5,7 +5,8 @@
 #   Reference: https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site#publishing-from-a-branch
 # 2. It uses "crazy-max/ghaction-github-pages@v4" action to deploy the test results to GitHub Pages. This action is not verified (compared to the actions provided by GitHub).
 # 3. This does not use container but installs Playwright browsers on the runner machine. This is slower compared to using docker containe which comes with pre installed browsers and dependencies. 
-#   Also this approach is not as consistent as using docker container.
+#   Also this approach is not as robust as using docker container since it can break due to changes in the dependencies that are being installed.
+# 4. Last but not the least, this workflow demonstrates how to run tests on a single machine. This is much slower than the other example that runs tests on multiple machines in parallel using Sharding.
 
 name: Single machine - Run Tests and Publish test results to GitHub Pages
 on:
