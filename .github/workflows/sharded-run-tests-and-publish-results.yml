@@ -42,7 +42,7 @@ jobs:
         run: |
           echo "Job number is ${{ strategy.job-index }}"
           echo "::set-env name=UPDATED_VALUE::$((${{ strategy.job-index }} + 1))" >> $GITHUB_ENV
-          echo "Updated value is $(env.UPDATED_VALUE)"
+          echo "Updated value is $env.UPDATED_VALUE"
 
       - name: Setup Node
         uses: actions/setup-node@v4
