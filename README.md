@@ -2,7 +2,7 @@
 
 I have created this repo to both practice playwright and in the process create a feature rich template project that QAs can use for their real projects for doing end to end test automation. 
 
-![CI Test workflow](https://github.com/PramodKumarYadav/playwright-sandbox/actions/workflows/run-tests-and-publish-results.yml/badge.svg)
+[![Multi machine - Run Tests and Publish test results to GitHub Pages](https://github.com/PramodKumarYadav/playwright-sandbox/actions/workflows/recommended-sharded-run-tests-on-container-and-publish-results-in-same-workflow.yml/badge.svg?branch=main)](https://github.com/PramodKumarYadav/playwright-sandbox/actions/workflows/recommended-sharded-run-tests-on-container-and-publish-results-in-same-workflow.yml)
 
 ## 🚀 Getting Started
 
