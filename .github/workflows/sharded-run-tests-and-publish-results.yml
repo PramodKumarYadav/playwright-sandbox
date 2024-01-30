@@ -45,8 +45,10 @@ jobs:
           JOB_INDEX: 
         run: |
           echo "JOB_INDEX=$(($JOB_INDEX_ZERO_BASED+1))" >> "$GITHUB_ENV"
-          echo $JOB_INDEX
-
+          
+      - name: Print Job Index
+        run: echo $JOB_INDEX
+      
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
