@@ -25,7 +25,7 @@ concurrency:
 jobs:
   test:
     # name: test (${{ matrix.shardIndex }}/${{ strategy.job-total }})
-    name: test ${{ matrix.browser-type }} 
+    name: test
     timeout-minutes: 60
     runs-on: ubuntu-latest
     strategy:
