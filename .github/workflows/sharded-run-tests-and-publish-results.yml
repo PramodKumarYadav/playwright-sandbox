@@ -51,7 +51,7 @@ jobs:
       - name: Run Playwright tests
         # run: npx playwright test --shard=${{ matrix.shardIndex }}/${{ strategy.job-total }} --reporter=blob
         # Index is zero based so add one to get shards as 1/3, 2/3, 3/3
-        run: npx playwright test --shard= $((${{ strategy.job-total }} + 1))/${{ strategy.job-total }} --reporter=blob
+        run: npx playwright test --shard= $((${{ strategy.job-index }} + 1))/${{ strategy.job-total }} --reporter=blob
         # run: npx playwright test --project=${{ matrix.browser-type }} --reporter=blob
       
       - name: Upload blob report to GitHub Actions Artifacts
