@@ -435,10 +435,16 @@ async function checkNumberOfTodosInLocalStorage(page: Page, expected: number) {
   }, expected);
 }
 
+type Todo = {
+  title: string;
+  completed: string;
+  // include other properties of a todo item here
+};
+
 async function checkNumberOfCompletedTodosInLocalStorage(page: Page, expected: number) {
   return await page.waitForFunction((e) => {
     return (
-      JSON.parse(localStorage["react-todos"]).filter((todo: any) => todo.completed)
+      JSON.parse(localStorage["react-todos"]).filter((todo: Todo) => todo.completed)
         .length === e
     );
   }, expected);
@@ -447,7 +453,7 @@ async function checkNumberOfCompletedTodosInLocalStorage(page: Page, expected: n
 async function checkTodosInLocalStorage(page: Page, title: string) {
   return await page.waitForFunction((t) => {
     return JSON.parse(localStorage["react-todos"])
-      .map((todo: any) => todo.title)
+      .map((todo: Todo) => todo.title)
       .includes(t);
   }, title);
 }
