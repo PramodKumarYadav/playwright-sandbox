@@ -1,4 +1,6 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-npx lint-staged
+# Run lint-staged to fix formatting, lint:check to check code issues and unit tests
+npx lint-staged && npm run lint:check && npm run test:unit
+
