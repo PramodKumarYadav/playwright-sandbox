@@ -7,9 +7,9 @@
     "test": "npx playwright test",
     "test:headed": "npx playwright test --headed",
     "test:unit": "npx playwright test --grep @unit-test",
-    "lint:check": "npx eslint .",
+    "lint": "npx eslint .",
     "lint:fix": "npx eslint . --fix",
-    "prettier:check": "npx prettier --check .",
+    "prettier": "npx prettier --check .",
     "prettier:fix": "npx prettier --write .",
     "prepare": "husky install"
   },
