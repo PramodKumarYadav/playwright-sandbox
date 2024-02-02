@@ -444,7 +444,7 @@ type Todo = {
 async function checkNumberOfCompletedTodosInLocalStorage(page: Page, expected: number) {
   return await page.waitForFunction((e) => {
     return (
-      JSON.parse(localStorage["react-todos"]).filter((todo: Todo) => todo.completed)
+      JSON.parse(localStorage["react-todos"]).filter((todo: any) => todo.completed)
         .length === e
     );
   }, expected);
