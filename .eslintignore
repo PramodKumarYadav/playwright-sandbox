@@ -1,0 +1,3 @@
+# Specify here only files that are not already ignored in .gitignore but that we 
+# want to ignore in Prettier: such as visual snapshot compare files.
+**/*.png
