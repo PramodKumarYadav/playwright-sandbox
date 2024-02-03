@@ -22,4 +22,9 @@ module.exports = {
   //     },
   //   ],
   // },
+  settings: {
+    playwright: {
+      additionalAssertFunctionNames: ['assertCustomCondition'],
+    },
+  },
 };
