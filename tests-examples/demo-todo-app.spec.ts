@@ -206,7 +206,7 @@ test.describe("Editing", () => {
       todoItem.locator("label", {
         hasText: TODO_ITEMS[1],
       }),
-    ).toBeHidden();
+    ).not.toBeVisible();
     await checkNumberOfTodosInLocalStorage(page, 3);
   });
 
