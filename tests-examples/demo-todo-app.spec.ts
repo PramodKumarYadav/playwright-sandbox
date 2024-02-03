@@ -367,7 +367,7 @@ test.describe("Routing", () => {
     await checkNumberOfCompletedTodosInLocalStorage(page, 1);
 
     await test.step("Showing all items", async () => {
-      page.getByRole("link", { name: "All" }).click();
+      await page.getByRole("link", { name: "All" }).click();
       await expect(todoItem).toHaveCount(3);
     });
 

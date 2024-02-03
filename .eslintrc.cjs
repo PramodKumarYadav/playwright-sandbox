@@ -24,7 +24,7 @@ module.exports = {
   // },
   settings: {
     playwright: {
-      additionalAssertFunctionNames: ['assertCustomCondition'],
+      additionalAssertFunctionNames: ["assertCustomCondition"],
     },
   },
 };
