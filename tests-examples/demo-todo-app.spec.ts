@@ -201,7 +201,7 @@ test.describe("Editing", () => {
   test("should hide other controls when editing", async ({ page }) => {
     const todoItem = page.getByTestId("todo-item").nth(1);
     await todoItem.dblclick();
-    await expect(todoItem.getByRole("checkbox")).not.toBeVisible();
+    await expect(todoItem.getByRole("checkbox")).toBeHidden();
     await expect(
       todoItem.locator("label", {
         hasText: TODO_ITEMS[1],
