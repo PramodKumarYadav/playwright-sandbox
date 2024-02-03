@@ -380,7 +380,7 @@ test.describe("Routing", () => {
     });
 
     await expect(todoItem).toHaveCount(1);
-    await page.goBack();
+    page.goBack();
     await expect(todoItem).toHaveCount(2);
     await page.goBack();
     await expect(todoItem).toHaveCount(3);
