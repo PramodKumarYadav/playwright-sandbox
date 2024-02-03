@@ -206,7 +206,7 @@ test.describe("Editing", () => {
       todoItem.locator("label", {
         hasText: TODO_ITEMS[1],
       }),
-    ).not.toBeVisible();
+    ).toBeHidden();
     await checkNumberOfTodosInLocalStorage(page, 3);
   });
 
@@ -380,7 +380,7 @@ test.describe("Routing", () => {
     });
 
     await expect(todoItem).toHaveCount(1);
-    page.goBack();
+    await page.goBack();
     await expect(todoItem).toHaveCount(2);
     await page.goBack();
     await expect(todoItem).toHaveCount(3);
