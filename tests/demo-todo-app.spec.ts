@@ -22,6 +22,8 @@ test.describe("New Todo", () => {
     await newTodo.fill(TODO_ITEMS[1]);
     await newTodo.press("Enter");
 
+    iterateLoop();
+
     // Make sure the list now has two todo items.
     await expect(page.getByTestId("todo-title")).toHaveText([
       TODO_ITEMS[0],
@@ -418,6 +420,12 @@ test.describe("Routing", () => {
     await expect(completedLink).toHaveClass("selected");
   });
 });
+
+function iterateLoop() {
+  for (let i = 0; i < 5; i++) {
+    console.log(i);
+  }
+}
 
 async function createDefaultTodos(page: Page) {
   // create a new todo locator
