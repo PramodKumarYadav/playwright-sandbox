@@ -29,6 +29,7 @@ jobs:
   test:
     timeout-minutes: 60
     runs-on: ubuntu-latest
+    environment: dev
     container:
       image: mcr.microsoft.com/playwright:v1.41.1-jammy
     strategy:
