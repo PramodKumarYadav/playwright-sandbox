@@ -3,6 +3,7 @@ import config from "config";
 
 test("config test @config", async ({ page }) => {
   console.log("NODE_ENV value: ", process.env.NODE_ENV);
+  console.log("HOST value: ", process.env.HOST);
   console.log("config value: ", config.get("baseURL"));
 
   // Expect a title "to contain" a substring.

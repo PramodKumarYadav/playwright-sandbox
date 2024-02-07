@@ -40,8 +40,8 @@
     "*.{ts,js,json,yml,css,md}": "npx prettier --write ."
   },
   "dependencies": {
+    "config": "^3.3.11",
     "cross-env": "^7.0.3",
-    "dotenv": "^16.4.1",
-    "config": "^3.3.11"
+    "dotenv": "^16.4.1"
   }
 }
