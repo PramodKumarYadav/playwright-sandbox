@@ -7,6 +7,7 @@
     "test": "npx playwright test",
     "test:headed": "npx playwright test --headed",
     "test:unit": "npx playwright test --grep @unit-test",
+    "test:dev": "NODE_ENV=dev npx playwright test --grep @config",
     "lint": "npx eslint .",
     "lint:fix": "npx eslint . --fix",
     "prettier": "npx prettier --check .",
@@ -35,5 +36,8 @@
   },
   "lint-staged": {
     "*.{ts,js,json,yml,css,md}": "npx prettier --write ."
+  },
+  "dependencies": {
+    "config": "^3.3.11"
   }
 }

@@ -1,4 +1,15 @@
 import { test, expect } from "@playwright/test";
+import config from "config";
+
+test("config test @config", async ({ page }) => {
+  console.log("NODE_ENV value: ", process.env.NODE_ENV);
+  console.log("config value: ", config.get("baseURL"));
+
+  // Expect a title "to contain" a substring.
+  await page.goto("https://playwright.dev/");
+  await expect(page).toHaveTitle(/Playwright/);
+  await expect(page).toHaveScreenshot("playwright.png");
+});
 
 test("has title @unit-test", async ({ page }) => {
   await page.goto("https://playwright.dev/");
