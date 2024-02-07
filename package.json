@@ -8,6 +8,7 @@
     "test:headed": "npx playwright test --headed",
     "test:unit": "npx playwright test --grep @unit-test",
     "test:dev": "NODE_ENV=dev npx playwright test --grep @config",
+    "test:test": "NODE_ENV=test npx playwright test --grep @config",
     "lint": "npx eslint .",
     "lint:fix": "npx eslint . --fix",
     "prettier": "npx prettier --check .",
