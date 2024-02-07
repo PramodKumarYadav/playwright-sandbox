@@ -52,9 +52,8 @@ jobs:
       - name: Run Playwright tests
         env:
           HOME: /root
-          NODE_ENV: ${{ secrets.NODE_ENV }}
         # Index is zero based so add one to get shards index as 1,2,3 and thus ratio as 1/3, 2/3, 3/3.
-        run: NODE_ENV=${{ secrets.NODE_ENV }} npx playwright test --shard=$((${{ strategy.job-index }} + 1))/${{ strategy.job-total }} --reporter=blob
+        run: npx playwright test --shard=$((${{ strategy.job-index }} + 1))/${{ strategy.job-total }} --reporter=blob
 
       - name: Upload blob report to GitHub Actions Artifacts
         if: always()
