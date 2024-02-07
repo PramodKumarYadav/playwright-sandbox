@@ -6,8 +6,9 @@
   "scripts": {
     "test": "npx playwright test",
     "test:headed": "npx playwright test --headed",
-    "test:dev": "cross-env NODE_ENV='dev' npx playwright test",
-    "test:test": "cross-env NODE_ENV='test' npx playwright test",
+    "test:unit": "npx playwright test --grep @unit-test",
+    "test:dev": "NODE_ENV=dev npx playwright test --grep @config",
+    "test:test": "NODE_ENV=test npx playwright test --grep @config",
     "lint": "npx eslint .",
     "lint:fix": "npx eslint . --fix",
     "prettier": "npx prettier --check .",
@@ -40,6 +41,7 @@
   },
   "dependencies": {
     "cross-env": "^7.0.3",
-    "dotenv": "^16.4.1"
+    "dotenv": "^16.4.1",
+    "config": "^3.3.11"
   }
 }

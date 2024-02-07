@@ -1,18 +1,14 @@
 import { test, expect } from "@playwright/test";
-// import { loadEnv } from "../env/load-env";
+import config from "config";
 
-test.beforeAll(async () => {
-  // Load environment variables based on NODE_ENV
-  // loadEnv();
-});
-
-test("env variables @env-test", async ({ page }) => {
-  console.log("test env from test: ", process.env.HOST);
-
-  await page.goto("https://playwright.dev/");
+test("config test @config", async ({ page }) => {
+  console.log("NODE_ENV value: ", process.env.NODE_ENV);
+  console.log("config value: ", config.get("baseURL"));
 
   // Expect a title "to contain" a substring.
+  await page.goto("https://playwright.dev/");
   await expect(page).toHaveTitle(/Playwright/);
+  await expect(page).toHaveScreenshot("playwright.png");
 });
 
 test("has title @unit-test", async ({ page }) => {
