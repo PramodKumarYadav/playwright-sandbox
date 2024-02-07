@@ -7,7 +7,7 @@ test.beforeAll(async () => {
 });
 
 test("env variables @env-test", async ({ page }) => {
-  console.log("test env: ", process.env.HOST);
+  console.log("test env from test: ", process.env.HOST);
 
   await page.goto("https://playwright.dev/");
 
