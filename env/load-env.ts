@@ -6,5 +6,5 @@ export function loadEnv() {
 
   console.log("file parsed: ", `.env.${env}`);
   const envPath = `.env.${env}`;
-  config({ path: envPath });
+  config({ path: envPath, override: true });
 }

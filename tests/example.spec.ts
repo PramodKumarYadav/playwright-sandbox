@@ -1,9 +1,9 @@
 import { test, expect } from "@playwright/test";
-import { loadEnv } from "../env/load-env";
+// import { loadEnv } from "../env/load-env";
 
 test.beforeAll(async () => {
   // Load environment variables based on NODE_ENV
-  loadEnv();
+  // loadEnv();
 });
 
 test("env variables @env-test", async ({ page }) => {
