@@ -50,6 +50,7 @@ jobs:
         run: npx playwright test --shard=$((${{ strategy.job-index }} + 1))/${{ strategy.job-total }} --reporter=blob
         env:
           HOME: /root
+          NODE_ENV: ${{ secrets.NODE_ENV }}
 
       - name: Upload blob report to GitHub Actions Artifacts
         if: always()

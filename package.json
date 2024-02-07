@@ -6,7 +6,8 @@
   "scripts": {
     "test": "npx playwright test",
     "test:headed": "npx playwright test --headed",
-    "test:unit": "npx playwright test --grep @unit-test",
+    "test:dev": "cross-env NODE_ENV='dev' npx playwright test",
+    "test:test": "cross-env NODE_ENV='test' npx playwright test",
     "lint": "npx eslint .",
     "lint:fix": "npx eslint . --fix",
     "prettier": "npx prettier --check .",
@@ -22,6 +23,7 @@
   "license": "ISC",
   "devDependencies": {
     "@playwright/test": "^1.41.1",
+    "@types/dotenv": "^8.2.0",
     "@types/node": "^20.11.10",
     "@typescript-eslint/eslint-plugin": "^6.20.0",
     "@typescript-eslint/parser": "^6.20.0",
@@ -35,5 +37,9 @@
   },
   "lint-staged": {
     "*.{ts,js,json,yml,css,md}": "npx prettier --write ."
+  },
+  "dependencies": {
+    "cross-env": "^7.0.3",
+    "dotenv": "^16.4.1"
   }
 }

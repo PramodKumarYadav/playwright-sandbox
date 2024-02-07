@@ -50,6 +50,16 @@ We use a mix of [Husky](https://github.com/typicode/husky), [ESLint](https://esl
 npm run prepare
 ```
 
+## Secrets
+
+All secrets should be stored in CI using GitHub secrets and locally using .env.env-name files.
+
+### Dotenv files
+
+Secrets for each test envirnoment i.e. (local, dev, staging) are to be added in different test files such as .env.local, .env.dev, .env.staging.
+
+You should ignore all .env\* files in .gitignore file so that we do not unintentionally commit and push secrets in our PRs.
+
 ## Reference
 
 - [Playwright Home Page](https://playwright.dev/) 🎭 with Node.js.
