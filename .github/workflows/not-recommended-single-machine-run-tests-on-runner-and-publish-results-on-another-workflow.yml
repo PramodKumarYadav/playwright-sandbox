@@ -45,6 +45,8 @@ jobs:
 
       - name: Run Playwright tests
         run: npx playwright test
+        env:
+          NODE_ENV: ${{ secrets.NODE_ENV }}
 
       - uses: actions/upload-artifact@v4
         if: always()

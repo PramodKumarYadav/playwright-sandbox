@@ -7,6 +7,9 @@ on:
   push:
     branches: ["main"]
 
+  pull_request:
+    branches: ["main"]
+
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
@@ -26,6 +29,7 @@ jobs:
   test:
     timeout-minutes: 60
     runs-on: ubuntu-latest
+    environment: dev
     container:
       image: mcr.microsoft.com/playwright:v1.41.1-jammy
     strategy:
@@ -50,6 +54,7 @@ jobs:
         run: NODE_ENV=dev npx playwright test --shard=$((${{ strategy.job-index }} + 1))/${{ strategy.job-total }} --reporter=blob
         env:
           HOME: /root
+          HOST: ${{ secrets.HOST}}
 
       - name: Upload blob report to GitHub Actions Artifacts
         if: always()

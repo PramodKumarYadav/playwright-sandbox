@@ -1,4 +1,5 @@
 import { defineConfig, devices } from "@playwright/test";
+import { config } from "dotenv";
 
 /**
  * Read environment variables from file.
@@ -9,6 +10,20 @@ import { defineConfig, devices } from "@playwright/test";
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
+
+if (process.env.CI) {
+  console.log("Running in CI");
+} else {
+  console.log("Running locally");
+
+  console.log("NODE_ENV value: ", process.env.NODE_ENV);
+  const env = process.env.NODE_ENV || "dev";
+
+  console.log("file parsed: ", `.env.${env}`);
+  const envPath = `.env.${env}`;
+  config({ path: envPath, override: true });
+}
+
 export default defineConfig({
   testDir: "./tests",
   /* Run tests in files in parallel */

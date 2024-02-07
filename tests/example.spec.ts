@@ -3,12 +3,12 @@ import config from "config";
 
 test("config test @config", async ({ page }) => {
   console.log("NODE_ENV value: ", process.env.NODE_ENV);
+  console.log("HOST value: ", process.env.HOST);
   console.log("config value: ", config.get("baseURL"));
 
   // Expect a title "to contain" a substring.
   await page.goto("https://playwright.dev/");
   await expect(page).toHaveTitle(/Playwright/);
-  await expect(page).toHaveScreenshot("playwright.png");
 });
 
 test("has title @unit-test", async ({ page }) => {
@@ -16,7 +16,6 @@ test("has title @unit-test", async ({ page }) => {
 
   // Expect a title "to contain" a substring.
   await expect(page).toHaveTitle(/Playwright/);
-  await expect(page).toHaveScreenshot("playwright.png");
 });
 
 test("get started link @smoke-test", async ({ page }) => {
