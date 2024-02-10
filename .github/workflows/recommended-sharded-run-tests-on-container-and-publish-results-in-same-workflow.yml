@@ -1,6 +1,6 @@
 # Simple workflow for deploying static content to GitHub Pages
 # Reference: https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site#publishing-with-a-custom-github-actions-workflow
-name: Multi machine - Run Tests and Publish test results to GitHub Pages
+name: Run Tests and Publish Results
 
 on:
   # Runs on pushes targeting the default branch
@@ -115,7 +115,8 @@ jobs:
 
     # Deploy to the github-pages environment
     environment:
-      name: github-pages
+      # name: github-pages
+      name: payment-service-pages
       url: ${{ steps.deployment.outputs.page_url }}
 
     # Specify runner + deployment step
