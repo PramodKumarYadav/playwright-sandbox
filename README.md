@@ -6,9 +6,6 @@ I have created this repo to both practice playwright and in the process create a
 
 ## 🚀 Getting Started
 
-<script src="https://kit.fontawesome.com/7cf90a18e5.js" crossorigin="anonymous"></script>
-<i class="fa-solid fa-code"></i>
-
 ### Clone project
 
 Start by cloning the repo on your local machine.
