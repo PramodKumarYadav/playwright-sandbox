@@ -5,6 +5,7 @@ I have created this repo to both practice playwright and in the process create a
 [![Run Tests and Publish results](https://github.com/PramodKumarYadav/playwright-sandbox/actions/workflows/recommended-sharded-run-tests-on-container-and-publish-results-in-same-workflow.yml/badge.svg?branch=main)](https://github.com/PramodKumarYadav/playwright-sandbox/actions/workflows/recommended-sharded-run-tests-on-container-and-publish-results-in-same-workflow.yml)
 
 ## 🚀 Getting Started
+
 <head>
   <script src="https://kit.fontawesome.com/7cf90a18e5.js" crossorigin="anonymous"></script>
 </head>
