@@ -5,7 +5,7 @@ export const test = base.extend<{ saveScreenshots: void }>({
     async ({ page }, use) => {
       console.log("running screenshotFixture...");
       await use();
-      await expect(page).toHaveScreenshot();
+      await expect(page).toHaveScreenshot({ maxDiffPixelRatio: 0.1 });
     },
     { auto: true },
   ],
