@@ -10,6 +10,7 @@ export const test = base.extend<{ consoleEventListner: void }>({
       });
       page.on("pageerror", async (error) => {
         console.log(`Found an error: ${error.name}, ${error.message}`);
+        // eslint-disable-next-line playwright/no-standalone-expect
         expect.soft(error.name, `for error => ${error.message}`).not.toEqual("Error");
       });
       await use();
