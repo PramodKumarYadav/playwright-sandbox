@@ -4,6 +4,11 @@ I have created this repo to both practice playwright and in the process create a
 
 [![Run Tests and Publish results](https://github.com/PramodKumarYadav/playwright-sandbox/actions/workflows/recommended-sharded-run-tests-on-container-and-publish-results-in-same-workflow.yml/badge.svg?branch=main)](https://github.com/PramodKumarYadav/playwright-sandbox/actions/workflows/recommended-sharded-run-tests-on-container-and-publish-results-in-same-workflow.yml)
 
+> [!NOTE]
+>
+> As the name suggests, this is a draft - work in progress - project. You may refer it to get a lot of cool things out of it but
+> do remember that this is not a refined project (for example, at the moment, the Readme.md (or overall design) is very raw and not yet refined).
+
 ## 🏃🏻‍♂️ Runme
 
 ```sh {"id":"01HR2FSVY5BNKH6WNMC5DVH04H","name":"Format files"}
