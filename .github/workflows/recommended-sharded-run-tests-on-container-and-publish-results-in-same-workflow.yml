@@ -109,60 +109,6 @@ jobs:
         with:
           path: "playwright-report"
 
-      # - name: Check Directory
-      #   run: |
-      #     if [ ! -d ./data ]; then
-      #       echo "Directory './data' does not exist."
-      #       exit 1
-      #     fi
-
-      # - name: List Trace Files
-      #   run: |
-      #     # List all trace files in the data directory and save them to a text file
-      #     ls ./data/* > trace_files.txt
-
-      - name: List Directories
-        run: |
-          # List all directories recursively and print them
-          find . -type d
-
-      - name: List Trace Files
-        run: |
-          # List all zip files in the ./playwright-report/data directory and save them to a text file
-          find ./playwright-report/data -name "*.zip" -exec basename {} \; > trace_files.txt || echo "No trace files found."
-
-      - name: Check Trace Files
-        run: |
-          if [ ! -s trace_files.txt ]; then
-            echo "No trace files found in './playwright-report/data' directory."
-            exit 1
-          fi
-
-      - name: Generate Links
-        id: links
-        run: |
-          # Read trace file names from the text file and generate hyperlinks with the desired prefix URL
-          echo "<ul>" > trace_links.html
-          report_url="https://trace.playwright.dev/?trace=https://pramodkumaryadav.github.io/playwright-sandbox/index.html"
-          echo "<li><a href='${report_url}'>${report_url}</a></li>" >> trace_links.html
-          while IFS= read -r trace_file; do
-            trace_url="https://trace.playwright.dev/?trace=https://pramodkumaryadav.github.io/playwright-sandbox/data/${trace_file}"
-            echo "<li><a href='${trace_url}'>${trace_url}</a></li>" >> trace_links.html
-          done < trace_files.txt
-          echo "</ul>" >> trace_links.html
-
-      - name: Display Links
-        env:
-          TRACE_LINKS: ${{ steps.links.outputs.trace_links }}
-        run: |
-          echo "::set-output name=trace_links::$TRACE_LINKS"
-
-      - name: Upload Trace Links
-        uses: actions/upload-artifact@v2
-        with:
-          name: trace-links
-          path: trace_links.html
-
   # Publish test results job
   publish-results:
     # Add a dependency to the test job
