@@ -11,11 +11,14 @@ test("config test @config", async ({ page }) => {
   await expect(page).toHaveTitle(/Playwright/);
 });
 
+/**
+ * Failing this test to test the retry mechanism and get trace in CI
+ */
 test("has title @unit-test", async ({ page }) => {
   await page.goto("https://playwright.dev/");
 
   // Expect a title "to contain" a substring.
-  await expect(page).toHaveTitle(/Playwright/);
+  await expect(page).toHaveTitle(/Playwrightooo/);
 });
 
 test("get started link @smoke-test", async ({ page }) => {
