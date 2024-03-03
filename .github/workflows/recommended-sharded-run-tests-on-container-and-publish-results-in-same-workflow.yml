@@ -119,6 +119,11 @@ jobs:
       #     # List all trace files in the data directory and save them to a text file
       #     ls ./data/* > trace_files.txt
 
+      - name: List Directories
+        run: |
+          # List all directories recursively and print them
+          find . -type d
+
       - name: Extract Trace File Names
         id: extract_files
         run: |
