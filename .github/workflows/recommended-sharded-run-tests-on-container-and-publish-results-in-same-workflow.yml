@@ -127,7 +127,7 @@ jobs:
       - name: List Trace Files
         run: |
           # List all zip files in the ./playwright-report/data directory and save them to a text file
-          find ./playwright-report/data -name "*.zip" > trace_files.txt || echo "No trace files found."
+          find ./playwright-report/data -name "*.zip" -exec basename {} \; > trace_files.txt || echo "No trace files found."
 
       - name: Check Trace Files
         run: |
@@ -140,7 +140,7 @@ jobs:
         run: |
           # Read trace file paths from the text file and generate hyperlinks with the desired prefix URL
           while IFS= read -r trace_file; do
-            trace_url="https://trace.playwright.dev/?trace=https://pramodkumaryadav.github.io/playwright-sandbox/${trace_file}"
+            trace_url="https://trace.playwright.dev/?trace=https://pramodkumaryadav.github.io/playwright-sandbox/data/${trace_file}"
             echo "${trace_url}" >> trace_links.txt
           done < trace_files.txt
 
