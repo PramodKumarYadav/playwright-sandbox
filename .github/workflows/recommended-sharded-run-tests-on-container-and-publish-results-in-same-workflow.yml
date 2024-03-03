@@ -123,7 +123,7 @@ jobs:
         id: extract_files
         run: |
           # Extract the trace file names from the logs and save them to a variable
-          trace_files=$(grep -oP 'data/.*?\.zip' <<< "$(cat $GITHUB_EVENT_PATH)")
+          trace_files=$(grep -o 'data/[^ ]*\.zip' <<< "$(cat $GITHUB_EVENT_PATH)")
           echo "::set-output name=trace_files::$trace_files"
 
       - name: Generate Links
