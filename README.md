@@ -1,8 +1,24 @@
+---
+runme:
+  id: 01HR2DWKKY17PPTNB0FMKQN8X5
+  version: v3
+---
+
 # 🎭 Playwright Sandbox
 
 I have created this repo to both practice playwright and in the process create a feature rich template project that QAs can use for their real projects for doing end to end test automation.
 
 [![Run Tests and Publish results](https://github.com/PramodKumarYadav/playwright-sandbox/actions/workflows/recommended-sharded-run-tests-on-container-and-publish-results-in-same-workflow.yml/badge.svg?branch=main)](https://github.com/PramodKumarYadav/playwright-sandbox/actions/workflows/recommended-sharded-run-tests-on-container-and-publish-results-in-same-workflow.yml)
+
+## 🏃🏻‍♂️ Runme
+
+```sh {"id":"01HR2FSVY5BNKH6WNMC5DVH04H","name":"Format files"}
+npm run prettier
+```
+
+```bash {"id":"01HR2FPMJVH50H6XJDBNS4Y5DT","name":"Lint files"}
+npm run lint
+```
 
 ## 🚀 Getting Started
 
@@ -20,7 +36,7 @@ Start by cloning the repo on your local machine.
 
 Install project dependencies by running below command:
 
-```bash
+```bash {"id":"01HR2DWKKY17PPTNB0FES9551V"}
 npm install
 ```
 
@@ -28,7 +44,7 @@ npm install
 
 Use the [VS Code Extension](https://marketplace.visualstudio.com/items?itemName=ms-playwright.playwright) to run the tests in the tests folder from VS Code or run the following command in the terminal:
 
-```bash
+```bash {"id":"01HR2DWKKY17PPTNB0FJ5A118B"}
 npx playwright test --ui
 ```
 
@@ -50,7 +66,7 @@ We use a mix of [Husky](https://github.com/typicode/husky), [ESLint](https://esl
 - Husky is a tool that will install a pre-commit hook to run the linter any time before you attempt to make a commit.
 - To install the pre-commit hook you will need to run
 
-```bash
+```bash {"id":"01HR2DWKKY17PPTNB0FJXFTFMV"}
 npm run prepare
 ```
 
