@@ -108,6 +108,7 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           path: "playwright-report"
+          retention-days: 30
 
   # Publish test results job
   publish-results:
