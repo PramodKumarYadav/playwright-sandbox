@@ -107,25 +107,25 @@ jobs:
         with:
           path: "playwright-report"
 
-      - name: Check Directory
-        run: |
-          if [ ! -d ./data ]; then
-            echo "Directory './data' does not exist."
-            exit 1
-          fi
+      # - name: Check Directory
+      #   run: |
+      #     if [ ! -d ./data ]; then
+      #       echo "Directory './data' does not exist."
+      #       exit 1
+      #     fi
 
-      - name: List Trace Files
-        run: |
-          # List all trace files in the data directory and save them to a text file
-          ls ./data/* > trace_files.txt
+      # - name: List Trace Files
+      #   run: |
+      #     # List all trace files in the data directory and save them to a text file
+      #     ls ./data/* > trace_files.txt
 
       - name: Generate Links
         run: |
-          # Read trace file paths from the text file and generate hyperlinks with the desired prefix URL
-          while IFS= read -r trace_file; do
-            trace_url="https://trace.playwright.dev/?trace=https://pramodkumaryadav.github.io/playwright-sandbox/${trace_file}"
+          # List all zip files in the data directory and generate hyperlinks with the desired prefix URL
+          for zip_file in ./data/*.zip; do
+            trace_url="https://trace.playwright.dev/?trace=https://pramodkumaryadav.github.io/playwright-sandbox/${zip_file}"
             echo "${trace_url}" >> trace_links.txt
-          done < trace_files.txt
+          done
 
       - name: Upload Trace Links
         uses: actions/upload-artifact@v2
