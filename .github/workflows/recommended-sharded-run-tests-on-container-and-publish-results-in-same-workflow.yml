@@ -70,6 +70,8 @@ jobs:
     if: always()
 
     runs-on: ubuntu-latest
+    outputs:
+      output1: ${{ steps.step1.outputs.test }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -137,24 +139,12 @@ jobs:
           fi
 
       - name: Generate Links
-        run: |
-          # Read trace file paths from the text file and generate hyperlinks with the desired prefix URL
-          while IFS= read -r trace_file; do
-            trace_url="https://trace.playwright.dev/?trace=https://pramodkumaryadav.github.io/playwright-sandbox/data/${trace_file}"
-            echo "${trace_url}" >> trace_links.txt
-          done < trace_files.txt
-
-      - name: Upload Trace Links
-        uses: actions/upload-artifact@v2
-        with:
-          name: trace-links
-          path: trace_links.txt
-
-      - name: Generate Links
         id: links
         run: |
           # Read trace file names from the text file and generate hyperlinks with the desired prefix URL
           echo "<ul>" > trace_links.html
+          report_url="https://trace.playwright.dev/?trace=https://pramodkumaryadav.github.io/playwright-sandbox/index.html"
+          echo "<li><a href='${report_url}'>${report_url}</a></li>" >> trace_links.html
           while IFS= read -r trace_file; do
             trace_url="https://trace.playwright.dev/?trace=https://pramodkumaryadav.github.io/playwright-sandbox/data/${trace_file}"
             echo "<li><a href='${trace_url}'>${trace_url}</a></li>" >> trace_links.html
