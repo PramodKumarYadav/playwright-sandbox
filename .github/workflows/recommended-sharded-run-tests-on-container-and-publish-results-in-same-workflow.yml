@@ -107,6 +107,24 @@ jobs:
         with:
           path: "playwright-report"
 
+      - name: List Trace Files
+        run: |
+          # List all trace files in the data directory and save them to a text file
+          ls ./data/*.zip > trace_files.txt
+
+      - name: Generate Links
+        run: |
+          # Read trace file paths from the text file and generate hyperlinks with the desired prefix URL
+          while IFS= read -r trace_file; do
+            trace_url="https://trace.playwright.dev/?trace=https://pramodkumaryadav.github.io/playwright-sandbox/${trace_file}"
+            echo "${trace_url}" >> trace_links.txt
+          done < trace_files.txt
+
+      - name: Upload Trace Links
+        uses: actions/upload-artifact@v2
+        with:
+          name: trace-links
+          path: trace_links.txt
   # Publish test results job
   publish-results:
     # Add a dependency to the test job
