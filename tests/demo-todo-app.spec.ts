@@ -6,6 +6,9 @@ test.beforeEach(async ({ page }) => {
 
 const TODO_ITEMS = ["buy some cheese", "feed the cat", "book a doctors appointment"];
 
+/**
+ * Failing this test to test the retry mechanism and get trace in CI
+ */
 test.describe("New Todo", () => {
   test("should allow me to add todo items @bug", async ({ page }) => {
     test.info().annotations.push({
@@ -22,6 +25,9 @@ test.describe("New Todo", () => {
 
     // Make sure the list only has one todo item.
     await expect(page.getByTestId("todo-title")).toHaveText([TODO_ITEMS[0]]);
+    await expect(page.getByTestId("todo-title")).toHaveText(
+      "intentionally failing this test case to test trace",
+    );
 
     // Create 2nd todo.
     await newTodo.fill(TODO_ITEMS[1]);

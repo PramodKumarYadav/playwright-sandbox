@@ -21,6 +21,9 @@ test("has title @unit-test", async ({ page }) => {
   await expect(page).toHaveTitle(/Playwrightooo/);
 });
 
+/**
+ * Failing this test to test the retry mechanism and get trace in CI
+ */
 test("get started link @smoke-test", async ({ page }) => {
   await page.goto("https://playwright.dev/");
 
@@ -28,5 +31,5 @@ test("get started link @smoke-test", async ({ page }) => {
   await page.getByRole("link", { name: "Get started" }).click();
 
   // Expects page to have a heading with the name of Installation.
-  await expect(page.getByRole("heading", { name: "Installation" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Installationnnn" })).toBeVisible();
 });
