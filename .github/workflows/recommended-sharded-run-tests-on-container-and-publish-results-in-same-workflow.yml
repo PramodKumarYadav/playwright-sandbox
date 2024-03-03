@@ -107,10 +107,17 @@ jobs:
         with:
           path: "playwright-report"
 
+      - name: Check Directory
+        run: |
+          if [ ! -d ./data ]; then
+            echo "Directory './data' does not exist."
+            exit 1
+          fi
+
       - name: List Trace Files
         run: |
           # List all trace files in the data directory and save them to a text file
-          ls ./data/*.zip > trace_files.txt
+          ls ./data/* > trace_files.txt
 
       - name: Generate Links
         run: |
