@@ -124,20 +124,25 @@ jobs:
           # List all directories recursively and print them
           find . -type d
 
-      - name: Extract Trace File Names
-        id: extract_files
+      - name: List Trace Files
         run: |
-          # Extract the trace file names from the logs and save them to a variable
-          trace_files=$(grep -o 'data/[^ ]*\.zip' <<< "$(cat $GITHUB_EVENT_PATH)")
-          echo "::set-output name=trace_files::$trace_files"
+          # List all zip files in the ./playwright-report/data directory and save them to a text file
+          find ./playwright-report/data -name "*.zip" > trace_files.txt || echo "No trace files found."
+
+      - name: Check Trace Files
+        run: |
+          if [ ! -s trace_files.txt ]; then
+            echo "No trace files found in './playwright-report/data' directory."
+            exit 1
+          fi
 
       - name: Generate Links
         run: |
-          # Read trace file names from the extracted variable and generate hyperlinks with the desired prefix URL
-          for trace_file in ${{ steps.extract_files.outputs.trace_files }}; do
+          # Read trace file paths from the text file and generate hyperlinks with the desired prefix URL
+          while IFS= read -r trace_file; do
             trace_url="https://trace.playwright.dev/?trace=https://pramodkumaryadav.github.io/playwright-sandbox/${trace_file}"
             echo "${trace_url}" >> trace_links.txt
-          done
+          done < trace_files.txt
 
       - name: Upload Trace Links
         uses: actions/upload-artifact@v2
