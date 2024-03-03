@@ -149,6 +149,30 @@ jobs:
         with:
           name: trace-links
           path: trace_links.txt
+
+      - name: Generate Links
+        id: links
+        run: |
+          # Read trace file names from the text file and generate hyperlinks with the desired prefix URL
+          echo "<ul>" > trace_links.html
+          while IFS= read -r trace_file; do
+            trace_url="https://trace.playwright.dev/?trace=https://pramodkumaryadav.github.io/playwright-sandbox/playwright-report/data/${trace_file}"
+            echo "<li><a href='${trace_url}'>${trace_file}</a></li>" >> trace_links.html
+          done < trace_files.txt
+          echo "</ul>" >> trace_links.html
+
+      - name: Display Links
+        env:
+          TRACE_LINKS: ${{ steps.links.outputs.trace_links }}
+        run: |
+          echo "::set-output name=trace_links::$TRACE_LINKS"
+
+      - name: Upload Trace Links
+        uses: actions/upload-artifact@v2
+        with:
+          name: trace-links
+          path: trace_links.html
+
   # Publish test results job
   publish-results:
     # Add a dependency to the test job
