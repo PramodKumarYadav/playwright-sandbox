@@ -119,11 +119,18 @@ jobs:
       #     # List all trace files in the data directory and save them to a text file
       #     ls ./data/* > trace_files.txt
 
+      - name: Extract Trace File Names
+        id: extract_files
+        run: |
+          # Extract the trace file names from the logs and save them to a variable
+          trace_files=$(grep -oP 'data/.*?\.zip' <<< "$(cat $GITHUB_EVENT_PATH)")
+          echo "::set-output name=trace_files::$trace_files"
+
       - name: Generate Links
         run: |
-          # List all zip files in the data directory and generate hyperlinks with the desired prefix URL
-          for zip_file in ./data/*.zip; do
-            trace_url="https://trace.playwright.dev/?trace=https://pramodkumaryadav.github.io/playwright-sandbox/${zip_file}"
+          # Read trace file names from the extracted variable and generate hyperlinks with the desired prefix URL
+          for trace_file in ${{ steps.extract_files.outputs.trace_files }}; do
+            trace_url="https://trace.playwright.dev/?trace=https://pramodkumaryadav.github.io/playwright-sandbox/${trace_file}"
             echo "${trace_url}" >> trace_links.txt
           done
 
