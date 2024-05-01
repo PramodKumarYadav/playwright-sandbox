@@ -1,0 +1,19 @@
+# Trigger smoke tests on merge to main in dev
+name: ☁️ Trigger smoke tests
+on:
+  push:
+    branches: [main]
+
+  # Allows us to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  on-merge-to-main-in-dev:
+    uses: ./.github/workflows/v3-recommended-reusable-workflow.yml
+    with:
+      test-environment: "dev"
+      tests-to-include: "@smoke-test"
+      tests-to-exclude: ""
+      projects: "--project='chromium'"
+      trigger: "run-smoke-tests-in-dev-on-merge-to-main"
+    secrets: inherit
