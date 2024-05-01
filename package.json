@@ -23,7 +23,7 @@
   "author": "Power Tester",
   "license": "ISC",
   "devDependencies": {
-    "@playwright/test": "^1.41.1",
+    "@playwright/test": "^1.43.1",
     "@types/dotenv": "^8.2.0",
     "@types/node": "^20.11.10",
     "@typescript-eslint/eslint-plugin": "^6.20.0",
