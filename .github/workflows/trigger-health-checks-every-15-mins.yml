@@ -1,0 +1,23 @@
+# Run daily health checks every 15 minutes, on dev
+name: 💓 Trigger Health Checks
+
+on:
+  schedule:
+    # * is a special character in YAML so you have to quote this string
+    # To set a new schedule use this: https://crontab.guru/
+    # To get the right time for your timezone use : https://www.worldtimebuddy.com/
+    - cron: "*/15 * * * MON-FRI" # “At every 15 minutes on every week day. ”
+
+  # Allows us to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  daily-at-every-15-min-in-dev:
+    uses: ./.github/workflows/v3-recommended-reusable-workflow.yml
+    with:
+      test-environment: "dev"
+      tests-to-include: "@health-check"
+      tests-to-exclude: ""
+      projects: "--project='chromium'"
+      trigger: "run-health-checks-in-dev-every-fifteen-mins"
+    secrets: inherit
