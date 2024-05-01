@@ -1,0 +1,108 @@
+name: Reusable workflow to run tests
+
+on:
+  workflow_call:
+    inputs:
+      test-environment:
+        required: true
+        type: string
+
+      tests-to-include:
+        required: true
+        type: string
+
+      tests-to-exclude:
+        required: false
+        type: string
+
+      projects:
+        required: true
+        type: string
+
+      trigger:
+        required: true
+        type: string
+
+jobs:
+  run-tests:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.test-environment }}
+    # Latest docker image version is here: https://playwright.dev/docs/docker
+    # All playwright binary versions are here: https://www.npmjs.com/package/playwright?activeTab=versions
+    container:
+      image: mcr.microsoft.com/playwright:v1.43.1-jammy
+    strategy:
+      fail-fast: false
+      matrix:
+        # Give same names for runners.
+        runner: ["first", "second", "third"]
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Tests
+        id: e2e-tests
+        # For sharding, index is zero based so add one to get shards index as 1,2,3 and thus ratio as 1/3, 2/3, 3/3.
+        run: >
+          npx playwright test 
+          --shard=$((${{ strategy.job-index }} + 1))/${{ strategy.job-total }} 
+          --grep="${{ inputs.tests-to-include }}" 
+          --grep-invert="${{ inputs.tests-to-exclude }}" 
+          ${{ inputs.projects }}
+        env:
+          HOME: /root
+          NODE_ENV: ${{ inputs.test-environment }}
+
+      - name: Upload blob report to GitHub Actions Artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: blob-report-${{ matrix.runner }}
+          path: blob-report
+          retention-days: 1
+
+  merge-reports:
+    # Merge reports after playwright-tests, even if some shards have failed
+    needs: [run-tests]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Download blob reports from GitHub Actions Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: all-blob-reports
+          pattern: blob-report-*
+          merge-multiple: true
+
+      - name: Merge into single HTML Report
+        run: npx playwright merge-reports --reporter html ./all-blob-reports
+
+      - name: Upload test report for local debugging
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report
+          retention-days: 90
+# NOTE: We dont publish report on GitHub pages because I learned over a period of time that to be able to do that we have to stop "parallel - concurrent" workflow runs which is a very bad compromise from
+# the performance perspective. So, I have decided to not publish the report on GitHub pages. Instead, I will download the report and publish it locally for debugging.
