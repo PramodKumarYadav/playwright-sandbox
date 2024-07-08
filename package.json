@@ -23,7 +23,7 @@
   "author": "Power Tester",
   "license": "ISC",
   "devDependencies": {
-    "@playwright/test": "^1.43.1",
+    "@playwright/test": "^1.45.0",
     "@types/dotenv": "^8.2.0",
     "@types/node": "^20.11.10",
     "@typescript-eslint/eslint-plugin": "^6.20.0",
@@ -40,7 +40,7 @@
     "*.{ts,js,json,yml,css,md}": "npx prettier --write ."
   },
   "dependencies": {
-    "@axe-core/playwright": "^4.8.2",
+    "@axe-core/playwright": "^4.9.1",
     "config": "^3.3.11",
     "cross-env": "^7.0.3",
     "dotenv": "^16.4.1",
