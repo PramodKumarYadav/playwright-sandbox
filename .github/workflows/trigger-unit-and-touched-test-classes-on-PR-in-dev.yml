@@ -2,50 +2,49 @@
 name: 🆕 Trigger Unit and new Tests
 
 on:
-  pull_request:
-    branches: [main]
+  # pull_request:
+  #   branches: [main]
 
   # Allows us to run this workflow manually from the Actions tab
   workflow_dispatch:
 
 jobs:
-  # touched-test-files:
-  #   runs-on: ubuntu-latest # windows-latest || macos-latest
-  #   name: Touched test files
-  #   permissions:
-  #     pull-requests: read
-  #   outputs:
-  #     tests_to_run: ${{ steps.tests_to_run.outputs.test_files }}
-  #   steps:
-  #     - name: Fetch changed files
-  #       id: changed-files
-  #       uses: tj-actions/changed-files@v44
-  #       with:
-  #         # Avoid using single or double quotes for multiline patterns
-  #         files: tests/**/*.{spec.ts,test.ts} # spec or test files only. Not other types of ts files (example page, data or fixtures file).
+  touched-test-files:
+    runs-on: ubuntu-latest # windows-latest || macos-latest
+    name: Touched test files
+    permissions:
+      pull-requests: read
+    outputs:
+      tests_to_run: ${{ steps.tests_to_run.outputs.test_files }}
+    steps:
+      - name: Fetch changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v44
+        with:
+          # Avoid using single or double quotes for multiline patterns
+          files: tests/**/*.{spec.ts,test.ts} # spec or test files only. Not other types of ts files (example page, data or fixtures file).
 
-  #     - name: List changed test files
-  #       id: tests_to_run
-  #       env:
-  #         ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
-  #       run: |
-  #         tests="@unit-test"
-  #         for file in ${ALL_CHANGED_FILES}; do
-  #           filename=$(basename "$file")
-  #           echo "$filename was changed"
-  #           tests="$tests|$filename"
-  #         done
-  #         echo "--grep input to send: $tests"
-  #         echo "test_files=$tests"  >> "$GITHUB_OUTPUT"
+      - name: List changed test files
+        id: tests_to_run
+        env:
+          ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
+        run: |
+          tests="@unit-test"
+          for file in ${ALL_CHANGED_FILES}; do
+            filename=$(basename "$file")
+            echo "$filename was changed"
+            tests="$tests|$filename"
+          done
+          echo "--grep input to send: $tests"
+          echo "test_files=$tests"  >> "$GITHUB_OUTPUT"
 
   on-a-pull-request-in-dev:
-    # needs: touched-test-files
+    needs: touched-test-files
     uses: ./.github/workflows/v3-recommended-reusable-workflow.yml
     with:
       test-environment: "dev"
-      # tests-to-include: "${{needs.touched-test-files.outputs.tests_to_run}}"
-      tests-to-include: ""
+      tests-to-include: "${{needs.touched-test-files.outputs.tests_to_run}}"
       tests-to-exclude: ""
-      projects: "--project=chromium --only-changed=$GITHUB_BASE_REF"
+      projects: "--project=chromium"
       trigger: "run-unit-and-touched-tests-in-dev-on-pull-request"
     secrets: inherit
