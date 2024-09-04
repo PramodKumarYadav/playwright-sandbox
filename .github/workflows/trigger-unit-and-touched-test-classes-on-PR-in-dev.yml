@@ -46,6 +46,6 @@ jobs:
       # tests-to-include: "${{needs.touched-test-files.outputs.tests_to_run}}"
       tests-to-include: ""
       tests-to-exclude: ""
-      projects: "--only-changed=$GITHUB_BASE_REF --project=chromium"
+      projects: "--project=chromium --only-changed=$GITHUB_BASE_REF"
       trigger: "run-unit-and-touched-tests-in-dev-on-pull-request"
     secrets: inherit
