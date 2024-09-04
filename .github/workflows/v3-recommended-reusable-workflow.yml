@@ -41,6 +41,9 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
+      - name: Set directory ownership
+        run: sudo chown -R $(whoami) .
+
       - name: Add safe directory exception
         run: git config --global --add safe.directory /__w/playwright-sandbox/playwright-sandbox
 
