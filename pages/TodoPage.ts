@@ -1,4 +1,5 @@
 import { expect, Page, Locator } from "@playwright/test";
+import { step } from "../utils/decorators";
 
 export class TodoPage {
   // private readonly page : Page;
@@ -69,6 +70,7 @@ export class TodoPage {
   //   return this.specificTodoItem(item);
   // }
 
+  @step
   async addTodoItem(item: string) {
     await this.todoInput.click();
     await this.todoInput.fill(item);

@@ -1,3 +1,4 @@
+/* eslint-disable playwright/valid-describe-callback */
 import { test, expect } from "@playwright/test";
 import config from "config";
 
@@ -14,11 +15,20 @@ test("config test @config", async ({ page }) => {
 /**
  * Failing this test to test the retry mechanism and get trace in CI
  */
-test("has title @unit-test", async ({ page }) => {
-  await page.goto("https://playwright.dev/");
+test.describe("Test", { tag: ["@smokey"] }, () => {
+  test("has title 12", async ({ page }) => {
+    await page.goto("https://playwright.dev/");
 
-  // Expect a title "to contain" a substring.
-  await expect(page).toHaveTitle(/Playwrightooo/);
+    // Expect a title "to contain" a substring.
+    await expect(page).toHaveTitle(/Playwright/);
+  });
+
+  test("has title 2", async ({ page }) => {
+    await page.goto("https://playwright.dev/");
+
+    // Expect a title "to contain" a substring.
+    await expect(page).toHaveTitle(/Playwright/);
+  });
 });
 
 /**
