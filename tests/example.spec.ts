@@ -23,23 +23,16 @@ test.describe("Test", { tag: ["@smokey"] }, () => {
     await expect(page).toHaveTitle(/Playwright/);
   });
 
-  test("has title 2", async ({ page }) => {
+  /**
+   * Failing this test to test the retry mechanism and get trace in CI
+   */
+  test("get started link @smoke-test", async ({ page }) => {
     await page.goto("https://playwright.dev/");
 
-    // Expect a title "to contain" a substring.
-    await expect(page).toHaveTitle(/Playwright/);
+    // Click the get started link.
+    await page.getByRole("link", { name: "Get started" }).click();
+
+    // Expects page to have a heading with the name of Installation.
+    await expect(page.getByRole("heading", { name: "Installation" })).toBeVisible();
   });
-});
-
-/**
- * Failing this test to test the retry mechanism and get trace in CI
- */
-test("get started link @smoke-test", async ({ page }) => {
-  await page.goto("https://playwright.dev/");
-
-  // Click the get started link.
-  await page.getByRole("link", { name: "Get started" }).click();
-
-  // Expects page to have a heading with the name of Installation.
-  await expect(page.getByRole("heading", { name: "Installationnnn" })).toBeVisible();
 });

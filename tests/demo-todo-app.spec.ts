@@ -25,9 +25,6 @@ test.describe("New Todo", () => {
 
     // Make sure the list only has one todo item.
     await expect(page.getByTestId("todo-title")).toHaveText([TODO_ITEMS[0]]);
-    await expect(page.getByTestId("todo-title")).toHaveText(
-      "intentionally failing this test case to test trace",
-    );
 
     // Create 2nd todo.
     await newTodo.fill(TODO_ITEMS[1]);
@@ -35,7 +32,7 @@ test.describe("New Todo", () => {
 
     iterateLoop();
 
-    // Make sure the list now has two todo items.
+    // Make sure the list now has two TODO items.
     await expect(page.getByTestId("todo-title")).toHaveText([
       TODO_ITEMS[0],
       TODO_ITEMS[1],

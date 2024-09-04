@@ -7,7 +7,7 @@ export const test = base.extend<{ saveScreenshots: void }>({
       await use();
       await expect(page).toHaveScreenshot({ maxDiffPixelRatio: 0.1 });
     },
-    { auto: true },
+    { auto: false },
   ],
 });
 

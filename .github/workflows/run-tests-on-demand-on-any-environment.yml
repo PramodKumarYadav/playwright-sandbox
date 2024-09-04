@@ -1,0 +1,55 @@
+# Run tests on demand on any Environment
+name: 🔘 Run tests on demand
+
+on:
+  # Allows us to run this workflow manually from the Actions tab
+  workflow_dispatch:
+    inputs:
+      test-environment:
+        description: "Test environment"
+        required: true
+        default: "dev"
+        type: choice
+        options:
+          - "dev"
+          - "test"
+
+      projects:
+        description: "Project to run on"
+        required: false
+        default: "--project='chromium'"
+        type: choice
+        options:
+          - "--project='chromium'"
+          - "--project='firefox'"
+          - "--project='webkit'"
+
+      tests-to-include:
+        description: "Tag of tests to include"
+        required: false
+        default: "unit-test"
+        type: choice
+        options:
+          - "unit-test"
+          - "health-check"
+          - "smoke-test"
+
+      tests-to-exclude:
+        description: "Tag of tests to exclude"
+        required: false
+        default: ""
+        type: choice
+        options:
+          - "unit-test"
+          - "health-check"
+          - "smoke-test"
+
+jobs:
+  for-any-tests-and-environment:
+    uses: ./.github/workflows/v3-recommended-reusable-workflow.yml
+    with:
+      test-environment: ${{ inputs.test-environment }}
+      tests-to-include: ${{ inputs.tests-to-include }}
+      projects: ${{ inputs.projects }}
+      trigger: "run-${{ inputs.tests-to-include }}-on-demand-on-${{ inputs.test-environment }}"
+    secrets: inherit

@@ -1,0 +1,24 @@
+name: 🚀 Trigger targetted tests on new deployments
+on:
+  repository_dispatch:
+    types: [environment-deployed-event]
+
+jobs:
+  log-requester-details:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Log Requester details
+        run: >
+          echo "Repository: ${{ github.event.client_payload.github.event.repository.full_name }}"
+          echo "Test Env: ${{ github.event.client_payload.TEST_ENV }}"
+          echo "Tests to run: ${{ github.event.client_payload.TAG_OF_TESTS_TO_INCLUDE }}"
+
+  on-dispatch-event-on-requested-env:
+    uses: ./.github/workflows/v3-recommended-reusable-workflow.yml
+    with:
+      test-environment: ${{ github.event.client_payload.TEST_ENV }}
+      tests-to-include: ${{ github.event.client_payload.TAG_OF_TESTS_TO_INCLUDE }}
+      tests-to-exclude: ""
+      projects: "--project='chromium'"
+      trigger: "run-${{ github.event.client_payload.TAG_OF_TESTS_TO_INCLUDE }}-tests-in-${{ github.event.client_payload.TEST_ENV }}-on-deployment"
+    secrets: inherit
