@@ -22,7 +22,7 @@ jobs:
         run: npx playwright install --with-deps
 
       - name: Run changed Playwright tests
-        run: npx playwright test --only-changed=$GITHUB_BASE_REF
+        run: npx playwright test --only-changed=origin/$GITHUB_BASE_REF
         if: github.event_name == 'pull_request'
 
       - uses: actions/upload-artifact@v4
