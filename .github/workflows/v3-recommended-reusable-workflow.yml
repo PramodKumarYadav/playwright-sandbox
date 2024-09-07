@@ -40,6 +40,11 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Add safe directory exception
+        run: git config --global --add safe.directory /__w/playwright-sandbox/playwright-sandbox
 
       - name: Setup Node
         uses: actions/setup-node@v4

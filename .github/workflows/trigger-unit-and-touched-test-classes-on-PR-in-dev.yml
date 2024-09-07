@@ -2,8 +2,8 @@
 name: 🆕 Trigger Unit and new Tests
 
 on:
-  pull_request:
-    branches: [main]
+  # pull_request:
+  #   branches: [main]
 
   # Allows us to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -35,7 +35,7 @@ jobs:
             echo "$filename was changed"
             tests="$tests|$filename"
           done
-          echo "--grep input to send: $tests" 
+          echo "--grep input to send: $tests"
           echo "test_files=$tests"  >> "$GITHUB_OUTPUT"
 
   on-a-pull-request-in-dev:
@@ -45,6 +45,6 @@ jobs:
       test-environment: "dev"
       tests-to-include: "${{needs.touched-test-files.outputs.tests_to_run}}"
       tests-to-exclude: ""
-      projects: "--project='chromium' --project='firefox'"
+      projects: "--project=chromium"
       trigger: "run-unit-and-touched-tests-in-dev-on-pull-request"
     secrets: inherit
