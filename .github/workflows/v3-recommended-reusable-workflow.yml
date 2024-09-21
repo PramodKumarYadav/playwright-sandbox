@@ -31,7 +31,7 @@ jobs:
     # Latest docker image version is here: https://playwright.dev/docs/docker
     # All playwright binary versions are here: https://www.npmjs.com/package/playwright?activeTab=versions
     container:
-      image: mcr.microsoft.com/playwright:v1.46.1-jammy
+      image: mcr.microsoft.com/playwright:v1.47.2-jammy
     strategy:
       fail-fast: false
       matrix:
