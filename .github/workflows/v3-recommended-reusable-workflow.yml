@@ -58,7 +58,7 @@ jobs:
         id: e2e-tests
         # For sharding, index is zero based so add one to get shards index as 1,2,3 and thus ratio as 1/3, 2/3, 3/3.
         run: >
-          npx playwright test 
+          npx playwright test -c playwright.service.config.ts
           --shard=$((${{ strategy.job-index }} + 1))/${{ strategy.job-total }} 
           --grep="${{ inputs.tests-to-include }}" 
           --grep-invert="${{ inputs.tests-to-exclude }}" 
