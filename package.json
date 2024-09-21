@@ -24,7 +24,7 @@
   "license": "ISC",
   "devDependencies": {
     "@azure/microsoft-playwright-testing": "^1.0.0-beta.3",
-    "@playwright/test": "^1.46.1",
+    "@playwright/test": "^1.47.2",
     "@types/dotenv": "^8.2.0",
     "@types/node": "^20.11.10",
     "@typescript-eslint/eslint-plugin": "^6.21.0",
