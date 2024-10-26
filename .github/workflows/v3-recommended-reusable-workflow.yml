@@ -91,7 +91,7 @@ jobs:
         with:
           project-name: "playwright-sandbox"
           build-name: ${{ inputs.trigger }}
-          build-tags: ${{ github.event_name }}
+          build-tags: ${{ github.event }}
           browserstack-username: ${{ secrets.BROWSERSTACK_USERNAME}}
           browserstack-access-key: ${{ secrets.BROWSERSTACK_ACCESS_KEY}}
           timeout-in-seconds: 500
