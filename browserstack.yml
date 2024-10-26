@@ -3,8 +3,8 @@
 userName: "set-as-your-env-variable"
 accessKey: "set-as-your-env-accessKey"
 
-projectName: playwright-sandbox
-buildName: from-local-machine
+projectName: "playwright-sandbox"
+buildName: "from-local-machine"
 buildIdentifier: "#${BUILD_NUMBER}" # Supports strings along with either/both ${expression}
 testObservability: true
 browserstackAutomation: false
