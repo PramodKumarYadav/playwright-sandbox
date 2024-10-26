@@ -58,14 +58,17 @@ jobs:
         id: e2e-tests
         # For sharding, index is zero based so add one to get shards index as 1,2,3 and thus ratio as 1/3, 2/3, 3/3.
         run: >
-          npx playwright test 
+          npx browserstack-node-sdk playwright test 
           --shard=$((${{ strategy.job-index }} + 1))/${{ strategy.job-total }} 
           --grep="${{ inputs.tests-to-include }}" 
           --grep-invert="${{ inputs.tests-to-exclude }}" 
           ${{ inputs.projects }}
         env:
-          HOME: /root
+          # HOME: /root # DO NOT set HOME to /root, it will break playwright. Leaving it here to avoid someone adding it in the future.
           NODE_ENV: ${{ inputs.test-environment }}
+          BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME}}
+          BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY}}
+          BROWSERSTACK_BUILD_NAME: ${{ inputs.trigger }}
 
       - name: Upload blob report to GitHub Actions Artifacts
         if: always()
