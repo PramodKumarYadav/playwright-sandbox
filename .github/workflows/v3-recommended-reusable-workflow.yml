@@ -78,6 +78,53 @@ jobs:
           path: blob-report
           retention-days: 1
 
+  test-run-result:
+    needs: [run-tests]
+    if: ${{ always() }}
+    runs-on: ubuntu-latest
+    outputs:
+      run-result: ${{ steps.evaluate-run-result.outputs.run-result }}
+    steps:
+      - name: Get BrowserStack Result
+        uses: PramodKumarYadav/browserstack-test-observability-get-quality-gate-result@main
+        id: get_browserstack_result
+        with:
+          project-name: "test-mercell-web-app"
+          build-name: ${{ inputs.trigger }}
+          build-tags: ${{ github.run_number }}
+          browserstack-username: ${{ secrets.BROWSERSTACK_USERNAME}}
+          browserstack-access-key: ${{ secrets.BROWSERSTACK_ACCESS_KEY}}
+          timeout-in-seconds: 500
+
+      - name: Evaluate run result
+        id: evaluate-run-result
+        run: |
+          echo "run-result=${{ steps.get_browserstack_result.outputs.quality-gate-result }}" >> $GITHUB_OUTPUT
+
+      - name: Log result
+        run: |
+          echo "Test Run Result: ${{ steps.evaluate-run-result.outputs.run-result }}"
+          if [ "${{ steps.evaluate-run-result.outputs.run-result }}" == "failed" ]; then
+            exit 1
+          fi
+
+  # Only if this test run was triggered by a Dispatch event, Notify caller repository.
+  notify-caller-service:
+    needs: [test-run-result]
+    if: ${{ always() && github.event_name == 'repository_dispatch' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Notify caller repository of test run status
+        uses: peter-evans/repository-dispatch@v3.0.0
+        with:
+          token: ${{ secrets.GA_GITHUB_TOKEN }}
+          repository: "${{ github.event.client_payload.github.event.repository.full_name }}"
+          event-type: "test-run-completed-on-${{ inputs.test-environment }}-for-${{ github.event.client_payload.github.event.repository.name }}"
+          client-payload: '{ "github": ${{ toJson(github) }}, "TEST_RUN_RESULT": "${{ needs.test-run-result.outputs.run-result }}", "TEST_ENV": "${{ inputs.test-environment }}" , "TAG_OF_TESTS_EXECUTED": "${{ inputs.tests-to-include }}", "TAG": "${{ github.event.client_payload.TAG }}" }'
+
   merge-reports:
     # Merge reports after playwright-tests, even if some shards have failed
     needs: [run-tests]
