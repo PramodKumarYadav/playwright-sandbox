@@ -20,4 +20,5 @@ jobs:
       tests-to-exclude: ""
       projects: "--project='chromium'"
       trigger: "run-health-checks-in-dev-every-fifteen-mins"
+      test-type: "health-checks"
     secrets: inherit

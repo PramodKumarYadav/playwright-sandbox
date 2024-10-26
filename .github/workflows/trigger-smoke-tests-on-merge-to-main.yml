@@ -16,4 +16,5 @@ jobs:
       tests-to-exclude: ""
       projects: "--project='chromium'"
       trigger: "run-smoke-tests-in-dev-on-merge-to-main"
+      test-type: "smoke-tests"
     secrets: inherit

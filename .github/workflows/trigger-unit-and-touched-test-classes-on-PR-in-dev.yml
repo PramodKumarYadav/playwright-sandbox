@@ -47,4 +47,5 @@ jobs:
       tests-to-exclude: ""
       projects: "--project=chromium"
       trigger: "run-unit-and-touched-tests-in-dev-on-pull-request"
+      test-type: "new-tests"
     secrets: inherit

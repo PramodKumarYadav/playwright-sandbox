@@ -52,4 +52,5 @@ jobs:
       tests-to-include: ${{ inputs.tests-to-include }}
       projects: ${{ inputs.projects }}
       trigger: "run-${{ inputs.tests-to-include }}-on-demand-on-${{ inputs.test-environment }}"
+      test-type: "manually-triggered-tests"
     secrets: inherit

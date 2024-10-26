@@ -21,4 +21,5 @@ jobs:
       tests-to-exclude: ""
       projects: "--project='chromium'"
       trigger: "${{ github.event.client_payload.github.event.repository.name }}-tests-run-on-${{ github.event.client_payload.TEST_ENV }}-environment"
+      test-type: "system-tests"
     secrets: inherit
