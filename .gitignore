@@ -18,3 +18,10 @@ node_modules/
 # Ignore all .env files:
 **/.env*
 !.env.example
+
+# Ignore browserstack config files:
+browserstackSetupConfig.json
+performance-report.json
+playwright-browserstack-sdk.config.temp.json
+playwright-browserstack-sdk.config.ts
+log

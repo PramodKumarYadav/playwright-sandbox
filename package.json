@@ -13,7 +13,13 @@
     "lint:fix": "npx eslint . --fix",
     "prettier": "npx prettier --check .",
     "prettier:fix": "npx prettier --write .",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "postinstall": "npm update browserstack-node-sdk",
+    "test-browserstack": "npx browserstack-node-sdk playwright test",
+    "test:headed-browserstack": "npx browserstack-node-sdk playwright test --headed",
+    "test:unit-browserstack": "npx browserstack-node-sdk playwright test --grep @unit-test",
+    "test:dev-browserstack": "NODE_ENV=dev npx browserstack-node-sdk playwright test",
+    "test:test-browserstack": "NODE_ENV=test npx browserstack-node-sdk playwright test"
   },
   "keywords": [
     "playwright",
@@ -29,6 +35,7 @@
     "@types/node": "^20.11.10",
     "@typescript-eslint/eslint-plugin": "^6.21.0",
     "@typescript-eslint/parser": "^6.20.0",
+    "browserstack-node-sdk": "^1.34.18",
     "eslint": "^8.56.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-playwright": "^1.5.2",
