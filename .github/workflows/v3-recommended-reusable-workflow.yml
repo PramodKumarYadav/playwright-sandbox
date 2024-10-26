@@ -124,7 +124,7 @@ jobs:
       - name: Notify caller repository of test run status
         uses: peter-evans/repository-dispatch@v3.0.0
         with:
-          token: ${{ secrets.GA_GITHUB_TOKEN }}
+          token: ${{ secrets.PAT_TOKEN_AUG_2025 }}
           repository: "${{ github.event.client_payload.github.event.repository.full_name }}"
           event-type: "test-run-completed-on-${{ inputs.test-environment }}-for-${{ github.event.client_payload.github.event.repository.name }}"
           client-payload: '{ "github": ${{ toJson(github) }}, "TEST_RUN_RESULT": "${{ needs.test-run-result.outputs.run-result }}", "TEST_ENV": "${{ inputs.test-environment }}" , "TAG_OF_TESTS_EXECUTED": "${{ inputs.tests-to-include }}", "TAG": "${{ github.event.client_payload.TAG }}" }'
