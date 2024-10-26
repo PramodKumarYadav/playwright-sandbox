@@ -4,8 +4,8 @@ import { test, expect } from "@playwright/test";
 /**
  * Failing this test to test the retry mechanism and get trace in CI
  */
-test.describe("Test", { tag: ["@employee-service"] }, () => {
-  test("has title 12", async ({ page }) => {
+test.describe("Employee-service", { tag: ["@employee-service"] }, () => {
+  test("has title Playwright", async ({ page }) => {
     await page.goto("https://playwright.dev/");
 
     // Expect a title "to contain" a substring.
@@ -15,7 +15,7 @@ test.describe("Test", { tag: ["@employee-service"] }, () => {
   /**
    * Failing this test to test the retry mechanism and get trace in CI
    */
-  test("get started link @smoke-test", async ({ page }) => {
+  test("get started link is visible @smoke-test", async ({ page }) => {
     await page.goto("https://playwright.dev/");
 
     // Click the get started link.
