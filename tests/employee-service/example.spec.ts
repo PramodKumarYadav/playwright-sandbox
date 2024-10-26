@@ -15,7 +15,7 @@ test("config test @config", async ({ page }) => {
 /**
  * Failing this test to test the retry mechanism and get trace in CI
  */
-test.describe("Test", { tag: ["@smokey"] }, () => {
+test.describe("Test", { tag: ["@employee-service"] }, () => {
   test("has title 12", async ({ page }) => {
     await page.goto("https://playwright.dev/");
 
