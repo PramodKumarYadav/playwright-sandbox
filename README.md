@@ -2,7 +2,9 @@
 
 I have created this repo to both practice playwright and in the process create a feature rich template project that QAs can use for their real projects for doing end to end test automation.
 
-[![Run Tests and Publish results](https://github.com/PramodKumarYadav/playwright-sandbox/actions/workflows/recommended-sharded-run-tests-on-container-and-publish-results-in-same-workflow.yml/badge.svg?branch=main)](https://github.com/PramodKumarYadav/playwright-sandbox/actions/workflows/recommended-sharded-run-tests-on-container-and-publish-results-in-same-workflow.yml)
+[![All Test runs](https://img.shields.io/badge/all_test_runs-on_browserstack-blue)](https://observability.browserstack.com/projects/playwright-sandbox/builds)
+
+[![🚀 Trigger targeted tests on new deployments](https://github.com/PramodKumarYadav/playwright-sandbox/actions/workflows/trigger-targetted-tests-on-every-new-env-deployment.yml/badge.svg)](https://github.com/PramodKumarYadav/playwright-sandbox/actions/workflows/trigger-targetted-tests-on-every-new-env-deployment.yml)
 
 > [!NOTE]
 >
