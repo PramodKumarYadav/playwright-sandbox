@@ -9,6 +9,7 @@ import { test as networkResponseAssert } from "./common-setup/assert-network-res
 import { test as consoleEventListener } from "./common-setup/console-event-listener.fixture";
 import { test as smoke } from "./common-setup/custom-annotation-smoke.fixture";
 
+// add another comment to test changed files.
 export const test = mergeTests(
   saveLogs,
   saveScreenshots,
