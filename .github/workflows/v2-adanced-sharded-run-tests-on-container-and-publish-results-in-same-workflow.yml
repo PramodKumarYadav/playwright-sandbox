@@ -42,6 +42,9 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Fetch Base Branch
+        run: git fetch origin main
+
       - name: Find modified test files
         run: |
           git diff --name-only ${{ github.event.pull_request.base.ref }}...HEAD
