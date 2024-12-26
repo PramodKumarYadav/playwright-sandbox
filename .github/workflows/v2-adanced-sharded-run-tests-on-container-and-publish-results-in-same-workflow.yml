@@ -51,13 +51,14 @@ jobs:
       - name: Find modified test files and output to github output variable
         id: find-modified-test-files
         run: |
-          modified_test_files=$(echo git diff --name-only origin/${{ github.event.pull_request.base.ref }}...HEAD | grep -E "\.spec\.ts$|\.test\.ts$" | wc -l)
-          echo "MODIFIED_TEST_FILES=$modified_test_files" >> "$GITHUB_OUTPUT"
+          MODIFIED_TEST_FILES=$(git diff --name-only origin/${{ github.event.pull_request.base.ref }}...HEAD | grep -E "\.spec\.ts$|\.test\.ts$" | wc -l)
+          echo "modified_test_files=$MODIFIED_TEST_FILES" >> "$GITHUB_OUTPUT"
 
       - name: Print total test files in the project
         run: |
           echo "MODIFIED_TEST_FILES= ${{ steps.find-modified-test-files.outputs.MODIFIED_TEST_FILES }}"
-          git ls-files | grep -E "\.spec\.ts$|\.test\.ts$" | wc -l
+          TOTAL_TEST_FILE_COUNT=$(git ls-files | grep -E "\.spec\.ts$|\.test\.ts$" | wc -l)
+          echo "test_file_count=$TOTAL_TEST_FILE_COUNT" >> $GITHUB_OUTPUT
 
       - name: Setup Node
         uses: actions/setup-node@v4
