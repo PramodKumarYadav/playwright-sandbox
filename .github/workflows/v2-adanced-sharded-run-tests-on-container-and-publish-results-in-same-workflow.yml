@@ -62,7 +62,7 @@ jobs:
           echo "test_file_count=$TOTAL_TEST_FILE_COUNT" >> $GITHUB_OUTPUT
 
       - name: Install bc to calculate ratio
-        run: sudo apt-get install -y bc
+        run: apt-get update && apt-get install -y bc
 
       - name: Ratio of files changed to total test files
         id: ratio-of-files-changed
