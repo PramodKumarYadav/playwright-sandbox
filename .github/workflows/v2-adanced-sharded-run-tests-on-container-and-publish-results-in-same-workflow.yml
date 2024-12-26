@@ -48,9 +48,10 @@ jobs:
       - name: Fetch Base Branch
         run: git fetch origin main
 
-      - name: Find modified test files
+      - name: Find modified test files and output to github output variable
         run: |
-          git diff --name-only origin/${{ github.event.pull_request.base.ref }}...HEAD | grep -E "\.spec\.ts$|\.test\.ts$" | wc -l
+          modified_test_files=$(echo git diff --name-only origin/${{ github.event.pull_request.base.ref }}...HEAD | grep -E "\.spec\.ts$|\.test\.ts$" | wc -l)
+          echo "MODIFIED_TEST_FILES=$modified_test_files" >> "$GITHUB_OUTPUT"
 
       - name: Print total test files in the project
         run: |
