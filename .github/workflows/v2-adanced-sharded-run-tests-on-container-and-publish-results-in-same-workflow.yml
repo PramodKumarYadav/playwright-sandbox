@@ -80,8 +80,7 @@ jobs:
         run: |
           MAX_RUNNER_COUNT=6
           RATIO=${{ steps.ratio-of-files-changed.outputs.ratio }}
-          TOTAL_SHARDS=$(echo "$RATIO * $MAX_RUNNER_COUNT" | bc -l)
-          TOTAL_SHARDS=$(printf "%.0f" $TOTAL_SHARDS)
+          TOTAL_SHARDS=$(echo "($RATIO * $MAX_RUNNER_COUNT + 0.999)/1" | bc)
           echo "total_shards=$TOTAL_SHARDS" >> $GITHUB_OUTPUT
 
       - name: Print Total Shards to use
