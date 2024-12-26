@@ -44,7 +44,7 @@ jobs:
 
       - name: Find modified test files
         run: |
-          git diff --name-only ${{ github.event.pull_request.base.ref }}...HEAD | grep -E "\.spec\.ts$|\.test\.ts$" | wc -l
+          git diff --name-only ${{ github.event.pull_request.base.ref }}...HEAD
 
       - name: Setup Node
         uses: actions/setup-node@v4
