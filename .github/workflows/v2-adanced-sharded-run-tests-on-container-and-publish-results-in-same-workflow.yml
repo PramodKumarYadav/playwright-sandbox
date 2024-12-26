@@ -49,12 +49,14 @@ jobs:
         run: git fetch origin main
 
       - name: Find modified test files and output to github output variable
+        id: find-modified-test-files
         run: |
           modified_test_files=$(echo git diff --name-only origin/${{ github.event.pull_request.base.ref }}...HEAD | grep -E "\.spec\.ts$|\.test\.ts$" | wc -l)
           echo "MODIFIED_TEST_FILES=$modified_test_files" >> "$GITHUB_OUTPUT"
 
       - name: Print total test files in the project
         run: |
+          echo "MODIFIED_TEST_FILES= ${{ steps.find-modified-test-files.outputs.MODIFIED_TEST_FILES }}"
           git ls-files | grep -E "\.spec\.ts$|\.test\.ts$" | wc -l
 
       - name: Setup Node
