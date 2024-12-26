@@ -42,6 +42,9 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Mark Repository as Safe
+        run: git config --global --add safe.directory $GITHUB_WORKSPACE
+
       - name: Fetch Base Branch
         run: git fetch origin main
 
