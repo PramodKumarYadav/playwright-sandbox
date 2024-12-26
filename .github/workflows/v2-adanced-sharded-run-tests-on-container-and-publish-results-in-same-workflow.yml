@@ -66,11 +66,12 @@ jobs:
         run: |
           MODIFIED_TEST_FILES=${{ steps.find-modified-test-files.outputs.modified_test_file_count }}
           TOTAL_TEST_FILE_COUNT=${{ steps.find-total-test-files.outputs.test_file_count }}
-          echo "ratio=$(($MODIFIED_TEST_FILES/ $TOTAL_TEST_FILE_COUNT))" >> $GITHUB_OUTPUT
+          RATIO=$(echo "scale=2; $MODIFIED_TEST_FILES / $TOTAL_TEST_FILE_COUNT" | bc)
+          echo "ratio=$RATIO" >> $GITHUB_OUTPUT
 
       - name: Print Ratio of files changed to total test files
         run: |
-          echo "MODIFIED_TEST_FILES= ${{ steps.ratio-of-files-changed.outputs.ratio }}"
+          echo "RATIO= ${{ steps.ratio-of-files-changed.outputs.ratio }}"
 
       - name: Setup Node
         uses: actions/setup-node@v4
