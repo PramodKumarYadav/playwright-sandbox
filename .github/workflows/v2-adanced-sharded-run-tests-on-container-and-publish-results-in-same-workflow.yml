@@ -27,8 +27,8 @@ concurrency:
 jobs:
   generate-matrix:
     runs-on: ubuntu-latest
-    container:
-      image: mcr.microsoft.com/playwright:v1.45.0-jammy
+    # container:
+    #   image: mcr.microsoft.com/playwright:v1.45.0-jammy
     outputs:
       total_shards: ${{ steps.calculate-total-shards-to-use.outputs.total_shards }}
       dynamic_matrix: ${{ steps.set-matrix.outputs.dynamic_matrix }}
@@ -44,17 +44,17 @@ jobs:
       - name: Fetch Base Branch
         run: git fetch origin main
 
-      - name: Install bc to calculate ratio
-        run: apt-get update && apt-get install -y bc
+      # - name: Install bc to calculate ratio
+      #   run: apt-get update && apt-get install -y bc
 
       - name: Calculate total shards to use
         id: calculate-total-shards-to-use
         run: |
-          MAX_RUNNER_COUNT=6
+          MAX_RUNNER_COUNT=4
           MODIFIED_TEST_FILES=$(git diff --name-only origin/${{ github.event.pull_request.base.ref }}...HEAD | grep -E "\.spec\.ts$|\.test\.ts$" | wc -l)
           TOTAL_TEST_FILE_COUNT=$(git ls-files | grep -E "\.spec\.ts$|\.test\.ts$" | wc -l)
-          RATIO=$(echo "scale=2; $MODIFIED_TEST_FILES / $TOTAL_TEST_FILE_COUNT" | bc)
-          TOTAL_SHARDS=$(echo "($RATIO * $MAX_RUNNER_COUNT + 0.999)/1" | bc)
+          RATIO=$(awk "BEGIN {print $MODIFIED_TEST_FILES / $TOTAL_TEST_FILE_COUNT}")
+          TOTAL_SHARDS=$(awk "BEGIN {print int($RATIO * $MAX_RUNNER_COUNT + 0.999)}")
           echo "TOTAL_SHARDS: $TOTAL_SHARDS"
           echo "total_shards=$TOTAL_SHARDS" >> $GITHUB_OUTPUT
 
