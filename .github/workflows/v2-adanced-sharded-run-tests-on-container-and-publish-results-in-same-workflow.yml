@@ -6,6 +6,8 @@ on:
   # Runs on pushes targeting the default branch
   # push:
   #   branches: ["main"]
+  pull_request:
+    branches: ["main"]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -23,20 +25,36 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  generate-matrix:
+    runs-on: ubuntu-latest
+    outputs:
+      dynamic_matrix: ${{ steps.get-dynamic-matrix.outputs.dynamic-matrix }}
+    steps:
+      - name: Get dynamic matrix
+        uses: PramodKumarYadav/playwright-loadbalancer@main
+        id: get-dynamic-matrix
+        with:
+          max-runners: 6
+
   test:
     timeout-minutes: 60
+    needs: generate-matrix
     runs-on: ubuntu-latest
     environment: dev
     container:
-      image: mcr.microsoft.com/playwright:v1.45.0-jammy
+      image: mcr.microsoft.com/playwright:v1.47.2-jammy
     strategy:
       fail-fast: false
       matrix:
-        # Give same names as of projects in playwright.config.ts since all those projects are being tested.
-        browser-type: ["chromium", "firefox", "webkit"]
+        runner: ${{ fromJSON(needs.generate-matrix.outputs.dynamic_matrix) }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Mark Repository as Safe
+        run: git config --global --add safe.directory $GITHUB_WORKSPACE
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -48,7 +66,7 @@ jobs:
 
       - name: Run Playwright tests
         # Index is zero based so add one to get shards index as 1,2,3 and thus ratio as 1/3, 2/3, 3/3.
-        run: NODE_ENV=dev npx playwright test --shard=$((${{ strategy.job-index }} + 1))/${{ strategy.job-total }} --reporter=blob
+        run: NODE_ENV=dev npx playwright test --only-changed=origin/main --shard=$((${{ strategy.job-index }} + 1))/${{ strategy.job-total }} --reporter=blob
         env:
           # HOME: /root
           HOST: ${{ secrets.HOST}}
@@ -57,7 +75,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: blob-report-${{ matrix.browser-type }}
+          name: blob-report-${{ matrix.runner }}-${{ strategy.job-index }}
           path: blob-report
           retention-days: 1
 
@@ -65,10 +83,7 @@ jobs:
     # Merge reports after playwright-tests, even if some shards have failed
     needs: [test]
     if: always()
-
     runs-on: ubuntu-latest
-    outputs:
-      output1: ${{ steps.step1.outputs.test }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
