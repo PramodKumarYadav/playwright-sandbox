@@ -31,7 +31,7 @@ jobs:
       dynamic_matrix: ${{ steps.get-dynamic-matrix.outputs.dynamic-matrix }}
     steps:
       - name: Get dynamic matrix
-        uses: PramodKumarYadav/playwright-loadbalancer@v0.0.1-alpha
+        uses: PramodKumarYadav/playwright-loadbalancer@main
         id: get-dynamic-matrix
         with:
           max-runners: 6
