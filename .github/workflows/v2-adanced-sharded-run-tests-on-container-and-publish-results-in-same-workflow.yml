@@ -28,47 +28,52 @@ jobs:
   generate-matrix:
     runs-on: ubuntu-latest
     outputs:
-      total_shards: ${{ steps.calculate-total-shards-to-use.outputs.total_shards }}
-      dynamic_matrix: ${{ steps.set-matrix.outputs.dynamic_matrix }}
+      dynamic_matrix: ${{ steps.get-dynamic-matrix.outputs.dynamic-matrix }}
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
+      - name: Get dynamic matrix
+        uses: PramodKumarYadav/playwright-loadbalancer@v0.0.1-alpha
+        id: get-dynamic-matrix
         with:
-          fetch-depth: 0
+          max-runners: 6
 
-      - name: Mark Repository as Safe
-        run: git config --global --add safe.directory $GITHUB_WORKSPACE
+      # - name: Checkout Repository
+      #   uses: actions/checkout@v4
+      #   with:
+      #     fetch-depth: 0
 
-      - name: Fetch Base Branch
-        run: git fetch origin main
+      # - name: Mark Repository as Safe
+      #   run: git config --global --add safe.directory $GITHUB_WORKSPACE
 
-      - name: Calculate total shards to use
-        id: calculate-total-shards-to-use
-        run: |
-          MAX_RUNNER_COUNT=4
-          MODIFIED_TEST_FILES=$(git diff --name-only origin/${{ github.event.pull_request.base.ref }}...HEAD | grep -E "\.spec\.ts$|\.test\.ts$" | wc -l)
-          TOTAL_TEST_FILE_COUNT=$(git ls-files | grep -E "\.spec\.ts$|\.test\.ts$" | wc -l)
-          RATIO=$(awk "BEGIN {print $MODIFIED_TEST_FILES / $TOTAL_TEST_FILE_COUNT}")
-          TOTAL_SHARDS=$(awk "BEGIN {print int($RATIO * $MAX_RUNNER_COUNT + 0.999)}")
-          echo "TOTAL_SHARDS: $TOTAL_SHARDS"
-          echo "total_shards=$TOTAL_SHARDS" >> $GITHUB_OUTPUT
+      # - name: Fetch Base Branch
+      #   run: git fetch origin main
 
-      - name: Generate JSON Matrix
-        id: set-matrix
-        run: |
-          TOTAL_SHARDS=${{ steps.calculate-total-shards-to-use.outputs.total_shards }}
-          MATRIX_JSON="["
-          for i in $(seq 1 $TOTAL_SHARDS); do
-            if [ $i -gt 1 ]; then
-              MATRIX_JSON+=","
-            fi
-            MATRIX_JSON+="\"$i\""
-          done
-          MATRIX_JSON+="]"
+      # - name: Calculate total shards to use
+      #   id: calculate-total-shards-to-use
+      #   run: |
+      #     MAX_RUNNER_COUNT=4
+      #     MODIFIED_TEST_FILES=$(git diff --name-only origin/${{ github.event.pull_request.base.ref }}...HEAD | grep -E "\.spec\.ts$|\.test\.ts$" | wc -l)
+      #     TOTAL_TEST_FILE_COUNT=$(git ls-files | grep -E "\.spec\.ts$|\.test\.ts$" | wc -l)
+      #     RATIO=$(awk "BEGIN {print $MODIFIED_TEST_FILES / $TOTAL_TEST_FILE_COUNT}")
+      #     TOTAL_SHARDS=$(awk "BEGIN {print int($RATIO * $MAX_RUNNER_COUNT + 0.999)}")
+      #     echo "TOTAL_SHARDS: $TOTAL_SHARDS"
+      #     echo "total_shards=$TOTAL_SHARDS" >> $GITHUB_OUTPUT
 
-          echo "Generated matrix: $MATRIX_JSON"
-          echo "dynamic_matrix=$MATRIX_JSON" >> $GITHUB_OUTPUT
-        shell: bash
+      # - name: Generate JSON Matrix
+      #   id: set-matrix
+      #   run: |
+      #     TOTAL_SHARDS=${{ steps.calculate-total-shards-to-use.outputs.total_shards }}
+      #     MATRIX_JSON="["
+      #     for i in $(seq 1 $TOTAL_SHARDS); do
+      #       if [ $i -gt 1 ]; then
+      #         MATRIX_JSON+=","
+      #       fi
+      #       MATRIX_JSON+="\"$i\""
+      #     done
+      #     MATRIX_JSON+="]"
+
+      #     echo "Generated matrix: $MATRIX_JSON"
+      #     echo "dynamic_matrix=$MATRIX_JSON" >> $GITHUB_OUTPUT
+      #   shell: bash
 
   test:
     timeout-minutes: 60
