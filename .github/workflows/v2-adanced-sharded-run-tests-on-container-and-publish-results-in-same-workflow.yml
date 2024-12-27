@@ -27,7 +27,8 @@ concurrency:
 jobs:
   generate-matrix:
     runs-on: ubuntu-latest
-    environment: dev
+    container:
+      image: mcr.microsoft.com/playwright:v1.45.0-jammy
     outputs:
       total_shards: ${{ steps.calculate-total-shards-to-use.outputs.total_shards }}
       dynamic_matrix: ${{ steps.set-matrix.outputs.dynamic_matrix }}
