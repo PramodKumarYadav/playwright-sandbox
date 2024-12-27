@@ -27,10 +27,10 @@ concurrency:
 jobs:
   generate-matrix:
     runs-on: ubuntu-latest
+    environment: dev
     outputs:
       total_shards: ${{ steps.calculate-total-shards-to-use.outputs.total_shards }}
       dynamic_matrix: ${{ steps.set-matrix.outputs.dynamic_matrix }}
-
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
