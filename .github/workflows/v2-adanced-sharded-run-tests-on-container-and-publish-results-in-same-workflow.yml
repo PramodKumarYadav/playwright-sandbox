@@ -34,7 +34,7 @@ jobs:
         uses: PramodKumarYadav/playwright-loadbalancer@main
         id: get-dynamic-matrix
         with:
-          max-runners: 6
+          max-runners: 3
 
   test:
     timeout-minutes: 60

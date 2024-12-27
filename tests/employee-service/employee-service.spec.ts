@@ -17,7 +17,7 @@ test.describe("Employee-service", { tag: ["@employee-service"] }, () => {
   /**
    * Failing this test to test the retry mechanism and get trace in CI
    */
-  test("get started link is visible @smoke-test", async ({ page }) => {
+  test("get started link is visible on page @smoke-test", async ({ page }) => {
     await page.goto("https://playwright.dev/");
 
     // Click the get started link.
