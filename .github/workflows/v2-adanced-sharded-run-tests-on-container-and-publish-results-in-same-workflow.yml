@@ -25,17 +25,12 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  test:
-    timeout-minutes: 60
+  generate-matrix:
     runs-on: ubuntu-latest
-    environment: dev
-    container:
-      image: mcr.microsoft.com/playwright:v1.45.0-jammy
-    strategy:
-      fail-fast: false
-      matrix:
-        # Give same names as of projects in playwright.config.ts since all those projects are being tested.
-        browser-type: ["chromium", "firefox", "webkit"]
+    outputs:
+      total_shards: ${{ steps.calculate-total-shards-to-use.outputs.total_shards }}
+      dynamic_matrix: ${{ steps.set-matrix.outputs.dynamic_matrix }}
+
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -48,44 +43,47 @@ jobs:
       - name: Fetch Base Branch
         run: git fetch origin main
 
-      - name: Find modified test files and output to github output variable
-        id: find-modified-test-files
-        run: |
-          MODIFIED_TEST_FILES=$(git diff --name-only origin/${{ github.event.pull_request.base.ref }}...HEAD | grep -E "\.spec\.ts$|\.test\.ts$" | wc -l)
-          echo "modified_test_file_count=$MODIFIED_TEST_FILES" >> "$GITHUB_OUTPUT"
-
-      - name: Print total test files in the project
-        id: find-total-test-files
-        run: |
-          TOTAL_TEST_FILE_COUNT=$(git ls-files | grep -E "\.spec\.ts$|\.test\.ts$" | wc -l)
-          echo "test_file_count=$TOTAL_TEST_FILE_COUNT" >> $GITHUB_OUTPUT
-
       - name: Install bc to calculate ratio
         run: apt-get update && apt-get install -y bc
 
-      - name: Ratio of files changed to total test files
-        id: ratio-of-files-changed
-        run: |
-          MODIFIED_TEST_FILES=${{ steps.find-modified-test-files.outputs.modified_test_file_count }}
-          TOTAL_TEST_FILE_COUNT=${{ steps.find-total-test-files.outputs.test_file_count }}
-          RATIO=$(echo "scale=2; $MODIFIED_TEST_FILES / $TOTAL_TEST_FILE_COUNT" | bc)
-          echo "ratio=$RATIO" >> $GITHUB_OUTPUT
-
-      - name: Print Ratio of files changed to total test files
-        run: |
-          echo "RATIO= ${{ steps.ratio-of-files-changed.outputs.ratio }}"
-
-      - name: Multiply ratio with Max number of runners to get total shards
+      - name: Calculate total shards to use
         id: calculate-total-shards-to-use
         run: |
           MAX_RUNNER_COUNT=6
-          RATIO=${{ steps.ratio-of-files-changed.outputs.ratio }}
+          MODIFIED_TEST_FILES=$(git diff --name-only origin/${{ github.event.pull_request.base.ref }}...HEAD | grep -E "\.spec\.ts$|\.test\.ts$" | wc -l)
+          TOTAL_TEST_FILE_COUNT=$(git ls-files | grep -E "\.spec\.ts$|\.test\.ts$" | wc -l)
+          RATIO=$(echo "scale=2; $MODIFIED_TEST_FILES / $TOTAL_TEST_FILE_COUNT" | bc)
           TOTAL_SHARDS=$(echo "($RATIO * $MAX_RUNNER_COUNT + 0.999)/1" | bc)
           echo "total_shards=$TOTAL_SHARDS" >> $GITHUB_OUTPUT
 
       - name: Print Total Shards to use
         run: |
           echo "TOTAL_SHARDS= ${{ steps.calculate-total-shards-to-use.outputs.total_shards }}"
+
+      - name: Generate JSON Matrix
+        id: set-matrix
+        run: |
+          TOTAL_SHARDS=${{ steps.calculate-total-shards-to-use.outputs.total_shards }}
+          # Generate a JSON array of numbers from 1 to TOTAL_SHARDS
+          MATRIX_JSON=$(seq 1 $TOTAL_SHARDS | awk '{printf "%s\"%s\"", NR>1?",":"[", $1} END {print "]"}')
+          echo "Generated matrix: $MATRIX_JSON"
+          echo "dynamic_matrix=$MATRIX_JSON" >> $GITHUB_OUTPUT
+  test:
+    timeout-minutes: 60
+    needs: generate-matrix
+    runs-on: ubuntu-latest
+    environment: dev
+    container:
+      image: mcr.microsoft.com/playwright:v1.45.0-jammy
+    strategy:
+      fail-fast: false
+      matrix:
+        runner: ${{ fromJSON(needs.generate-matrix.outputs.dynamic_matrix) }}
+        # Give same names as of projects in playwright.config.ts since all those projects are being tested.
+        # browser-type: ["chromium", "firefox", "webkit"]
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -106,7 +104,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: blob-report-${{ matrix.browser-type }}
+          name: blob-report-${{ matrix.runner }}-${{ strategy.job-index }}
           path: blob-report
           retention-days: 1
 
