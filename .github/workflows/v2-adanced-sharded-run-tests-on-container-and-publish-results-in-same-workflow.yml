@@ -61,7 +61,7 @@ jobs:
       - name: Generate JSON Matrix
         id: set-matrix
         run: |
-          TOTAL_SHARDS= ${{ steps.calculate-total-shards-to-use.outputs.total_shards }}
+          TOTAL_SHARDS=${{ steps.calculate-total-shards-to-use.outputs.total_shards }}
           MATRIX_JSON="["
           for i in $(seq 1 $TOTAL_SHARDS); do
             if [ $i -gt 1 ]; then
