@@ -73,6 +73,7 @@ jobs:
 
           echo "Generated matrix: $MATRIX_JSON"
           echo "dynamic_matrix=$MATRIX_JSON" >> $GITHUB_OUTPUT
+        shell: bash
 
   test:
     timeout-minutes: 60
