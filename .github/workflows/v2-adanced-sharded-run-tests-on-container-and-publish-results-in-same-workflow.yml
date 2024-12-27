@@ -27,8 +27,6 @@ concurrency:
 jobs:
   generate-matrix:
     runs-on: ubuntu-latest
-    # container:
-    #   image: mcr.microsoft.com/playwright:v1.45.0-jammy
     outputs:
       total_shards: ${{ steps.calculate-total-shards-to-use.outputs.total_shards }}
       dynamic_matrix: ${{ steps.set-matrix.outputs.dynamic_matrix }}
@@ -43,9 +41,6 @@ jobs:
 
       - name: Fetch Base Branch
         run: git fetch origin main
-
-      # - name: Install bc to calculate ratio
-      #   run: apt-get update && apt-get install -y bc
 
       - name: Calculate total shards to use
         id: calculate-total-shards-to-use
@@ -81,7 +76,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: dev
     container:
-      image: mcr.microsoft.com/playwright:v1.45.0-jammy
+      image: mcr.microsoft.com/playwright:v1.47.2-jammy
     strategy:
       fail-fast: false
       matrix:
