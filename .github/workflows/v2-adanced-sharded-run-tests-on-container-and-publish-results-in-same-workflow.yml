@@ -55,20 +55,25 @@ jobs:
           TOTAL_TEST_FILE_COUNT=$(git ls-files | grep -E "\.spec\.ts$|\.test\.ts$" | wc -l)
           RATIO=$(echo "scale=2; $MODIFIED_TEST_FILES / $TOTAL_TEST_FILE_COUNT" | bc)
           TOTAL_SHARDS=$(echo "($RATIO * $MAX_RUNNER_COUNT + 0.999)/1" | bc)
+          echo "TOTAL_SHARDS: $TOTAL_SHARDS"
           echo "total_shards=$TOTAL_SHARDS" >> $GITHUB_OUTPUT
-
-      - name: Print Total Shards to use
-        run: |
-          echo "TOTAL_SHARDS= ${{ steps.calculate-total-shards-to-use.outputs.total_shards }}"
 
       - name: Generate JSON Matrix
         id: set-matrix
         run: |
-          TOTAL_SHARDS=${{ steps.calculate-total-shards-to-use.outputs.total_shards }}
-          # Generate a JSON array of numbers from 1 to TOTAL_SHARDS
-          MATRIX_JSON=$(seq 1 $TOTAL_SHARDS | awk '{printf "%s\"%s\"", NR>1?",":"[", $1} END {print "]"}')
+          TOTAL_SHARDS= ${{ steps.calculate-total-shards-to-use.outputs.total_shards }}
+          MATRIX_JSON="["
+          for i in $(seq 1 $TOTAL_SHARDS); do
+            if [ $i -gt 1 ]; then
+              MATRIX_JSON+=","
+            fi
+            MATRIX_JSON+="\"$i\""
+          done
+          MATRIX_JSON+="]"
+
           echo "Generated matrix: $MATRIX_JSON"
           echo "dynamic_matrix=$MATRIX_JSON" >> $GITHUB_OUTPUT
+
   test:
     timeout-minutes: 60
     needs: generate-matrix
