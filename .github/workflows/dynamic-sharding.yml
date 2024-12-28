@@ -67,64 +67,57 @@ jobs:
         run: |
           echo "Run test cases to run: $RUN_TEST_CASE_TO_RUN"
 
-  #     - name: Calculate total shards to use
-  #       id: calculate-total-shards-to-use
-  #       run: |
-  #         MAX_RUNNER_COUNT=${{ inputs.max-runners }}
-  #         echo "MAX_RUNNER_COUNT: $MAX_RUNNER_COUNT"
-  #         # Ensure MAX_RUNNER_COUNT is not zero (sanity check)
-  #         if [ "$MAX_RUNNER_COUNT" -le 0 ]; then
-  #           echo "Error: Max runner count must be a positive number."
-  #           exit 1
-  #         fi
+      - name: Calculate total shards to use
+        id: calculate-total-shards-to-use
+        run: |
+          MAX_RUNNER_COUNT=6
+          echo "MAX_RUNNER_COUNT: $MAX_RUNNER_COUNT"
+          # Ensure MAX_RUNNER_COUNT is not zero (sanity check)
+          if [ "$MAX_RUNNER_COUNT" -le 0 ]; then
+            echo "Error: Max runner count must be a positive number."
+            exit 1
+          fi
 
-  #         # Capture the raw list of modified test files
-  #         MODIFIED_TEST_FILES_RAW=$(git diff --name-only origin/${{ github.event.pull_request.base.ref }}...HEAD | grep -E "\.spec\.ts$|\.test\.ts$" || true)
-  #         if [ -z "$MODIFIED_TEST_FILES_RAW" ]; then
-  #           MODIFIED_TEST_FILES=0
-  #         else
-  #           MODIFIED_TEST_FILES=$(echo "$MODIFIED_TEST_FILES_RAW" | wc -l | tr -d '[:space:]')
-  #         fi
-  #         echo "MODIFIED_TEST_FILES: $MODIFIED_TEST_FILES"
+          TOTAL_TEST_CASES_COUNT_FOR_ALL_PROJECTS=$(npx playwright test --list | grep "Total:" | awk '{print $2}')
+          echo "TOTAL_TEST_CASES_COUNT_FOR_ALL_PROJECTS: $TOTAL_TEST_CASES_COUNT_FOR_ALL_PROJECTS"
+          # Ensure TOTAL_TEST_CASES_COUNT_FOR_ALL_PROJECTS is not zero (sanity check)
+          if [ "$TOTAL_TEST_CASES_COUNT_FOR_ALL_PROJECTS" -eq 0 ]; then
+            echo "Error: No test cases found in the repository."
+            exit 1
+          fi
 
-  #         TOTAL_TEST_FILE_COUNT=$(git ls-files | grep -E "\.spec\.ts$|\.test\.ts$" | wc -l)
-  #         echo "TOTAL_TEST_FILE_COUNT: $TOTAL_TEST_FILE_COUNT"
-  #         # Ensure TOTAL_TEST_FILE_COUNT is not zero (sanity check)
-  #         if [ "$TOTAL_TEST_FILE_COUNT" -eq 0 ]; then
-  #           echo "Error: No test files found in the repository."
-  #           exit 1
-  #         fi
+          TEST_CASE_COUNT_FOR_THIS_RUN=$(npx playwright test --grep=@smoke --list | grep "Total:" | awk '{print $2}')
+          echo "TEST_CASE_COUNT_FOR_THIS_RUN: $TEST_CASE_COUNT_FOR_THIS_RUN"
 
-  #         RATIO=$(awk "BEGIN {print $MODIFIED_TEST_FILES / $TOTAL_TEST_FILE_COUNT}")
-  #         echo "RATIO: $RATIO"
+          RATIO=$(awk "BEGIN {print $TEST_CASE_COUNT_FOR_THIS_RUN / $TOTAL_TEST_CASES_COUNT_FOR_ALL_PROJECTS}")
+          echo "RATIO: $RATIO"
 
-  #         TOTAL_SHARDS=$(awk "BEGIN {print int($RATIO * $MAX_RUNNER_COUNT + 0.999)}")
-  #         echo "TOTAL_SHARDS_AS_CALCULATED: $TOTAL_SHARDS"
+          TOTAL_SHARDS=$(awk "BEGIN {print int($RATIO * $MAX_RUNNER_COUNT + 0.999)}")
+          echo "TOTAL_SHARDS_AS_CALCULATED: $TOTAL_SHARDS"
 
-  #         # If there are no modified files, set TOTAL_SHARDS to 1
-  #         if [ "$TOTAL_SHARDS" -eq 0 ]; then
-  #           TOTAL_SHARDS=1
-  #         fi
-  #         echo "TOTAL_SHARDS_TO_USE: $TOTAL_SHARDS"
-  #         echo "total_shards=$TOTAL_SHARDS" >> $GITHUB_OUTPUT
-  #       shell: bash
+          # If there are no modified files, set TOTAL_SHARDS to 1
+          if [ "$TOTAL_SHARDS" -eq 0 ]; then
+            TOTAL_SHARDS=1
+          fi
+          echo "TOTAL_SHARDS_TO_USE: $TOTAL_SHARDS"
+          echo "TOTAL_SHARDS=$TOTAL_SHARDS" >> $GITHUB_ENV
+        shell: bash
 
-  #     - name: Generate JSON Matrix
-  #       id: set-matrix
-  #       run: |
-  #         TOTAL_SHARDS=${{ steps.calculate-total-shards-to-use.outputs.total_shards }}
-  #         MATRIX_JSON="["
-  #         for i in $(seq 1 $TOTAL_SHARDS); do
-  #           if [ $i -gt 1 ]; then
-  #             MATRIX_JSON+=","
-  #           fi
-  #           MATRIX_JSON+="\"$i\""
-  #         done
-  #         MATRIX_JSON+="]"
+      - name: Generate JSON Matrix
+        id: set-matrix
+        run: |
+          MATRIX_JSON="["
+          for i in $(seq 1 $TOTAL_SHARDS); do
+            if [ $i -gt 1 ]; then
+              MATRIX_JSON+=","
+            fi
+            MATRIX_JSON+="\"$i\""
+          done
+          MATRIX_JSON+="]"
 
-  #         echo "Generated matrix: $MATRIX_JSON"
-  #         echo "dynamic_matrix=$MATRIX_JSON" >> $GITHUB_OUTPUT
-  #       shell: bash
+          echo "Generated matrix: $MATRIX_JSON"
+          echo "dynamic_matrix=$MATRIX_JSON" >> $GITHUB_OUTPUT
+        shell: bash
 
   # test:
   #   timeout-minutes: 60
