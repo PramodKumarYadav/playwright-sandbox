@@ -86,7 +86,7 @@ jobs:
             exit 1
           fi
 
-          TEST_CASE_COUNT_FOR_THIS_RUN=$(npx playwright test --grep=@smoke --list | grep "Total:" | awk '{print $2}')
+          TEST_CASE_COUNT_FOR_THIS_RUN=$(npx playwright test --grep=demo-todo-app --list | grep "Total:" | awk '{print $2}')
           echo "TEST_CASE_COUNT_FOR_THIS_RUN: $TEST_CASE_COUNT_FOR_THIS_RUN"
 
           RATIO=$(awk "BEGIN {print $TEST_CASE_COUNT_FOR_THIS_RUN / $TOTAL_TEST_CASES_COUNT_FOR_ALL_PROJECTS}")
