@@ -35,6 +35,11 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
       # - name: Mark Repository as Safe
       #   run: git config --global --add safe.directory $GITHUB_WORKSPACE
       #   shell: bash
@@ -130,10 +135,10 @@ jobs:
   #     - name: Mark Repository as Safe
   #       run: git config --global --add safe.directory $GITHUB_WORKSPACE
 
-  #     - name: Setup Node
-  #       uses: actions/setup-node@v4
-  #       with:
-  #         node-version: 18
+  # - name: Setup Node
+  #   uses: actions/setup-node@v4
+  #   with:
+  #     node-version: 18
 
   #     - name: Install project dependencies
   #       run: npm ci
