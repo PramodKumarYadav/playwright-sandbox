@@ -43,12 +43,8 @@ jobs:
       - name: Install project dependencies
         run: npm ci
 
-      # - name: Mark Repository as Safe
-      #   run: git config --global --add safe.directory $GITHUB_WORKSPACE
-      #   shell: bash
-
       - name: Get total test case count
-        id: test-count
+        id: total-test-count
         run: |
           # Run the command and filter the total count
           TOTAL_TEST_CASE_TO_RUN=$(npx playwright test --list | grep "Total:" | awk '{print $2}')
@@ -58,6 +54,18 @@ jobs:
       - name: Display test case count
         run: |
           echo "Total test cases to run: $TOTAL_TEST_CASE_TO_RUN"
+
+      - name: Get run test case count
+        id: test-count
+        run: |
+          # Run the command and filter the total count
+          RUN_TEST_CASE_TO_RUN=$(npx playwright test --grep=@smoke --list | grep "Total:" | awk '{print $2}')
+          echo "RUN_TEST_CASE_TO_RUN=$RUN_TEST_CASE_TO_RUN" >> $GITHUB_ENV
+        shell: bash
+
+      - name: Display test case count
+        run: |
+          echo "Run test cases to run: $RUN_TEST_CASE_TO_RUN"
 
   #     - name: Calculate total shards to use
   #       id: calculate-total-shards-to-use
