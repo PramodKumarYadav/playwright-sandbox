@@ -38,7 +38,7 @@ jobs:
         with:
           max-runners: 6
           pw-cmd-to-list-all-tests: "npx playwright test --list"
-          pw-cmd-to-list-selected-tests: "npx playwright test --project=chromium --list"
+          pw-cmd-to-list-selected-tests: "npx playwright test --grep=@smoke --list"
 
   test:
     timeout-minutes: 60
