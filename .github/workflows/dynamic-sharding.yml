@@ -37,8 +37,8 @@ jobs:
         id: get-dynamic-matrix
         with:
           max-runners: 6
-          pw-cmd-to-find-total-tests: "npx playwright test --list"
-          pw-cmd-to-run-tests-in-this-run: "npx playwright test --grep=@smoke --list"
+          pw-cmd-to-list-all-tests: "npx playwright test --list"
+          pw-cmd-to-list-selected-tests: "npx playwright test -project=chromium --list"
 
   test:
     timeout-minutes: 60
