@@ -29,11 +29,35 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: mcr.microsoft.com/playwright:latest
-    # outputs:
-    #   dynamic_matrix: ${{ steps.get-dynamic-matrix.outputs.dynamic-matrix }}
+    outputs:
+      dynamic_matrix: ${{ steps.get-dynamic-matrix.outputs.dynamic-matrix }}
+    steps:
+      - name: Get dynamic matrix
+        uses: PramodKumarYadav/playwright-test-sharder@main
+        id: get-dynamic-matrix
+        with:
+          max-runners: 6
+          pw-cmd-to-run-tests-in-this-run: "npx playwright test --list"
+
+  test:
+    timeout-minutes: 60
+    needs: generate-matrix
+    runs-on: ubuntu-latest
+    environment: dev
+    container:
+      image: mcr.microsoft.com/playwright:v1.47.2-jammy
+    strategy:
+      fail-fast: false
+      matrix:
+        runner: ${{ fromJSON(needs.generate-matrix.outputs.dynamic_matrix) }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Mark Repository as Safe
+        run: git config --global --add safe.directory $GITHUB_WORKSPACE
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -43,124 +67,20 @@ jobs:
       - name: Install project dependencies
         run: npm ci
 
-      - name: Get total test case count
-        id: total-test-count
-        run: |
-          # Run the command and filter the total count
-          TOTAL_TEST_CASE_TO_RUN=$(npx playwright test --list | grep "Total:" | awk '{print $2}')
-          echo "TOTAL_TEST_CASE_TO_RUN=$TOTAL_TEST_CASE_TO_RUN" >> $GITHUB_ENV
-        shell: bash
+      - name: Run Playwright tests
+        # Index is zero based so add one to get shards index as 1,2,3 and thus ratio as 1/3, 2/3, 3/3.
+        run: NODE_ENV=dev npx playwright test --only-changed=origin/main --shard=$((${{ strategy.job-index }} + 1))/${{ strategy.job-total }} --reporter=blob
+        env:
+          # HOME: /root
+          HOST: ${{ secrets.HOST}}
 
-      - name: Display test case count
-        run: |
-          echo "Total test cases to run: $TOTAL_TEST_CASE_TO_RUN"
-
-      - name: Get run test case count
-        id: test-count
-        run: |
-          # Run the command and filter the total count
-          RUN_TEST_CASE_TO_RUN=$(npx playwright test --grep=@smoke --list | grep "Total:" | awk '{print $2}')
-          echo "RUN_TEST_CASE_TO_RUN=$RUN_TEST_CASE_TO_RUN" >> $GITHUB_ENV
-        shell: bash
-
-      - name: Display test case count
-        run: |
-          echo "Run test cases to run: $RUN_TEST_CASE_TO_RUN"
-
-      - name: Calculate total shards to use
-        id: calculate-total-shards-to-use
-        run: |
-          MAX_RUNNER_COUNT=6
-          echo "MAX_RUNNER_COUNT: $MAX_RUNNER_COUNT"
-          # Ensure MAX_RUNNER_COUNT is not zero (sanity check)
-          if [ "$MAX_RUNNER_COUNT" -le 0 ]; then
-            echo "Error: Max runner count must be a positive number."
-            exit 1
-          fi
-
-          TOTAL_TEST_CASES_COUNT_FOR_ALL_PROJECTS=$(npx playwright test --list | grep "Total:" | awk '{print $2}')
-          echo "TOTAL_TEST_CASES_COUNT_FOR_ALL_PROJECTS: $TOTAL_TEST_CASES_COUNT_FOR_ALL_PROJECTS"
-          # Ensure TOTAL_TEST_CASES_COUNT_FOR_ALL_PROJECTS is not zero (sanity check)
-          if [ "$TOTAL_TEST_CASES_COUNT_FOR_ALL_PROJECTS" -eq 0 ]; then
-            echo "Error: No test cases found in the repository."
-            exit 1
-          fi
-
-          TEST_CASE_COUNT_FOR_THIS_RUN=$(npx playwright test --grep=demo-todo-app --list | grep "Total:" | awk '{print $2}')
-          echo "TEST_CASE_COUNT_FOR_THIS_RUN: $TEST_CASE_COUNT_FOR_THIS_RUN"
-
-          RATIO=$(awk "BEGIN {print $TEST_CASE_COUNT_FOR_THIS_RUN / $TOTAL_TEST_CASES_COUNT_FOR_ALL_PROJECTS}")
-          echo "RATIO: $RATIO"
-
-          TOTAL_SHARDS=$(awk "BEGIN {print int($RATIO * $MAX_RUNNER_COUNT + 0.999)}")
-          echo "TOTAL_SHARDS_AS_CALCULATED: $TOTAL_SHARDS"
-
-          # If there are no modified files, set TOTAL_SHARDS to 1
-          if [ "$TOTAL_SHARDS" -eq 0 ]; then
-            TOTAL_SHARDS=1
-          fi
-          echo "TOTAL_SHARDS_TO_USE: $TOTAL_SHARDS"
-          echo "TOTAL_SHARDS=$TOTAL_SHARDS" >> $GITHUB_ENV
-        shell: bash
-
-      - name: Generate JSON Matrix
-        id: set-matrix
-        run: |
-          MATRIX_JSON="["
-          for i in $(seq 1 $TOTAL_SHARDS); do
-            if [ $i -gt 1 ]; then
-              MATRIX_JSON+=","
-            fi
-            MATRIX_JSON+="\"$i\""
-          done
-          MATRIX_JSON+="]"
-
-          echo "Generated matrix: $MATRIX_JSON"
-          echo "dynamic_matrix=$MATRIX_JSON" >> $GITHUB_OUTPUT
-        shell: bash
-
-  # test:
-  #   timeout-minutes: 60
-  #   needs: generate-matrix
-  #   runs-on: ubuntu-latest
-  #   environment: dev
-  #   container:
-  #     image: mcr.microsoft.com/playwright:v1.47.2-jammy
-  #   strategy:
-  #     fail-fast: false
-  #     matrix:
-  #       runner: ${{ fromJSON(needs.generate-matrix.outputs.dynamic_matrix) }}
-  #   steps:
-  #     - name: Checkout Repository
-  #       uses: actions/checkout@v4
-  #       with:
-  #         fetch-depth: 0
-
-  #     - name: Mark Repository as Safe
-  #       run: git config --global --add safe.directory $GITHUB_WORKSPACE
-
-  # - name: Setup Node
-  #   uses: actions/setup-node@v4
-  #   with:
-  #     node-version: 18
-
-  # - name: Install project dependencies
-  #   run: npm ci
-
-  #     - name: Run Playwright tests
-  #       # Index is zero based so add one to get shards index as 1,2,3 and thus ratio as 1/3, 2/3, 3/3.
-  #       run: NODE_ENV=dev npx playwright test --only-changed=origin/main --shard=$((${{ strategy.job-index }} + 1))/${{ strategy.job-total }} --reporter=blob
-  #       env:
-  #         # HOME: /root
-  #         HOST: ${{ secrets.HOST}}
-
-  #     - name: Upload blob report to GitHub Actions Artifacts
-  #       if: always()
-  #       uses: actions/upload-artifact@v4
-  #       with:
-  #         name: blob-report-${{ matrix.runner }}-${{ strategy.job-index }}
-  #         path: blob-report
-  #         retention-days: 1
+      - name: Upload blob report to GitHub Actions Artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: blob-report-${{ matrix.runner }}-${{ strategy.job-index }}
+          path: blob-report
+          retention-days: 1
 
   # merge-reports:
   #   # Merge reports after playwright-tests, even if some shards have failed
