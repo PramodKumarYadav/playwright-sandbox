@@ -5,7 +5,7 @@ const BUY_MILK = "buy milk";
 const BUY_TOMATO = "Buy Tomato";
 const BUY_ONIONS = "Buy Onions";
 
-test.describe("todo page @payment-service", () => {
+test.describe("todo page tests @payment-service", () => {
   test("has title", async ({ todoPage }) => {
     await todoPage.addTodoItem(BUY_MILK);
     await todoPage.addTodoItem(BUY_BREAD);
