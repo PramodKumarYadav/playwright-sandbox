@@ -12,9 +12,6 @@ jobs:
   test:
     timeout-minutes: 60
     runs-on: ubuntu-latest
-    environment: dev
-    container:
-      image: mcr.microsoft.com/playwright:v1.47.2-jammy
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -34,6 +31,9 @@ jobs:
 
       - name: Install project dependencies
         run: npm ci
+
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
 
       - name: List Playwright Tests
         id: list-tests
