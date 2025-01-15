@@ -39,7 +39,7 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
 
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: [["list"], ["html"], ["github"], ["blob"], ["./custom-reporter.js"]],
+  reporter: [["list"], ["html"], ["github"], ["blob"], ["./state-reporter.js"]],
 
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {

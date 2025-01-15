@@ -3,7 +3,7 @@ import path from "path";
 
 class CustomReporter {
   constructor() {
-    this.resultsFile = path.resolve("./test-results.json"); // Path to store test data
+    this.resultsFile = path.resolve("./state.json"); // Path to store test data
   }
 
   // Called when the entire test run starts
