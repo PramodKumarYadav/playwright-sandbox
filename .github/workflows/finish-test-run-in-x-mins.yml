@@ -32,6 +32,14 @@ jobs:
       - name: Install project dependencies
         run: npm ci
 
+      - name: Cache Playwright Browsers
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-browsers-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            playwright-browsers-${{ runner.os }}-
+
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
 
@@ -39,7 +47,7 @@ jobs:
         id: list-tests
         run: |
           # Run the Playwright test list command
-          test_list=$(npx playwright test --list)
+          test_list=$(npx playwright test --list | grep -E '^\[.+\]')
 
           # Process the output into a JSON array
           test_array=$(echo "$test_list" | jq -R -s 'split("\n") | map(select(length > 0))')
