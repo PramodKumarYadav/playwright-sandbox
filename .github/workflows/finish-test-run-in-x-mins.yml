@@ -46,8 +46,6 @@ jobs:
 
           # Save the array as an output
           echo "TEST_LIST=$test_array" >> $GITHUB_ENV
-        env:
-          CI: true
 
       - name: Display Test List
         run: |
