@@ -22,7 +22,7 @@ jobs:
           fetch-depth: 0
 
       - name: Install jq
-        run: apt-get update && sudo apt-get install -y jq
+        run: apt-get update && apt-get install -y jq
 
       - name: Mark Repository as Safe
         run: git config --global --add safe.directory $GITHUB_WORKSPACE
