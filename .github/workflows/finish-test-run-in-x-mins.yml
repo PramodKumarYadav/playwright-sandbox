@@ -37,7 +37,7 @@ jobs:
 
       - name: List Playwright Tests
         id: list-tests
-        run: |
+        run: >
           # Run the Playwright test list command
           test_list=$(npx playwright test --list)
 
