@@ -7,7 +7,7 @@ import { test, expect } from "@playwright/test";
  * Failing this test to test the retry mechanism and get trace in CI
  */
 test.describe("HEAD1-Employee-service", { tag: ["@employee-service"] }, () => {
-  test.describe("HEAD2-Employee-service", { tag: ["@employee-service"] }, () => {
+  test.describe("HEAD2-Employee-service,", { tag: ["@employee-service"] }, () => {
     test.describe("Employee-service", { tag: ["@employee-service"] }, () => {
       test("has title Playwright", async ({ page }) => {
         await page.goto("https://playwright.dev/");
