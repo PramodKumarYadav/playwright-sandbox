@@ -85,51 +85,9 @@ jobs:
           echo "$json_array"
 
           # Save the JSON array to GITHUB_OUTPUT, ensuring proper escaping
-          echo "TEST_LIST=$(echo "$json_array" | jq -c)" >> $GITHUB_OUTPUT
-
-      - name: Group Tests by Project
-        id: group-tests
-        run: |
-          test_list='${{ steps.list-tests.outputs.TEST_LIST }}'
-          grouped_tests=$(echo "$test_list" | jq -R -s '
-            split("\n") |
-            map(select(length > 0)) |
-            map({
-              project: (match("^\\[([^\\]]+)\\]").captures[0].string),
-              test: (match("(?<=› ).*?\\.spec\\.ts:\\d+:\\d+") | .string)
-            }) |
-            group_by(.project) |
-            map({ (.[0].project): map(.test) })
-          ')
-
-          echo "Grouped Tests: $grouped_tests"
-
-          # Escape the JSON properly and save it to GITHUB_ENV
-          escaped_grouped_tests=$(echo "$grouped_tests" | jq -c)
-          echo "GROUPED_TESTS=$escaped_grouped_tests" >> $GITHUB_ENV
-
-      - name: Run Tests Per Project
-        run: |
-          grouped_tests=${{ env.GROUPED_TESTS }}
-
-          # Parse and run tests
-          echo "$grouped_tests" | jq -c '.[]' | while IFS= read -r entry; do
-            project=$(echo "$entry" | jq -r 'keys[0]')
-            tests=$(echo "$entry" | jq -r --arg project "$project" '.[$project] | join(" ")')
-
-            if [ -n "$tests" ]; then
-              echo "Running tests for project $project: $tests"
-              npx playwright test $tests --project=$project --output=results/$project
-            else
-              echo "No tests to run for project $project"
-            fi
-          done
-
-      - name: Merge Reports
-        run: |
-          echo "Merging reports..."
-          # Example: Using merge-html-reports or similar tools
-          npx merge-html-reports results/* --output=final-report
+          TEST_LIST=$(echo "$json_array" | jq -c)
+          echo "TEST_LIST=$TEST_LIST" >> $GITHUB_ENV
+          echo "TEST_LIST=$TEST_LIST" >> $GITHUB_OUTPUT
 
       - name: Get Number of CPU Cores
         run: |
@@ -155,9 +113,6 @@ jobs:
           TOTAL_RUNNER_EXECUTION_TIME=0
           RUNNER_COUNT=1
 
-          tests_to_run_in_runner=""  # For test file paths
-          projects=()    # For unique project names
-
           echo "Max Run Time (ms): $MAX_RUN_TIME"
 
           # Read the JSON array
@@ -169,36 +124,17 @@ jobs:
               # Fetch the execution time for the test from state.json
               time=$(jq -r --arg test "$test" '.[$test]' state.json)
 
-              # Extract the project name (inside square brackets)
-              project=$(echo "$test" | grep -oP '^\[\K[^\]]+')
-              
-              # Extract the test path (portion after "›" and before the second "›")
-              test_path=$(echo "$test" | grep -oP '(?<=› ).*?\.spec\.ts:\d+:\d+|(?<=› ).*?\.test\.ts:\d+:\d+') || true 
-
               if [ "$time" != "null" ]; then
                 # Add the test time to the current runner's total
                 if (( (TOTAL_RUNNER_EXECUTION_TIME + time) / HALF_CORES <= MAX_RUN_TIME )); then
                   TOTAL_RUNNER_EXECUTION_TIME=$((TOTAL_RUNNER_EXECUTION_TIME + time))
                   TOTAL_TESTS_IN_A_RUNNER=$((TOTAL_TESTS_IN_A_RUNNER + 1))
                   echo "Adding test to runner $RUNNER_COUNT: $test (${time}ms)"
-
-                  # Add the test path to the list (space-separated)
-                  tests_to_run_in_runner+=" $test_path"
-
-                  # Add the project to the unique list (if not already included)
-                  if [[ ! " ${projects[*]} " =~ " $project " ]]; then
-                    projects+=("$project")
-                  fi
                 else
                   # Current runner is full; Add a new runner for the current test
                   echo "::notice title=Runner $RUNNER_COUNT expected run time:: Runner $RUNNER_COUNT will run $TOTAL_TESTS_IN_A_RUNNER tests using $HALF_CORES workers in approx run time: $((TOTAL_RUNNER_EXECUTION_TIME / HALF_CORES))ms"
-                  echo "::notice title=Runner $RUNNER_COUNT tests to run:: Runner $RUNNER_COUNT will run $tests_to_run_in_runner"
-                  echo "::notice title=Runner $RUNNER_COUNT projects to run:: Runner $RUNNER_COUNT will run $projects"
 
                   # Reset variables for the next runner
-                  tests_to_run_in_runner="$test_path"  # For test file paths
-                  projects=("$project")
-
                   RUNNER_COUNT=$((RUNNER_COUNT + 1))
                   TOTAL_RUNNER_EXECUTION_TIME=$time
                   TOTAL_TESTS_IN_A_RUNNER=1
@@ -214,8 +150,6 @@ jobs:
             done
 
             echo "::notice title=Runner $RUNNER_COUNT expected run time:: Runner $RUNNER_COUNT will run $TOTAL_TESTS_IN_A_RUNNER tests using $HALF_CORES workers in approx run time: $((TOTAL_RUNNER_EXECUTION_TIME / HALF_CORES))ms"
-            echo "::notice title=Runner $RUNNER_COUNT tests to run:: Runner $RUNNER_COUNT will run $tests_to_run_in_runner"
-            echo "::notice title=Runner $RUNNER_COUNT projects to run:: Runner $RUNNER_COUNT will run $projects"
             echo "RUNNER_COUNT=$RUNNER_COUNT" >> $GITHUB_ENV
             echo "RUNNER_COUNT=$RUNNER_COUNT" >> $GITHUB_OUTPUT
           }
