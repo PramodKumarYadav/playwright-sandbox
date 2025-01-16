@@ -140,7 +140,7 @@ jobs:
 
                   # Add the test path to the list (space-separated)
                   if [ -n "$tests_to_run_in_runner" ]; then
-                    tests_to_run_in_runner="$tests_to_run_in_runner $tests_to_run_in_runner"
+                    tests_to_run_in_runner+=" $tests_to_run_in_runner"
                   fi
 
                   # Add the project to the unique list (if not already included)
