@@ -98,6 +98,7 @@ jobs:
 
           # MAX_RUN_TIME in milliseconds (3 minutes)
           MAX_RUN_TIME=10000
+          TESTS_IN_RUNNER=0
           RUNNER_TESTS_TIME=0
           RUNNER_INDEX=1
 
@@ -115,10 +116,11 @@ jobs:
                 # Add the test time to the current runner's total
                 if (( (RUNNER_TESTS_TIME + time) / HALF_CORES <= MAX_RUN_TIME )); then
                   RUNNER_TESTS_TIME=$((RUNNER_TESTS_TIME + time))
+                  TESTS_IN_RUNNER=$((TESTS_IN_RUNNER + 1))
                   echo "Adding test to runner $RUNNER_INDEX: $test (${time}ms)"
                 else
                   # Current runner is full; Add a new runner for the current test
-                  echo "::notice title=Runner $RUNNER_INDEX expected run time:: Runner $RUNNER_INDEX expected run time is: $((RUNNER_TESTS_TIME / HALF_CORES))ms)"
+                  echo "::notice title=Runner $RUNNER_INDEX expected run time:: Runner $RUNNER_INDEX will run $TESTS_IN_RUNNER tests using $HALF_CORES workers in approx run time: $((RUNNER_TESTS_TIME / HALF_CORES))ms)"
                   RUNNER_INDEX=$((RUNNER_INDEX + 1))
                   RUNNER_TESTS_TIME=$time
                   echo "Adding another runner $RUNNER_INDEX for test: $test (${time}ms)"
@@ -132,7 +134,7 @@ jobs:
               fi
             done
 
-            echo "::notice title=Runner $RUNNER_INDEX expected run time:: Runner $RUNNER_INDEX expected run time is: $((RUNNER_TESTS_TIME / HALF_CORES))ms)"
+            echo "::notice title=Runner $RUNNER_INDEX expected run time:: Runner $RUNNER_INDEX will run $TESTS_IN_RUNNER tests using $HALF_CORES workers in approx run time: $((RUNNER_TESTS_TIME / HALF_CORES))ms)"
             echo "RUNNER_INDEX=$RUNNER_INDEX" >> $GITHUB_ENV
             echo "RUNNER_INDEX=$RUNNER_INDEX" >> $GITHUB_OUTPUT
           }
