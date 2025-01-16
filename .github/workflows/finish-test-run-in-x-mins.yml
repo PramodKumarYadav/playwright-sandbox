@@ -104,8 +104,8 @@ jobs:
           # Read the JSON array
           test_list='${{ steps.list-tests.outputs.TEST_LIST }}'
 
-          # Parse and iterate through the array
-          echo "$test_list" | jq -r '.[]' | while read -r test; do
+          # Iterate through the JSON array using jq without a subshell
+          for test in $(echo "$test_list" | jq -r '.[]'); do
             # Fetch the execution time for the test from state.json
             time=$(jq -r --arg test "$test" '.[$test]' state.json)
             if [ "$time" != "null" ]; then
@@ -114,11 +114,11 @@ jobs:
                 RUNNER_TESTS_TIME=$((RUNNER_TESTS_TIME + time))
                 echo "Adding test to runner $RUNNER_INDEX: $test (${time}ms)"
               else
-                # Current runner is full; move to the next runner
+                # Current runner is full; add it to the NEED_RUNNERS array
                 NEED_RUNNERS+=($RUNNER_INDEX)
                 echo "Runner $RUNNER_INDEX is full. Starting new runner."
 
-                # Add a new runner for the current test
+                # Start a new runner for the current test
                 RUNNER_INDEX=$((RUNNER_INDEX + 1))
                 RUNNER_TESTS_TIME=$time
                 echo "Adding another runner $RUNNER_INDEX for test: $test (${time}ms)"
@@ -128,7 +128,7 @@ jobs:
             fi
           done
 
-          # Outside the loop, ensure the last runner is added if it has any tests
+          # Add the last runner if it has tests
           if (( RUNNER_TESTS_TIME > 0 )); then
             NEED_RUNNERS+=($RUNNER_INDEX)
           fi
