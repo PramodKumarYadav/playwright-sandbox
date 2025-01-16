@@ -68,30 +68,20 @@ jobs:
             exit 1
           fi
 
-          # Convert the filtered output into a simple map
-          map_output=""
-          counter=1
-          while IFS= read -r line; do
-            map_output+="test_${counter}=${line}"$'\n'
-            counter=$((counter + 1))
-          done <<< "$filtered_list"
+          # Convert the filtered output into a list format (newline-separated string)
+          test_list_output=$(echo "$filtered_list" | tr '\n' ',' | sed 's/,$//')
 
-          # Debug: Display the map output
-          echo "Map output:"
-          echo "$map_output"
+          # Debug: Display the list output
+          echo "List output:"
+          echo "$test_list_output"
 
-          # Save the map to GITHUB_OUTPUT
-          echo "$map_output" >> $GITHUB_OUTPUT
-
-      - name: Display Test List
-        run: |
-          echo "Test list: $TEST_LIST"
+          # Save the list as an output
+          echo "TEST_LIST=$test_list_output" >> $GITHUB_OUTPUT
 
       - name: Use Test List
         run: |
-          echo "Processing the test array..."
-          for test in $(echo $TEST_LIST | jq -r '.[]'); do
-            echo "Test: $test"
+          echo "Using the test list..."
+          IFS=',' read -ra test_array <<< "${{ steps.list-tests.outputs.TEST_LIST }}"
+          for test in "${test_array[@]}"; do
+            echo "Processing test: $test"
           done
-        env:
-          TEST_LIST: ${{ env.TEST_LIST }}
