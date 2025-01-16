@@ -55,8 +55,8 @@
   "[webkit] › emp/employee-service/employee-service.spec.ts:22:11 › HEAD1-Employee-service › HEAD2-Employee-service › Employee-service › get started link is visible on page @employee-service": 674,
   "[webkit] › todo-page-with-fixture.spec.ts:27:7 › todo page tests @payment-service › simple test @smoke": 485,
   "[webkit] › todo-page-with-fixture.spec.ts:9:7 › todo page tests @payment-service › has title": 701,
-  "[chromium] › emp/employee-service/employee-service.spec.ts:12:11 › HEAD1-Employee-service › HEAD2-Employee-service, › Employee-service › has title Playwright": 388,
-  "[chromium] › emp/employee-service/employee-service.spec.ts:22:11 › HEAD1-Employee-service › HEAD2-Employee-service, › Employee-service › get started link is visible on page @employee-service": 571,
-  "[webkit] › emp/employee-service/employee-service.spec.ts:12:11 › HEAD1-Employee-service › HEAD2-Employee-service, › Employee-service › has title Playwright": 756,
-  "[webkit] › emp/employee-service/employee-service.spec.ts:22:11 › HEAD1-Employee-service › HEAD2-Employee-service, › Employee-service › get started link is visible on page @employee-service": 886
+  "[chromium] › emp/employee-service/employee-service.spec.ts:12:11 › HEAD1-Employee-service › HEAD2-Employee-service, › Employee-service › has title Playwright": 513,
+  "[chromium] › emp/employee-service/employee-service.spec.ts:22:11 › HEAD1-Employee-service › HEAD2-Employee-service, › Employee-service › get started link is visible on page @employee-service": 690,
+  "[webkit] › emp/employee-service/employee-service.spec.ts:12:11 › HEAD1-Employee-service › HEAD2-Employee-service, › Employee-service › has title Playwright": 897,
+  "[webkit] › emp/employee-service/employee-service.spec.ts:22:11 › HEAD1-Employee-service › HEAD2-Employee-service, › Employee-service › get started link is visible on page @employee-service": 987
 }

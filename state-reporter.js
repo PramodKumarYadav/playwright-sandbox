@@ -16,7 +16,6 @@ class CustomReporter {
   onTestEnd(test, result) {
     // Use titlePath() to get the hierarchy of describe and test titles
     const titlePath = test.titlePath().filter((title) => title !== ""); // Remove empty titles
-    console.log("Full Title Path:", titlePath);
 
     // Extract browser name, file path, and test path from titlePath
     const project = titlePath[0]; // 'chromium'
@@ -27,7 +26,6 @@ class CustomReporter {
 
     // Extract the top-level describe block's text (if available)
     const listTest = `[${project}] › ${filePath}:${line}:${column} › ${testPath}`;
-    console.log(`[${listTest}]`);
 
     this.testResults.push({
       name: listTest, // Full test path
