@@ -108,6 +108,11 @@ jobs:
                 fi
               else
                 echo "Test: $test not found in state.json"
+                echo "It seems the test directory structure was updated locally but it was not pushed to state.json."
+                echo "NOTE: Ideally, this situation can be completely avoided by adding a pre commit hook to automatically add touched (new/updated) tests to state.json on commit."
+                echo "NOTE: If you want to learn, how to do this, see readme documentation of this plugin."
+                echo "However, for now, you can please run all the tests locally to update the state.json file and upload again."
+                exit 1
               fi
             done
 
