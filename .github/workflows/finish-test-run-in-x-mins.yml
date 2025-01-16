@@ -1,4 +1,6 @@
 # To run unit tests and new tests on a pull request on dev environment
+# Runner CORES: https://docs.github.com/en/actions/using-github-hosted-runners/using-github-hosted-runners/about-github-hosted-runners
+# CORES relationship with nr of workers: https://learn.microsoft.com/en-us/azure/playwright-testing/concept-determine-optimal-configuration?utm_source=chatgpt.com#run-tests-locally
 name: get test list
 
 on:
@@ -82,9 +84,21 @@ jobs:
           echo "Number of CPU cores: $cores"
           echo "CORES=$cores" >> $GITHUB_ENV
 
+          # Determine the number of cores and calculate half the cores
+          NUM_CORES=$(nproc) # For Linux runners
+          HALF_CORES=$((NUM_CORES / 2))
+          echo "Number of cores: $NUM_CORES"
+          echo "Half of cores: $HALF_CORES"
+
       - name: Use Test List
         run: |
           echo "Using the test list..."
+
+          # Determine the number of cores and calculate half the cores
+          NUM_CORES=$(nproc) # For Linux runners
+          HALF_CORES=$((NUM_CORES / 2))
+          echo "Number of cores: $NUM_CORES"
+          echo "Half of cores: $HALF_CORES"
 
           # MAX_RUN_TIME in milliseconds (3 minutes)
           MAX_RUN_TIME=10000
@@ -103,7 +117,7 @@ jobs:
               time=$(jq -r --arg test "$test" '.[$test]' state.json)
               if [ "$time" != "null" ]; then
                 # Add the test time to the current runner's total
-                if (( RUNNER_TESTS_TIME + time <= MAX_RUN_TIME )); then
+                if (( (RUNNER_TESTS_TIME + time) / HALF_CORES <= MAX_RUN_TIME )); then
                   RUNNER_TESTS_TIME=$((RUNNER_TESTS_TIME + time))
                   echo "Adding test to runner $RUNNER_INDEX: $test (${time}ms)"
                 else
