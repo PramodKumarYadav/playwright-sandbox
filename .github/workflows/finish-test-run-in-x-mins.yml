@@ -133,8 +133,8 @@ jobs:
             done
 
             echo "::notice title=Runner $RUNNER_INDEX expected run time:: Expected $RUNNER_INDEX run time is: $((RUNNER_TESTS_TIME))ms) "
-            echo "RUNNER_INDEX=$RUNNER_INDEX" >> $GITHUB_OUTPUT
             echo "RUNNER_INDEX=$RUNNER_INDEX" >> $GITHUB_ENV
+            echo "RUNNER_INDEX=$RUNNER_INDEX" >> $GITHUB_OUTPUT
           }
 
       - name: Generate JSON Matrix
