@@ -49,7 +49,15 @@ jobs:
         id: list-tests
         run: |
           # Run the Playwright test list command
-          test_list=$(npx playwright test employee-service-na --list --reporter=list)
+          test_list=$(npx playwright test employee-service-na --list --reporter=list 2>&1 || true)
+
+          # Check if no tests were found
+          if echo "$test_list" | grep -q "Error: No tests found."; then
+            echo "No tests found. Setting RUNNER_INDEX to 1 and exiting gracefully."
+            echo "RUNNER_INDEX=1" >> $GITHUB_ENV
+            echo "RUNNER_INDEX=1" >> $GITHUB_OUTPUT
+            exit 0
+          fi
 
           # Debug: Display the raw data
           echo "RAW test_list:"
@@ -67,26 +75,6 @@ jobs:
 
           # Save the JSON array to GITHUB_OUTPUT, ensuring proper escaping
           echo "TEST_LIST=$(echo "$json_array" | jq -c)" >> $GITHUB_OUTPUT
-
-      # - name: Use Test List
-      #   run: |
-      #     echo "Using the test list..."
-
-      #     # Read the JSON array
-      #     test_list='${{ steps.list-tests.outputs.TEST_LIST }}'
-
-      #     # Parse and iterate through the array
-      #     echo "$test_list" | jq -r '.[]' | while read -r test; do
-      #       echo "Processing test: $test"
-      #       # Fetch the execution time for the test from state.json
-      #       time=$(jq -r --arg test "$test" '.[$test]' state.json)
-      #       if [ "$time" != "null" ]; then
-      #         echo "Test: $test"
-      #         echo "Execution Time: ${time}ms"
-      #       else
-      #         echo "Test: $test not found in state.json"
-      #       fi
-      #     done
 
       - name: Use Test List
         run: |
@@ -122,11 +110,6 @@ jobs:
                 echo "Test: $test not found in state.json"
               fi
             done
-
-            # Add the last runner if it has tests
-            # if (( RUNNER_TESTS_TIME > 0 )); then
-            #   RUNNER_INDEX+=($RUNNER_INDEX)
-            # fi
 
             echo "RUNNER_INDEX=$RUNNER_INDEX" >> $GITHUB_ENV
             echo "RUNNER_INDEX=$RUNNER_INDEX" >> $GITHUB_OUTPUT
