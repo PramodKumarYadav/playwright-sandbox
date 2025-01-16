@@ -102,6 +102,7 @@ jobs:
                   echo "Adding test to runner $RUNNER_INDEX: $test (${time}ms)"
                 else
                   # Current runner is full; Add a new runner for the current test
+                  echo "::notice title=Last runner expected total time:: Runner expected time is: (${RUNNER_TESTS_TIME}ms) "
                   RUNNER_INDEX=$((RUNNER_INDEX + 1))
                   RUNNER_TESTS_TIME=$time
                   echo "Adding another runner $RUNNER_INDEX for test: $test (${time}ms)"
@@ -109,7 +110,7 @@ jobs:
               else
                 echo "::error title=Test Not Found::Test not found in state.json 👉 $test "
                 echo "::notice title=Directory Structure Updated::It seems the test directory structure was updated locally but it was not pushed to state.json."
-                echo "::notice title=Pre-commit Hook Suggestion::NOTE: Ideally, this situation can be completely avoided by adding a pre-commit hook to automatically add touched (new/updated) tests to state.json on commit. %0ARefer to the readme of this action, if you want to learn how to do this."                
+                echo "::  title=Pre-commit Hook Suggestion::NOTE: Ideally, this situation can be completely avoided by adding a pre-commit hook to automatically add touched (new/updated) tests to state.json on commit. %0ARefer to the readme of this action, if you want to learn how to do this."                
                 echo "::notice title=Next Steps::For now, you can either 'run missing tests only' or 'all the tests locally' to update the state.json snapshot file and upload it again for reference. Later, implement the pre-commit hook to avoid this situation in the future."
                 exit 1
               fi
