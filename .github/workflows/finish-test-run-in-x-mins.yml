@@ -129,7 +129,7 @@ jobs:
               project=$(echo "$test" | grep -oP '^\[\K[^\]]+')
               
               # Extract the test path (portion after "›" and before the second "›")
-              tests_to_run_in_runner=$(echo "$test" | grep -oP '(?<=› ).*?\.spec\.ts:\d+:\d+|(?<=› ).*?\.test\.ts:\d+:\d+') || true 
+              test_path=$(echo "$test" | grep -oP '(?<=› ).*?\.spec\.ts:\d+:\d+|(?<=› ).*?\.test\.ts:\d+:\d+') || true 
 
               if [ "$time" != "null" ]; then
                 # Add the test time to the current runner's total
@@ -139,7 +139,7 @@ jobs:
                   echo "Adding test to runner $RUNNER_COUNT: $test (${time}ms)"
 
                   # Add the test path to the list (space-separated)
-                  tests_to_run_in_runner+=" $tests_to_run_in_runner"
+                  tests_to_run_in_runner+=" $test_path"
 
                   # Add the project to the unique list (if not already included)
                   if [[ ! " ${projects[*]} " =~ " $project " ]]; then
@@ -152,7 +152,7 @@ jobs:
                   echo "::notice title=Runner $RUNNER_COUNT projects to run:: Runner $RUNNER_COUNT will run $projects"
 
                   # Initialise the new runner variables
-                  tests_to_run_in_runner="$tests_to_run_in_runner"  # For test file paths
+                  tests_to_run_in_runner="$test_path"  # For test file paths
                   projects="$project"
 
                   RUNNER_COUNT=$((RUNNER_COUNT + 1))
