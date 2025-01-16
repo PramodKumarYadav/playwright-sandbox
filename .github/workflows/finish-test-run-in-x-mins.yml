@@ -108,7 +108,7 @@ jobs:
           echo "Half of cores: $HALF_CORES"
 
           # MAX_RUN_TIME in milliseconds (3 minutes)
-          MAX_RUN_TIME=10000
+          MAX_RUN_TIME=$((3 * 60 * 1000))
           TOTAL_TESTS_IN_A_RUNNER=0
           TOTAL_RUNNER_EXECUTION_TIME=0
           RUNNER_COUNT=1
