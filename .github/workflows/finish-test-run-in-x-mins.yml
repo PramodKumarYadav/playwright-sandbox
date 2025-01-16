@@ -108,9 +108,9 @@ jobs:
                 fi
               else
                 echo "::error title=Test Not Found::Test: $test not found in state.json"
-                echo "::warning title=Directory Structure Updated::It seems the test directory structure was updated locally but it was not pushed to state.json."
-                echo "::warning title=Pre-commit Hook Suggestion::NOTE: Ideally, this situation can be completely avoided by adding a pre-commit hook to automatically add touched (new/updated) tests to state.json on commit."
-                echo "::warning title=Pre-commit Hook Suggestion::NOTE: Refer readme of this action, if you want to learn how to do this."
+                echo "::debug title=Directory Structure Updated::It seems the test directory structure was updated locally but it was not pushed to state.json."
+                echo "::debug title=Pre-commit Hook Suggestion::NOTE: Ideally, this situation can be completely avoided by adding a pre-commit hook to automatically add touched (new/updated) tests to state.json on commit."
+                echo "::debug title=Pre-commit Hook Suggestion::NOTE: Refer readme of this action, if you want to learn how to do this."
                 echo "::notice title=Next Steps::However, for now, you can please run all the tests locally to update the state.json file and upload again."
                 exit 1
               fi
