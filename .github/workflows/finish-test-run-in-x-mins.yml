@@ -139,9 +139,7 @@ jobs:
                   echo "Adding test to runner $RUNNER_COUNT: $test (${time}ms)"
 
                   # Add the test path to the list (space-separated)
-                  if [ -n "$tests_to_run_in_runner" ]; then
-                    tests_to_run_in_runner+=" $tests_to_run_in_runner"
-                  fi
+                  tests_to_run_in_runner+=" $tests_to_run_in_runner"
 
                   # Add the project to the unique list (if not already included)
                   if [[ ! " ${projects[*]} " =~ " $project " ]]; then
