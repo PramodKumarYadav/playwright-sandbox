@@ -51,6 +51,10 @@ jobs:
           # Run the Playwright test list command
           test_list=$(npx playwright test --list --reporter=list)
 
+          # Debug: Display the raw data
+          echo "RAW test_list:"
+          echo "$test_list"
+
           # Filter output to include valid test lines starting with '['
           filtered_list=$(echo "$test_list" | grep -E '^\s*\[' | sed 's/^\s*//; s/\s*$//')
 
@@ -60,11 +64,6 @@ jobs:
           # Debug: Display the JSON array
           echo "JSON array:"
           echo "$json_array"
-
-          # Parse and iterate through the array
-          echo "$json_array" | jq -r '.[]' | while read -r test; do
-            echo "Processing test: $test"
-          done
 
           # Save the JSON array to GITHUB_OUTPUT, ensuring proper escaping
           echo "TEST_LIST=$(echo "$json_array" | jq -c)" >> $GITHUB_OUTPUT
