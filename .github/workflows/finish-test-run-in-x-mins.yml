@@ -68,11 +68,20 @@ jobs:
             exit 1
           fi
 
-          # Convert the filtered output into a JSON array
-          test_array=$(echo "$filtered_list" | awk '{$1=$1;print}' | jq -R -s 'split("\n") | map(select(length > 0))')
+          # Convert the filtered output into a simple map
+          map_output=""
+          counter=1
+          while IFS= read -r line; do
+            map_output+="test_${counter}=${line}"$'\n'
+            counter=$((counter + 1))
+          done <<< "$filtered_list"
 
-          # Save the array as an output
-          echo "TEST_LIST=$test_array" >> $GITHUB_ENV
+          # Debug: Display the map output
+          echo "Map output:"
+          echo "$map_output"
+
+          # Save the map to GITHUB_OUTPUT
+          echo "$map_output" >> $GITHUB_OUTPUT
 
       - name: Display Test List
         run: |
