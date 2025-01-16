@@ -93,8 +93,9 @@ jobs:
           echo "Using the test list..."
 
           # MAX_RUN_TIME in milliseconds (3 minutes)
-          MAX_RUN_TIME=$((3 * 60 * 1000))
-          RUNNER_TESTS=0
+          # MAX_RUN_TIME=$((3 * 60 * 1000))
+          MAX_RUN_TIME=500
+          RUNNER_TESTS_TIME=0
           RUNNER_INDEX=1
           NEED_RUNNERS=()
 
@@ -109,23 +110,26 @@ jobs:
             time=$(jq -r --arg test "$test" '.[$test]' state.json)
             if [ "$time" != "null" ]; then
               # Add the test time to the current runner's total
-              if (( RUNNER_TESTS + time <= MAX_RUN_TIME )); then
-                RUNNER_TESTS=$((RUNNER_TESTS + time))
+              if (( RUNNER_TESTS_TIME + time <= MAX_RUN_TIME )); then
+                RUNNER_TESTS_TIME=$((RUNNER_TESTS_TIME + time))
                 echo "Adding test to runner $RUNNER_INDEX: $test (${time}ms)"
               else
                 # Current runner is full; move to the next runner
                 NEED_RUNNERS+=($RUNNER_INDEX)
+                echo "Runner $RUNNER_INDEX is full. Starting new runner."
+
+                # Add a new runner for the current test
                 RUNNER_INDEX=$((RUNNER_INDEX + 1))
-                RUNNER_TESTS=$time
-                echo "Starting new runner $RUNNER_INDEX for test: $test (${time}ms)"
+                RUNNER_TESTS_TIME=$time
+                echo "Adding another runner $RUNNER_INDEX for test: $test (${time}ms)"
               fi
             else
               echo "Test: $test not found in state.json"
             fi
           done
 
-          # Add the last runner if it has tests
-          if (( RUNNER_TESTS > 0 )); then
+          # Outside the loop, ensure the last runner is added if it has any tests
+          if (( RUNNER_TESTS_TIME > 0 )); then
             NEED_RUNNERS+=($RUNNER_INDEX)
           fi
 
