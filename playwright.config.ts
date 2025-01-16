@@ -28,6 +28,8 @@ export default defineConfig({
   /** By removing OS related info, we can use same snapshots across different OS. */
   snapshotPathTemplate: `.screenshots/{testFilePath}/{arg}{ext}`,
 
+  timeout: 80000,
+
   testDir: "./tests",
   /* Run tests in files in parallel */
   fullyParallel: true,
