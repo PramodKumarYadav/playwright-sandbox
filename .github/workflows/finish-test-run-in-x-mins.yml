@@ -61,6 +61,11 @@ jobs:
           echo "JSON array:"
           echo "$json_array"
 
+          # Parse and iterate through the array
+          echo "$json_array" | jq -r '.[]' | while read -r test; do
+            echo "Processing test: $test"
+          done
+
           # Save the JSON array to GITHUB_OUTPUT
           echo "TEST_LIST=$json_array" >> $GITHUB_OUTPUT
 
