@@ -111,6 +111,9 @@ jobs:
           TOTAL_RUNNER_EXECUTION_TIME=0
           RUNNER_COUNT=1
 
+          tests_to_run_in_runner=""  # For test file paths
+          projects=()    # For unique project names
+
           echo "Max Run Time (ms): $MAX_RUN_TIME"
 
           # Read the JSON array
@@ -121,15 +124,39 @@ jobs:
             while IFS= read -r test; do
               # Fetch the execution time for the test from state.json
               time=$(jq -r --arg test "$test" '.[$test]' state.json)
+
+              # Extract the project name (inside square brackets)
+              project=$(echo "$test" | grep -oP '^\[\K[^\]]+')
+              
+              # Extract the test path (portion after "›" and before the second "›")
+              tests_to_run_in_runner=$(echo "$test" | grep -oP '(?<=› ).*?\.spec\.ts:\d+:\d+|(?<=› ).*?\.test\.ts:\d+:\d+') || true 
+
               if [ "$time" != "null" ]; then
                 # Add the test time to the current runner's total
                 if (( (TOTAL_RUNNER_EXECUTION_TIME + time) / HALF_CORES <= MAX_RUN_TIME )); then
                   TOTAL_RUNNER_EXECUTION_TIME=$((TOTAL_RUNNER_EXECUTION_TIME + time))
                   TOTAL_TESTS_IN_A_RUNNER=$((TOTAL_TESTS_IN_A_RUNNER + 1))
                   echo "Adding test to runner $RUNNER_COUNT: $test (${time}ms)"
+
+                  # Add the test path to the list (space-separated)
+                  if [ -n "$tests_to_run_in_runner" ]; then
+                    tests_to_run_in_runner="$tests_to_run_in_runner $tests_to_run_in_runner"
+                  fi
+
+                  # Add the project to the unique list (if not already included)
+                  if [[ ! " ${projects[*]} " =~ " $project " ]]; then
+                    projects+=("$project")
+                  fi
                 else
                   # Current runner is full; Add a new runner for the current test
                   echo "::notice title=Runner $RUNNER_COUNT expected run time:: Runner $RUNNER_COUNT will run $TOTAL_TESTS_IN_A_RUNNER tests using $HALF_CORES workers in approx run time: $((TOTAL_RUNNER_EXECUTION_TIME / HALF_CORES))ms"
+                  echo "::notice title=Runner $RUNNER_COUNT tests to run:: Runner $test_paths to run"
+                  echo "::notice title=Runner $RUNNER_COUNT projects to run:: Runner $projects to run"
+
+                  # Initialise the new runner variables
+                  tests_to_run_in_runner="$tests_to_run_in_runner"  # For test file paths
+                  projects="$project"
+
                   RUNNER_COUNT=$((RUNNER_COUNT + 1))
                   TOTAL_RUNNER_EXECUTION_TIME=$time
                   echo "Adding another runner $RUNNER_COUNT for test: $test (${time}ms)"
