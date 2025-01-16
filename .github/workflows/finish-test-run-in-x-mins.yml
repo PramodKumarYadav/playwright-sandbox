@@ -80,10 +80,6 @@ jobs:
 
       - name: Get Number of CPU Cores
         run: |
-          cores=$(grep -c ^processor /proc/cpuinfo)
-          echo "Number of CPU cores: $cores"
-          echo "CORES=$cores" >> $GITHUB_ENV
-
           # Determine the number of cores and calculate half the cores
           NUM_CORES=$(nproc) # For Linux runners
           HALF_CORES=$((NUM_CORES / 2))
@@ -122,7 +118,7 @@ jobs:
                   echo "Adding test to runner $RUNNER_INDEX: $test (${time}ms)"
                 else
                   # Current runner is full; Add a new runner for the current test
-                  echo "::notice title=Runner $RUNNER_INDEX expected run time:: Expected run time is: (${RUNNER_TESTS_TIME}ms) "
+                  echo "::notice title=Runner $RUNNER_INDEX expected run time:: Expected run time is: (${RUNNER_TESTS_TIME / HALF_CORES}ms) "
                   RUNNER_INDEX=$((RUNNER_INDEX + 1))
                   RUNNER_TESTS_TIME=$time
                   echo "Adding another runner $RUNNER_INDEX for test: $test (${time}ms)"
@@ -136,7 +132,7 @@ jobs:
               fi
             done
 
-            echo "::notice title=Runner $RUNNER_INDEX expected run time:: Expected run time is: (${RUNNER_TESTS_TIME}ms) "
+            echo "::notice title=Runner $RUNNER_INDEX expected run time:: Expected run time is: (${RUNNER_TESTS_TIME / HALF_CORES}ms) "
             echo "RUNNER_INDEX=$RUNNER_INDEX" >> $GITHUB_ENV
             echo "RUNNER_INDEX=$RUNNER_INDEX" >> $GITHUB_OUTPUT
           }
