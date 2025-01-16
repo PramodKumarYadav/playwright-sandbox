@@ -55,9 +55,9 @@ jobs:
 
           # Check if no tests were found
           if echo "$test_list" | grep -q "Error: No tests found."; then
-            echo "No tests found. Setting RUNNER_INDEX to 1 and exiting gracefully."
-            echo "RUNNER_INDEX=1" >> $GITHUB_ENV
-            echo "RUNNER_INDEX=1" >> $GITHUB_OUTPUT
+            echo "No tests found. Setting RUNNER_COUNT to 1 and exiting gracefully."
+            echo "RUNNER_COUNT=1" >> $GITHUB_ENV
+            echo "RUNNER_COUNT=1" >> $GITHUB_OUTPUT
             exit 0
           fi
 
@@ -98,9 +98,9 @@ jobs:
 
           # MAX_RUN_TIME in milliseconds (3 minutes)
           MAX_RUN_TIME=10000
-          TESTS_IN_RUNNER=0
-          RUNNER_TESTS_TIME=0
-          RUNNER_INDEX=1
+          TOTAL_TESTS_IN_A_RUNNER=0
+          TOTAL_RUNNER_EXECUTION_TIME=0
+          RUNNER_COUNT=1
 
           echo "Max Run Time (ms): $MAX_RUN_TIME"
 
@@ -114,16 +114,16 @@ jobs:
               time=$(jq -r --arg test "$test" '.[$test]' state.json)
               if [ "$time" != "null" ]; then
                 # Add the test time to the current runner's total
-                if (( (RUNNER_TESTS_TIME + time) / HALF_CORES <= MAX_RUN_TIME )); then
-                  RUNNER_TESTS_TIME=$((RUNNER_TESTS_TIME + time))
-                  TESTS_IN_RUNNER=$((TESTS_IN_RUNNER + 1))
-                  echo "Adding test to runner $RUNNER_INDEX: $test (${time}ms)"
+                if (( (TOTAL_RUNNER_EXECUTION_TIME + time) / HALF_CORES <= MAX_RUN_TIME )); then
+                  TOTAL_RUNNER_EXECUTION_TIME=$((TOTAL_RUNNER_EXECUTION_TIME + time))
+                  TOTAL_TESTS_IN_A_RUNNER=$((TOTAL_TESTS_IN_A_RUNNER + 1))
+                  echo "Adding test to runner $RUNNER_COUNT: $test (${time}ms)"
                 else
                   # Current runner is full; Add a new runner for the current test
-                  echo "::notice title=Runner $RUNNER_INDEX expected run time:: Runner $RUNNER_INDEX will run $TESTS_IN_RUNNER tests using $HALF_CORES workers in approx run time: $((RUNNER_TESTS_TIME / HALF_CORES))ms)"
-                  RUNNER_INDEX=$((RUNNER_INDEX + 1))
-                  RUNNER_TESTS_TIME=$time
-                  echo "Adding another runner $RUNNER_INDEX for test: $test (${time}ms)"
+                  echo "::notice title=Runner $RUNNER_COUNT expected run time:: Runner $RUNNER_COUNT will run $TOTAL_TESTS_IN_A_RUNNER tests using $HALF_CORES workers in approx run time: $((TOTAL_RUNNER_EXECUTION_TIME / HALF_CORES))ms"
+                  RUNNER_COUNT=$((RUNNER_COUNT + 1))
+                  TOTAL_RUNNER_EXECUTION_TIME=$time
+                  echo "Adding another runner $RUNNER_COUNT for test: $test (${time}ms)"
                 fi
               else
                 echo "::error title=Test Not Found::Test not found in state.json 👉 $test "
@@ -134,16 +134,16 @@ jobs:
               fi
             done
 
-            echo "::notice title=Runner $RUNNER_INDEX expected run time:: Runner $RUNNER_INDEX will run $TESTS_IN_RUNNER tests using $HALF_CORES workers in approx run time: $((RUNNER_TESTS_TIME / HALF_CORES))ms)"
-            echo "RUNNER_INDEX=$RUNNER_INDEX" >> $GITHUB_ENV
-            echo "RUNNER_INDEX=$RUNNER_INDEX" >> $GITHUB_OUTPUT
+            echo "::notice title=Runner $RUNNER_COUNT expected run time:: Runner $RUNNER_COUNT will run $TOTAL_TESTS_IN_A_RUNNER tests using $HALF_CORES workers in approx run time: $((TOTAL_RUNNER_EXECUTION_TIME / HALF_CORES))ms"
+            echo "RUNNER_COUNT=$RUNNER_COUNT" >> $GITHUB_ENV
+            echo "RUNNER_COUNT=$RUNNER_COUNT" >> $GITHUB_OUTPUT
           }
 
       - name: Generate JSON Matrix
         id: set-matrix
         run: |
           MATRIX_JSON="["
-          for i in $(seq 1 $RUNNER_INDEX); do
+          for i in $(seq 1 $RUNNER_COUNT); do
             if [ $i -gt 1 ]; then
               MATRIX_JSON+=","
             fi
