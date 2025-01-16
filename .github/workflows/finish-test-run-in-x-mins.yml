@@ -69,7 +69,7 @@ jobs:
           fi
 
           # Process the filtered output into a JSON array
-          test_array=$(echo "$test_list" | jq -R -s 'split("\n") | map(select(length > 0))')
+          test_array=$(echo "$filtered_list" | jq -R -s 'split("\n") | map(select(length > 0))')
 
           # Save the array as an output
           echo "TEST_LIST=$test_array" >> $GITHUB_ENV
