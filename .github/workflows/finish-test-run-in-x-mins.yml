@@ -92,22 +92,37 @@ jobs:
         run: |
           test_list='${{ steps.list-tests.outputs.TEST_LIST }}'
           grouped_tests=$(echo "$test_list" | jq -R -s '
-            split("\n") | 
-            map(select(length > 0)) | 
-            group_by(. | match("^\\[([^\\]]+)\\]").captures[0].string) |
-            map({ (.[0] | match("^\\[([^\\]]+)\\]").captures[0].string): map(. | capture("(?<=› ).*?\\.spec\\.ts:\\d+:\\d+")) })
+            split("\n") |
+            map(select(length > 0)) |
+            map({
+              project: (match("^\\[([^\\]]+)\\]").captures[0].string),
+              test: (match("(?<=› ).*?\\.spec\\.ts:\\d+:\\d+") | .string)
+            }) |
+            group_by(.project) |
+            map({ (.[0].project): map(.test) })
           ')
+
           echo "Grouped Tests: $grouped_tests"
-          echo "GROUPED_TESTS=$grouped_tests" >> $GITHUB_ENV
+
+          # Escape the JSON properly and save it to GITHUB_ENV
+          escaped_grouped_tests=$(echo "$grouped_tests" | jq -c)
+          echo "GROUPED_TESTS=$escaped_grouped_tests" >> $GITHUB_ENV
 
       - name: Run Tests Per Project
         run: |
           grouped_tests=${{ env.GROUPED_TESTS }}
+
+          # Parse and run tests
           echo "$grouped_tests" | jq -c '.[]' | while IFS= read -r entry; do
             project=$(echo "$entry" | jq -r 'keys[0]')
-            tests=$(echo "$entry" | jq -r '.[] | join(" ")')
-            echo "Running tests for project $project: $tests"
-            npx playwright test $tests --project=$project --output=results/$project
+            tests=$(echo "$entry" | jq -r --arg project "$project" '.[$project] | join(" ")')
+
+            if [ -n "$tests" ]; then
+              echo "Running tests for project $project: $tests"
+              npx playwright test $tests --project=$project --output=results/$project
+            else
+              echo "No tests to run for project $project"
+            fi
           done
 
       - name: Merge Reports
