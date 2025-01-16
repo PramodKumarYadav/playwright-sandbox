@@ -93,7 +93,6 @@ jobs:
           echo "Using the test list..."
 
           # MAX_RUN_TIME in milliseconds (3 minutes)
-          # MAX_RUN_TIME=$((3 * 60 * 1000))
           MAX_RUN_TIME=500
           RUNNER_TESTS_TIME=0
           RUNNER_INDEX=1
@@ -103,36 +102,39 @@ jobs:
 
           # Read the JSON array
           test_list='${{ steps.list-tests.outputs.TEST_LIST }}'
+          echo "TEST_LIST=$test_list"
 
-          # Iterate through the JSON array using jq without a subshell
-          for test in $(echo "$test_list" | jq -r '.[]'); do
-            # Fetch the execution time for the test from state.json
-            time=$(jq -r --arg test "$test" '.[$test]' state.json)
-            if [ "$time" != "null" ]; then
-              # Add the test time to the current runner's total
-              if (( RUNNER_TESTS_TIME + time <= MAX_RUN_TIME )); then
-                RUNNER_TESTS_TIME=$((RUNNER_TESTS_TIME + time))
-                echo "Adding test to runner $RUNNER_INDEX: $test (${time}ms)"
+          # Parse and iterate through the JSON array line by line
+          echo "$test_list" | jq -r '.[]' | {
+            while IFS= read -r test; do
+              # Fetch the execution time for the test from state.json
+              time=$(jq -r --arg test "$test" '.[$test]' state.json)
+              if [ "$time" != "null" ]; then
+                # Add the test time to the current runner's total
+                if (( RUNNER_TESTS_TIME + time <= MAX_RUN_TIME )); then
+                  RUNNER_TESTS_TIME=$((RUNNER_TESTS_TIME + time))
+                  echo "Adding test to runner $RUNNER_INDEX: $test (${time}ms)"
+                else
+                  # Current runner is full; add it to the NEED_RUNNERS array
+                  NEED_RUNNERS+=($RUNNER_INDEX)
+                  echo "Runner $RUNNER_INDEX is full. Starting new runner."
+
+                  # Start a new runner for the current test
+                  RUNNER_INDEX=$((RUNNER_INDEX + 1))
+                  RUNNER_TESTS_TIME=$time
+                  echo "Adding another runner $RUNNER_INDEX for test: $test (${time}ms)"
+                fi
               else
-                # Current runner is full; add it to the NEED_RUNNERS array
-                NEED_RUNNERS+=($RUNNER_INDEX)
-                echo "Runner $RUNNER_INDEX is full. Starting new runner."
-
-                # Start a new runner for the current test
-                RUNNER_INDEX=$((RUNNER_INDEX + 1))
-                RUNNER_TESTS_TIME=$time
-                echo "Adding another runner $RUNNER_INDEX for test: $test (${time}ms)"
+                echo "Test: $test not found in state.json"
               fi
-            else
-              echo "Test: $test not found in state.json"
+            done
+
+            # Add the last runner if it has tests
+            if (( RUNNER_TESTS_TIME > 0 )); then
+              NEED_RUNNERS+=($RUNNER_INDEX)
             fi
-          done
 
-          # Add the last runner if it has tests
-          if (( RUNNER_TESTS_TIME > 0 )); then
-            NEED_RUNNERS+=($RUNNER_INDEX)
-          fi
-
-          # Output the list of needed runners
-          echo "NEED_RUNNERS=${NEED_RUNNERS[@]}"
-          echo "NEED_RUNNERS=$(IFS=','; echo "${NEED_RUNNERS[*]}")" >> $GITHUB_OUTPUT
+            # Output the list of needed runners
+            echo "NEED_RUNNERS=${NEED_RUNNERS[@]}"
+            echo "NEED_RUNNERS=$(IFS=','; echo "${NEED_RUNNERS[*]}")" >> $GITHUB_OUTPUT
+          }
