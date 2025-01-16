@@ -66,8 +66,8 @@ jobs:
             echo "Processing test: $test"
           done
 
-          # Save the JSON array to GITHUB_OUTPUT
-          echo "TEST_LIST=$json_array" >> $GITHUB_OUTPUT
+          # Save the JSON array to GITHUB_OUTPUT, ensuring proper escaping
+          echo "TEST_LIST=$(echo "$json_array" | jq -c)" >> $GITHUB_OUTPUT
 
       - name: Use Test List
         run: |
