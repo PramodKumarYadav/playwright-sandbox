@@ -45,7 +45,7 @@ jobs:
         if: steps.cache-browsers.outputs.cache-hit != 'true'
         run: npx playwright install --with-deps
 
-      - name: List Playwright Tests
+      - name: List of Playwright Tests to Run
         id: list-tests
         run: |
           # Run the Playwright test list command
