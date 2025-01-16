@@ -51,37 +51,27 @@ jobs:
           # Run the Playwright test list command
           test_list=$(npx playwright test --list)
 
-          # Debug: Display the raw output
-          echo "Raw test list output:"
-          echo "$test_list"
-
-          # Filter output to include only lines starting with '['
+          # Filter output to include valid test lines starting with '['
           filtered_list=$(echo "$test_list" | grep -E '^\s*\[' | sed 's/^\s*//; s/\s*$//')
 
-          # Debug: Display the filtered output
-          echo "Filtered test list:"
-          echo "$filtered_list"
+          # Convert the filtered output into a JSON array
+          json_array=$(echo "$filtered_list" | jq -R -s 'split("\n") | map(select(length > 0))')
 
-          # Check if filtered_list is empty
-          if [ -z "$filtered_list" ]; then
-            echo "No tests found matching the pattern. Exiting with error."
-            exit 1
-          fi
+          # Debug: Display the JSON array
+          echo "JSON array:"
+          echo "$json_array"
 
-          # Convert the filtered output into a list format (newline-separated string)
-          test_list_output=$(echo "$filtered_list" | tr '\n' ',' | sed 's/,$//')
-
-          # Debug: Display the list output
-          echo "List output:"
-          echo "$test_list_output"
-
-          # Save the list as an output
-          echo "TEST_LIST=$test_list_output" >> $GITHUB_OUTPUT
+          # Save the JSON array to GITHUB_OUTPUT
+          echo "TEST_LIST=$json_array" >> $GITHUB_OUTPUT
 
       - name: Use Test List
         run: |
           echo "Using the test list..."
-          IFS=',' read -ra test_array <<< "${{ steps.list-tests.outputs.TEST_LIST }}"
-          for test in "${test_array[@]}"; do
+
+          # Read the JSON array
+          test_list='${{ steps.list-tests.outputs.TEST_LIST }}'
+
+          # Parse and iterate through the array
+          echo "$test_list" | jq -r '.[]' | while read -r test; do
             echo "Processing test: $test"
           done
