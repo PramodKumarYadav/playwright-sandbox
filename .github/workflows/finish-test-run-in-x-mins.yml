@@ -151,12 +151,13 @@ jobs:
                   echo "::notice title=Runner $RUNNER_COUNT tests to run:: Runner $RUNNER_COUNT will run $tests_to_run_in_runner"
                   echo "::notice title=Runner $RUNNER_COUNT projects to run:: Runner $RUNNER_COUNT will run $projects"
 
-                  # Initialise the new runner variables
+                  # Reset variables for the next runner
                   tests_to_run_in_runner="$test_path"  # For test file paths
-                  projects="$project"
+                  projects=("$project")
 
                   RUNNER_COUNT=$((RUNNER_COUNT + 1))
                   TOTAL_RUNNER_EXECUTION_TIME=$time
+                  TOTAL_TESTS_IN_A_RUNNER=1
                   echo "Adding another runner $RUNNER_COUNT for test: $test (${time}ms)"
                 fi
               else
