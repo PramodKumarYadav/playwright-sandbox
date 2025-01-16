@@ -68,8 +68,12 @@ jobs:
             exit 1
           fi
 
-          # Process the filtered output into a JSON array
-          test_array=$(echo "$filtered_list" | jq -R -s 'split("\n") | map(select(length > 0))')
+          sanitized_input=$(echo "$filtered_list" | tr '\n' '\0' | tr '\0' '\n')
+          echo "Sanitized input for jq:"
+          echo "$sanitized_input"
+
+          # Pass sanitized input to jq
+          test_array=$(echo "$sanitized_input" | jq -R -s 'split("\n") | map(select(length > 0))')
 
           # Save the array as an output
           echo "TEST_LIST=$test_array" >> $GITHUB_ENV
