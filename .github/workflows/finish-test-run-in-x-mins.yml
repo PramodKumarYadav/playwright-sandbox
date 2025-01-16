@@ -49,7 +49,7 @@ jobs:
         id: list-tests
         run: |
           # Run the Playwright test list command
-          test_list=$(npx playwright test employee-service --list --reporter=list)
+          test_list=$(npx playwright test employee-service-na --list --reporter=list)
 
           # Debug: Display the raw data
           echo "RAW test_list:"
