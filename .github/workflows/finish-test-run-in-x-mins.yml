@@ -150,8 +150,8 @@ jobs:
                 else
                   # Current runner is full; Add a new runner for the current test
                   echo "::notice title=Runner $RUNNER_COUNT expected run time:: Runner $RUNNER_COUNT will run $TOTAL_TESTS_IN_A_RUNNER tests using $HALF_CORES workers in approx run time: $((TOTAL_RUNNER_EXECUTION_TIME / HALF_CORES))ms"
-                  echo "::notice title=Runner $RUNNER_COUNT tests to run:: Runner $test_paths to run"
-                  echo "::notice title=Runner $RUNNER_COUNT projects to run:: Runner $projects to run"
+                  echo "::notice title=Runner $RUNNER_COUNT tests to run:: Runner $RUNNER_COUNT will run $tests_to_run_in_runner"
+                  echo "::notice title=Runner $RUNNER_COUNT projects to run:: Runner $RUNNER_COUNT will run $projects"
 
                   # Initialise the new runner variables
                   tests_to_run_in_runner="$tests_to_run_in_runner"  # For test file paths
@@ -171,6 +171,8 @@ jobs:
             done
 
             echo "::notice title=Runner $RUNNER_COUNT expected run time:: Runner $RUNNER_COUNT will run $TOTAL_TESTS_IN_A_RUNNER tests using $HALF_CORES workers in approx run time: $((TOTAL_RUNNER_EXECUTION_TIME / HALF_CORES))ms"
+            echo "::notice title=Runner $RUNNER_COUNT tests to run:: Runner $RUNNER_COUNT will run $tests_to_run_in_runner"
+            echo "::notice title=Runner $RUNNER_COUNT projects to run:: Runner $RUNNER_COUNT will run $projects"
             echo "RUNNER_COUNT=$RUNNER_COUNT" >> $GITHUB_ENV
             echo "RUNNER_COUNT=$RUNNER_COUNT" >> $GITHUB_OUTPUT
           }
