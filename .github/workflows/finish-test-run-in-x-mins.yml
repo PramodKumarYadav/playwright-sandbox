@@ -93,7 +93,7 @@ jobs:
           echo "Using the test list..."
 
           # MAX_RUN_TIME in milliseconds (3 minutes)
-          MAX_RUN_TIME=500
+          MAX_RUN_TIME=1200
           RUNNER_TESTS_TIME=0
           RUNNER_INDEX=0
 
