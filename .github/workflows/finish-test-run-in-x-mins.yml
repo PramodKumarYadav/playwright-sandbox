@@ -76,6 +76,12 @@ jobs:
           # Save the JSON array to GITHUB_OUTPUT, ensuring proper escaping
           echo "TEST_LIST=$(echo "$json_array" | jq -c)" >> $GITHUB_OUTPUT
 
+      - name: Get Number of CPU Cores
+        run: |
+          cores=$(grep -c ^processor /proc/cpuinfo)
+          echo "Number of CPU cores: $cores"
+          echo "CORES=$cores" >> $GITHUB_ENV
+
       - name: Use Test List
         run: |
           echo "Using the test list..."
