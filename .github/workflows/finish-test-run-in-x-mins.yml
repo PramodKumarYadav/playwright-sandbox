@@ -96,7 +96,6 @@ jobs:
           MAX_RUN_TIME=500
           RUNNER_TESTS_TIME=0
           RUNNER_INDEX=1
-          NEED_RUNNERS=()
 
           echo "Max Run Time (ms): $MAX_RUN_TIME"
 
@@ -115,11 +114,7 @@ jobs:
                   RUNNER_TESTS_TIME=$((RUNNER_TESTS_TIME + time))
                   echo "Adding test to runner $RUNNER_INDEX: $test (${time}ms)"
                 else
-                  # Current runner is full; add it to the NEED_RUNNERS array
-                  NEED_RUNNERS+=($RUNNER_INDEX)
-                  echo "Runner $RUNNER_INDEX is full. Starting new runner."
-
-                  # Start a new runner for the current test
+                  # Current runner is full; Add a new runner for the current test
                   RUNNER_INDEX=$((RUNNER_INDEX + 1))
                   RUNNER_TESTS_TIME=$time
                   echo "Adding another runner $RUNNER_INDEX for test: $test (${time}ms)"
@@ -134,7 +129,21 @@ jobs:
               NEED_RUNNERS+=($RUNNER_INDEX)
             fi
 
-            # Output the list of needed runners
-            echo "NEED_RUNNERS=${NEED_RUNNERS[@]}"
-            echo "NEED_RUNNERS=$(IFS=','; echo "${NEED_RUNNERS[*]}")" >> $GITHUB_OUTPUT
+            echo "RUNNER_INDEX=$RUNNER_INDEX" >> $GITHUB_ENV
+            echo "RUNNER_INDEX=$RUNNER_INDEX" >> $GITHUB_OUTPUT
           }
+
+      - name: Generate JSON Matrix
+        id: set-matrix
+        run: |
+          MATRIX_JSON="["
+          for i in $(seq 1 $RUNNER_INDEX); do
+            if [ $i -gt 1 ]; then
+              MATRIX_JSON+=","
+            fi
+            MATRIX_JSON+="\"$i\""
+          done
+          MATRIX_JSON+="]"
+
+          echo "Generated matrix: $MATRIX_JSON"
+          echo "dynamic_matrix=$MATRIX_JSON" >> $GITHUB_OUTPUT
