@@ -95,13 +95,12 @@ jobs:
           # MAX_RUN_TIME in milliseconds (3 minutes)
           MAX_RUN_TIME=500
           RUNNER_TESTS_TIME=0
-          RUNNER_INDEX=1
+          RUNNER_INDEX=0
 
           echo "Max Run Time (ms): $MAX_RUN_TIME"
 
           # Read the JSON array
           test_list='${{ steps.list-tests.outputs.TEST_LIST }}'
-          echo "TEST_LIST=$test_list"
 
           # Parse and iterate through the JSON array line by line
           echo "$test_list" | jq -r '.[]' | {
@@ -126,7 +125,7 @@ jobs:
 
             # Add the last runner if it has tests
             if (( RUNNER_TESTS_TIME > 0 )); then
-              NEED_RUNNERS+=($RUNNER_INDEX)
+              RUNNER_INDEX+=($RUNNER_INDEX)
             fi
 
             echo "RUNNER_INDEX=$RUNNER_INDEX" >> $GITHUB_ENV
