@@ -107,11 +107,11 @@ jobs:
                   echo "Adding another runner $RUNNER_INDEX for test: $test (${time}ms)"
                 fi
               else
-                echo "Test: $test \033[31mnot found in state.json\033[0m"
-                echo "It seems the test directory structure was updated locally but it was not pushed to state.json."
-                echo "\033[34mNOTE: Ideally, this situation can be completely avoided by adding a pre commit hook to automatically add touched (new/updated) tests to state.json on commit.\033[0m"
-                echo "\033[34mNOTE: If you want to learn, how to do this, see readme documentation of this plugin.\033[0m"
-                echo "\033[32mHowever, for now, you can please run all the tests locally to update the state.json file and upload again.\033[0m"
+                echo "::error title=Test Not Found::Test: $test not found in state.json"
+                echo "::warning title=Directory Structure Updated::It seems the test directory structure was updated locally but it was not pushed to state.json."
+                echo "::warning title=Pre-commit Hook Suggestion::NOTE: Ideally, this situation can be completely avoided by adding a pre-commit hook to automatically add touched (new/updated) tests to state.json on commit."
+                echo "::warning title=Pre-commit Hook Suggestion::NOTE: Refer readme of this action, if you want to learn how to do this."
+                echo "::notice title=Next Steps::However, for now, you can please run all the tests locally to update the state.json file and upload again."
                 exit 1
               fi
             done
