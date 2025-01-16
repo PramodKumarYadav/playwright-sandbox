@@ -118,8 +118,7 @@ jobs:
                   echo "Adding test to runner $RUNNER_INDEX: $test (${time}ms)"
                 else
                   # Current runner is full; Add a new runner for the current test
-                  echo "::notice title=Runner $RUNNER_INDEX expected run time:: Expected run time is: (${RUNNER_TESTS_TIME / HALF_CORES}ms) "
-                  RUNNER_INDEX=$((RUNNER_INDEX + 1))
+                  echo "::notice title=Runner $RUNNER_INDEX expected run time:: Expected run time is: $((RUNNER_TESTS_TIME / HALF_CORES))ms"                  RUNNER_INDEX=$((RUNNER_INDEX + 1))
                   RUNNER_TESTS_TIME=$time
                   echo "Adding another runner $RUNNER_INDEX for test: $test (${time}ms)"
                 fi
@@ -132,8 +131,7 @@ jobs:
               fi
             done
 
-            echo "::notice title=Runner $RUNNER_INDEX expected run time:: Expected run time is: (${RUNNER_TESTS_TIME / HALF_CORES}ms) "
-            echo "RUNNER_INDEX=$RUNNER_INDEX" >> $GITHUB_ENV
+            echo "::notice title=Runner $RUNNER_INDEX expected run time:: Expected run time is: $((RUNNER_TESTS_TIME / HALF_CORES))ms"            echo "RUNNER_INDEX=$RUNNER_INDEX" >> $GITHUB_ENV
             echo "RUNNER_INDEX=$RUNNER_INDEX" >> $GITHUB_OUTPUT
           }
 
