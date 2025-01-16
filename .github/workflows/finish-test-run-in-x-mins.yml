@@ -124,9 +124,9 @@ jobs:
             done
 
             # Add the last runner if it has tests
-            if (( RUNNER_TESTS_TIME > 0 )); then
-              RUNNER_INDEX+=($RUNNER_INDEX)
-            fi
+            # if (( RUNNER_TESTS_TIME > 0 )); then
+            #   RUNNER_INDEX+=($RUNNER_INDEX)
+            # fi
 
             echo "RUNNER_INDEX=$RUNNER_INDEX" >> $GITHUB_ENV
             echo "RUNNER_INDEX=$RUNNER_INDEX" >> $GITHUB_OUTPUT
