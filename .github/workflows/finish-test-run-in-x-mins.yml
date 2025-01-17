@@ -20,7 +20,7 @@ jobs:
         uses: PramodKumarYadav/finish-tests-in-x-mins@main
         id: get-dynamic-matrix
         with:
-          total-run-time-in-mins: 3
+          total-run-time-in-mins: 5
           pw-command-to-execute: "npx playwright test"
 
   test:
