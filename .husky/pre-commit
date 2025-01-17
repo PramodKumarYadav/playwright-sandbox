@@ -2,6 +2,7 @@
 . "$(dirname "$0")/_/husky.sh"
 
 # Run lint-staged to fix formatting and also commit formatted changes, lint:check to check code issues and unit tests
+npx playwright test load-tests-sample
 npx lint-staged 
 npm run lint 
 
