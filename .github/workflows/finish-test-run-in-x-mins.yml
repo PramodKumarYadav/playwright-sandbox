@@ -57,7 +57,7 @@ jobs:
         id: list-tests
         run: |
           # Run the Playwright test list command
-          test_list=$(npx playwright test employee-service.spec.ts --list --reporter=list 2>&1 || true)
+          test_list=$(npx playwright test employee-service.spec.ts demo-todo-app.spec.ts --list --reporter=list 2>&1 || true)
 
           # Check if no tests were found
           if echo "$test_list" | grep -q "Error: No tests found."; then
