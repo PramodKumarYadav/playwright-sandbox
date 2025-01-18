@@ -262,7 +262,7 @@ jobs:
           PROJECTS=$(echo $RUNNER_TESTS | jq -r 'keys[]')
           for project in $PROJECTS; do
               # Get the test list for the current project
-              TEST_LIST=$(echo "$RUNNER_TESTS" | jq -r --arg project "$project" '.[$project] | join(" ")')
+              TEST_LIST=$(echo $RUNNER_TESTS | jq -r --arg project "$project" '.[$project] | join(" ")')
 
               # Debugging outputs
               echo "Running tests for project: $project"
