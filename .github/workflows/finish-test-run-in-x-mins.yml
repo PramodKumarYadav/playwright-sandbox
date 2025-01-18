@@ -141,7 +141,7 @@ jobs:
                 fi
 
                 # Append test to the appropriate runner and project
-                RUNNER_KEY="Runner $RUNNER_COUNT"
+                RUNNER_KEY="Runner_$RUNNER_COUNT"
                 RUNNER_TESTS["$RUNNER_KEY"]+="{\"project\":\"$project\",\"test\":\"$test\"},"
               else
                 echo "::error title=Test Not Found::Test not found in state.json 👉 $test "
@@ -153,19 +153,19 @@ jobs:
             done
 
             # Output the final JSON structure
-            # FINAL_JSON="{"
-            # for runner in "${!RUNNER_TESTS[@]}"; do
-            #   if [[ "$FINAL_JSON" != "{" ]]; then
-            #     FINAL_JSON+=","
-            #   fi
-            #   # Group by project
-            #   PROJECT_GROUPED=$(echo "[${RUNNER_TESTS[$runner]%?}]" | jq -c '[group_by(.project)[] | {(.[0].project): map(.test)}] | add')
-            #   FINAL_JSON+="\"$runner\": $PROJECT_GROUPED"
-            # done
-            # FINAL_JSON+="}"
+            FINAL_JSON="{"
+            for runner in "${!RUNNER_TESTS[@]}"; do
+              if [[ "$FINAL_JSON" != "{" ]]; then
+                FINAL_JSON+=","
+              fi
+              # Group by project
+              PROJECT_GROUPED=$(echo "[${RUNNER_TESTS[$runner]%?}]" | jq -c '[group_by(.project)[] | {(.[0].project): map(.test)}] | add')
+              FINAL_JSON+="\"$runner\": $PROJECT_GROUPED"
+            done
+            FINAL_JSON+="}"
 
-            # echo "::notice::Final runners JSON: $FINAL_JSON"
-            # echo "runners_json=$FINAL_JSON" >> $GITHUB_OUTPUT
+            echo "::notice::Final runners JSON: $FINAL_JSON"
+            echo "runners_json=$FINAL_JSON" >> $GITHUB_OUTPUT
             
             echo "::notice title=Runner $RUNNER_COUNT expected run time:: Runner $RUNNER_COUNT will run $TOTAL_TESTS_IN_A_RUNNER tests using $HALF_CORES workers in approx run time: $((TOTAL_RUNNER_EXECUTION_TIME / HALF_CORES))ms"
             echo "RUNNER_COUNT=$RUNNER_COUNT" >> $GITHUB_ENV
