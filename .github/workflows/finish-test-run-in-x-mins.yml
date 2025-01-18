@@ -254,6 +254,7 @@ jobs:
       - name: Run Playwright Tests for Runner ${{ matrix.runner }}
         run: |
           # Extract the test-load-distribution-json for the current runner
+          echo ${{ needs.get-matrix-for-sharding.outputs.test_load_distribution_json }}
           TEST_LOAD_JSON=${{ needs.get-matrix-for-sharding.outputs.test_load_distribution_json }} | jq .
           RUNNER_KEY="${{ matrix.runner }}"
           RUNNER_TESTS=$(echo ${{ needs.get-matrix-for-sharding.outputs.test_load_distribution_json }} | jq -r --arg key "$RUNNER_KEY" '.[$key]')
