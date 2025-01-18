@@ -146,6 +146,7 @@ jobs:
 
                 # Append test to the appropriate runner and project
                 RUNNER_KEY="Runner_$RUNNER_COUNT"
+                echo "$RUNNER_KEY"
                 RUNNER_TESTS["$RUNNER_KEY"]+="{\"project\":\"$project\",\"test\":\"$test_identifier\"},"
               else
                 echo "::error title=Test Not Found::Test not found in state.json 👉 $test "
