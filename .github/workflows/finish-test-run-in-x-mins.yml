@@ -122,6 +122,10 @@ jobs:
               project=$(echo "$test" | awk -F'›' '{print $1}' | xargs | sed 's/^\[//;s/\]$//')
               echo "::notice::Project: $project"
 
+              # Extract the part of the test key to store in JSON (e.g., demo-todo-app.spec.ts:45:7)
+              test_identifier=$(echo "$test" | awk -F'›' '{print $2}' | xargs)
+              echo "::notice::Test Identifier: $test_identifier"
+
               if [ "$time" != "null" ]; then
                 # Add the test time to the current runner's total
                 if (( (TOTAL_RUNNER_EXECUTION_TIME + time) / HALF_CORES <= MAX_RUN_TIME )); then
@@ -142,7 +146,7 @@ jobs:
 
                 # Append test to the appropriate runner and project
                 RUNNER_KEY="Runner_$RUNNER_COUNT"
-                RUNNER_TESTS["$RUNNER_KEY"]+="{\"project\":\"$project\",\"test\":\"$test\"},"
+                RUNNER_TESTS["$RUNNER_KEY"]+="{\"project\":\"$project\",\"test\":\"$test_identifier\"},"
               else
                 echo "::error title=Test Not Found::Test not found in state.json 👉 $test "
                 echo "::notice title=Directory Structure Updated::It seems the test directory structure was updated locally but it was not pushed to state.json."
