@@ -255,15 +255,11 @@ jobs:
         run: |
           # Extract the test-load-distribution-json for the current runner
           TEST_LOAD_JSON=${{ needs.get-matrix-for-sharding.outputs.test_load_distribution_json }} | jq .
-          echo "Test Load JSON:"
-          echo "$TEST_LOAD_JSON"
-
           RUNNER_KEY="${{ matrix.runner }}"
-
-          RUNNER_TESTS=$(echo "${{ needs.get-matrix-for-sharding.outputs.test_load_distribution_json }}" | jq -r --arg key "$RUNNER_KEY" '.[$key]')
+          RUNNER_TESTS=$(echo ${{ needs.get-matrix-for-sharding.outputs.test_load_distribution_json }} | jq -r --arg key "$RUNNER_KEY" '.[$key]')
 
           # Iterate over projects in the runner
-          PROJECTS=$(echo "$RUNNER_TESTS" | jq -r 'keys[]')
+          PROJECTS=$(echo $RUNNER_TESTS | jq -r 'keys[]')
           for project in $PROJECTS; do
               # Get the test list for the current project
               TEST_LIST=$(echo "$RUNNER_TESTS" | jq -r --arg project "$project" '.[$project] | join(" ")')
