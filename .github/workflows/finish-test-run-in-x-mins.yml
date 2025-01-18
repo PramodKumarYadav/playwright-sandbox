@@ -145,7 +145,7 @@ jobs:
                 fi
 
                 # Append test to the appropriate runner and project
-                RUNNER_KEY="Runner_$RUNNER_COUNT"
+                RUNNER_KEY="$RUNNER_COUNT"
                 echo "$RUNNER_KEY"
                 # Initialize the JSON for the runner if not already set
                 if [ -z "${RUNNER_TESTS[$RUNNER_KEY]}" ]; then
