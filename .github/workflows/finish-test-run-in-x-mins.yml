@@ -182,7 +182,7 @@ jobs:
             done
             FINAL_JSON+="}"
 
-            echo "::notice::Final runners JSON: $FINAL_JSON"
+            echo "Final runners JSON: $FINAL_JSON"
             echo "runners_json=$FINAL_JSON" >> $GITHUB_OUTPUT
             
             echo "::notice title=Runner $RUNNER_COUNT expected run time:: Runner $RUNNER_COUNT will run $TOTAL_TESTS_IN_A_RUNNER tests using $HALF_CORES workers in approx run time: $((TOTAL_RUNNER_EXECUTION_TIME / HALF_CORES))ms"
