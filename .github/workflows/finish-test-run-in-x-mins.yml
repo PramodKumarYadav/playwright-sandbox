@@ -179,7 +179,7 @@ jobs:
               if [[ "$FINAL_JSON" != "{" ]]; then
                 FINAL_JSON+=","
               fi
-              FINAL_JSON+="\"$runner\": $(echo "${RUNNER_TESTS[$runner]}" | jq)"
+              FINAL_JSON+="\"$runner\": $(echo "${RUNNER_TESTS[$runner]}" | jq -c)"
             done
             FINAL_JSON+="}"
 
