@@ -78,7 +78,8 @@ jobs:
           json_array=$(echo "$filtered_list" | jq -R -s 'split("\n") | map(select(length > 0))')
 
           # Debug: Display the JSON array
-          echo "::debug title=JSON array::$json_array "
+          echo "JSON array"
+          echo "$json_array "
 
           # Save the JSON array to GITHUB_OUTPUT, ensuring proper escaping
           TEST_LIST=$(echo "$json_array" | jq -c)
@@ -178,7 +179,7 @@ jobs:
               if [[ "$FINAL_JSON" != "{" ]]; then
                 FINAL_JSON+=","
               fi
-              FINAL_JSON+="\"$runner\": $(echo "${RUNNER_TESTS[$runner]}" | jq -c)"
+              FINAL_JSON+="\"$runner\": $(echo "${RUNNER_TESTS[$runner]}" | jq)"
             done
             FINAL_JSON+="}"
 
