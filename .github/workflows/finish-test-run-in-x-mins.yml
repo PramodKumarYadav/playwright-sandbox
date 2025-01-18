@@ -119,7 +119,7 @@ jobs:
               time=$(jq -r --arg test "$test" '.[$test]' state.json)
 
               # Extract the project from the test key
-              project=$(echo "$test" | awk -F'›' '{print $1}' | xargs)
+              project=$(echo "$test" | awk -F'›' '{print $1}' | xargs | sed 's/^\[//;s/\]$//')
               echo "::notice::Project: $project"
 
               if [ "$time" != "null" ]; then
