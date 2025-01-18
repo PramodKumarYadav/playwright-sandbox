@@ -254,17 +254,13 @@ jobs:
       - name: Run Playwright Tests for Runner ${{ matrix.runner }}
         run: |
           # Extract the test-load-distribution-json for the current runner
-          TEST_LOAD_JSON="${{ needs.get-matrix-for-sharding.outputs.test_load_distribution_json }}"
+          TEST_LOAD_JSON="${{ needs.get-matrix-for-sharding.outputs.test_load_distribution_json }}" | jq .
           echo "Test Load JSON:"
           echo "$TEST_LOAD_JSON"
 
           RUNNER_KEY="${{ matrix.runner }}"
 
-          # Sanitize the JSON to ensure proper quoting
-          VALID_JSON=$(echo "$TEST_LOAD_JSON" | sed -E 's/([a-zA-Z0-9_-]+):/\\"\1\\":/g; s/:([a-zA-Z0-9_\-\.\/]+)(,|})/:"\1"\2/g')
-          echo "Sanitized JSON: $VALID_JSON"
-
-          RUNNER_TESTS=$(echo "$VALID_JSON" | jq -r --arg key "$RUNNER_KEY" '.[$key]')
+          RUNNER_TESTS=$(echo "$TEST_LOAD_JSON" | jq -r --arg key "$RUNNER_KEY" '.[$key]')
 
           # Iterate over projects in the runner
           PROJECTS=$(echo "$RUNNER_TESTS" | jq -r 'keys[]')
