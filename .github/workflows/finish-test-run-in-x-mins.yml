@@ -157,6 +157,9 @@ jobs:
               fi
             done
 
+            # Debugging: Output the runner keys
+            echo "Keys in RUNNER_TESTS: ${!RUNNER_TESTS[@]}"
+
             # Output the final JSON structure
             FINAL_JSON="{"
             for runner in "${!RUNNER_TESTS[@]}"; do
