@@ -259,6 +259,7 @@ jobs:
           # TEST_LOAD_JSON=cat json_output.txt | jq .
           echo "$TEST_LOAD_JSON"
           RUNNER_KEY="${{ matrix.runner }}"
+          echo "$RUNNER_KEY"
           echo "ln 3"
           echo " "
           # RUNNER_TESTS=$(echo "${{ needs.get-matrix-for-sharding.outputs.test_load_distribution_json }}" | jq -r --arg key "$RUNNER_KEY" '.[$key]')
