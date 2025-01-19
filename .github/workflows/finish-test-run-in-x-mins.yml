@@ -278,7 +278,6 @@ jobs:
               echo "Running tests for project: $project"
               echo "Tests: $TEST_LIST"
 
-              TEST_LIST="employee-service.spec.ts"
               # Run Playwright command if TEST_LIST is not empty
               if [ -n "$TEST_LIST" ]; then
                   npx playwright test $TEST_LIST --project=$project --reporter=blob
