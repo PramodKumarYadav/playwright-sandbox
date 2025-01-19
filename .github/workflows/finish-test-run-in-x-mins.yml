@@ -270,22 +270,22 @@ jobs:
           echo "$PROJECTS"
 
           echo "Now we iterate over projects"
-          # for project in $PROJECTS; do
-          #     # Get the test list for the current project
-          #     # TEST_LIST=$(echo $RUNNER_TESTS | jq -r --arg project "$project" '.[$project] | join(" ")')
+          for project in $PROJECTS; do
+              # Get the test list for the current project
+              TEST_LIST=$(echo $RUNNER_TESTS | jq -r --arg project "$project" '.[$project] | join(" ")')
 
-          #     # Debugging outputs
-          #     echo "Running tests for project: $project"
-          #     # echo "Tests: $TEST_LIST"
+              # Debugging outputs
+              echo "Running tests for project: $project"
+              echo "Tests: $TEST_LIST"
 
-          #     TEST_LIST="employee-service.spec.ts"
-          #     # Run Playwright command if TEST_LIST is not empty
-          #     if [ -n "$TEST_LIST" ]; then
-          #         npx playwright test $TEST_LIST --project=$project --reporter=blob
-          #     else
-          #         echo "No tests to run for project: $project"
-          #     fi
-          # done
+              TEST_LIST="employee-service.spec.ts"
+              # Run Playwright command if TEST_LIST is not empty
+              if [ -n "$TEST_LIST" ]; then
+                  npx playwright test $TEST_LIST --project=$project --reporter=blob
+              else
+                  echo "No tests to run for project: $project"
+              fi
+          done
 
       # - name: Run Playwright tests
       #   # Index is zero based so add one to get shards index as 1,2,3 and thus ratio as 1/3, 2/3, 3/3.
