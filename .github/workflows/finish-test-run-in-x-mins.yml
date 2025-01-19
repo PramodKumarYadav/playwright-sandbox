@@ -256,7 +256,7 @@ jobs:
           # Extract the test-load-distribution-json for the current runner
           echo "ln 1"
           echo " "
-          TEST_LOAD_JSON=${{ needs.get-matrix-for-sharding.outputs.test_load_distribution_json }} | jq .
+          TEST_LOAD_JSON="${{ needs.get-matrix-for-sharding.outputs.test_load_distribution_json }}" | jq .
           echo "ln 2"
           echo " "
           RUNNER_KEY="${{ matrix.runner }}"
