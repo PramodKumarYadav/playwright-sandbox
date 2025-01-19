@@ -259,7 +259,7 @@ jobs:
           echo '${{ needs.get-matrix-for-sharding.outputs.test_load_distribution_json }}' > json_output.txt
           cat json_output.txt | jq .
            echo "ln 1- end"
-          TEST_LOAD_JSON="${{ needs.get-matrix-for-sharding.outputs.test_load_distribution_json }}" | jq .
+          # TEST_LOAD_JSON="${{ needs.get-matrix-for-sharding.outputs.test_load_distribution_json }}" | jq .
           echo "ln 2"
           echo " "
           RUNNER_KEY="${{ matrix.runner }}"
