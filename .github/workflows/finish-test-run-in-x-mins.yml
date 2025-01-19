@@ -270,7 +270,7 @@ jobs:
           echo " "
 
           # Iterate over projects in the runner
-          PROJECTS=$(echo $RUNNER_KEY | jq -r 'keys[]')
+          # PROJECTS=$(echo $RUNNER_KEY | jq -r 'keys[]')
           echo "ln 5"
           echo " "
           # for project in $PROJECTS; do
