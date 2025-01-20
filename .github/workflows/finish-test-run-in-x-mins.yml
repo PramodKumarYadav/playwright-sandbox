@@ -282,26 +282,30 @@ jobs:
               # Generate a unique report directory for each project
               report_dir="blob-report/$RUNNER_KEY-$project"
               echo "Report Name: $report_name"
+
+              # Generate a unique report file name
+              report_path="blob-report/$RUNNER_KEY-$project-report.zip"
+
               if [ -n "$TEST_LIST" ]; then
                   echo "Starting tests for project: $project at $(date)"
                   npx playwright test $TEST_LIST --project=$project --reporter=blob --outputDir=$report_dir
-                  echo "Searching for $report_name..."
-                  echo " ---------"  
-                  ls -R $report_dir
-                  echo " ---------"            
+
+                  # Upload the generated blob report immediately
+                  echo "Uploading report: $report_path"
+                  gh run upload-artifact --name "$RUNNER_KEY-$project-report" --path "$report_path"           
                   echo "finishing tests for project: $project at $(date)"
               else
                   echo "No tests to run for project: $project"
               fi
           done
 
-      - name: Upload blob report to GitHub Actions Artifacts
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          path: blob-report/
-          name: blob-report-${{ matrix.runner }}
-          retention-days: 1
+      # - name: Upload blob report to GitHub Actions Artifacts
+      #   if: always()
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     path: blob-report/
+      #     name: blob-report-${{ matrix.runner }}
+      #     retention-days: 1
 
   merge-reports:
     # Merge reports after playwright-tests, even if some shards have failed
