@@ -288,10 +288,7 @@ jobs:
                   echo "Searching for $report_name..."
                   echo " ---------"  
                   ls -R blob-report
-                  echo " ---------"           
-                  echo " ---------"  
-                  ls -R blob-report-1
-                  echo " ---------"   
+                  echo " ---------"            
                   echo "finishing tests for project: $project at $(date)"
               else
                   echo "No tests to run for project: $project"
