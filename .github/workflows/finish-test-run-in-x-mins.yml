@@ -307,15 +307,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           path: blob-report
-          name: blob-report-${{ matrix.runner }}-chromium.json
-          retention-days: 1
-
-      - name: Upload blob report to GitHub Actions Artifacts
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          path: blob-report
-          name: blob-report-${{ matrix.runner }}-webkit.json
+          name: blob-report-${{ matrix.runner }}
           retention-days: 1
 
   merge-reports:
