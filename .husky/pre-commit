@@ -6,8 +6,3 @@ npx lint-staged
 npm run lint 
 npx playwright test --only-changed
 
-# Check if state.json exists, add it to the staging area, and commit it without triggering Husky
-if [ -f "state.json" ]; then
-  git add state.json
-  HUSKY=0 git commit -m "chore: update state.json"
-fi
