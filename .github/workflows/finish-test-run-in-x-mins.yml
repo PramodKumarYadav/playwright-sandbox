@@ -284,7 +284,7 @@ jobs:
               echo "Report Name: $report_name"
               if [ -n "$TEST_LIST" ]; then
                   echo "Starting tests for project: $project at $(date)"
-                  npx playwright test $TEST_LIST --project=$project --reporter=blob --output=blob-report-${{ matrix.runner }}
+                  npx playwright test $TEST_LIST --project=$project --reporter=blob
                   echo "Searching for $report_name..."
                   echo " ---------"  
                   ls -R blob-report
@@ -302,7 +302,8 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          path: blob-report-${{ matrix.runner }}
+          path: blob-report
+          name: blob-report-${{ matrix.runner }}
           retention-days: 1
 
   merge-reports:
