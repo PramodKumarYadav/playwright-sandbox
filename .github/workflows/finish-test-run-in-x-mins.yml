@@ -22,7 +22,7 @@ jobs:
         id: get-dynamic-matrix
         with:
           total-run-time-in-mins: 3
-          pw-command-to-execute: "npx playwright test demo-todo-app.spec.ts"
+          pw-command-to-execute: "npx playwright test"
   #   steps:
   #     - name: Checkout Repository
   #       uses: actions/checkout@v4
