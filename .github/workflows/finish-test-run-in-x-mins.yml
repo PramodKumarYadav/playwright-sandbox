@@ -286,6 +286,11 @@ jobs:
                   echo "Starting tests for project: $project at $(date)"
                   npx playwright test $TEST_LIST --project=$project --reporter=blob --output=blob-report/blob-report-$RUNNER_KEY-$project
                   # cat blob-report/blob-report-$RUNNER_KEY-$project/report.json
+                  cd blob-report/blob-report-$RUNNER_KEY-$project
+                  ls -la
+                  cd ..                  
+                  cd ..                  
+
                   echo "finishing tests for project: $project at $(date)"
               else
                   echo "No tests to run for project: $project"
