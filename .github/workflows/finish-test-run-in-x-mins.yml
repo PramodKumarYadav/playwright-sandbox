@@ -284,7 +284,7 @@ jobs:
               echo "Report Name: $report_name"
               if [ -n "$TEST_LIST" ]; then
                   echo "Starting tests for project: $project at $(date)"
-                  npx playwright test $TEST_LIST --project=$project --reporter=blob --output=blob-report/blob-report-$RUNNER_KEY-$project
+                  DEBUG=pw:reporter npx playwright test $TEST_LIST --project=$project --reporter=blob --output=blob-report/blob-report-$RUNNER_KEY-$project
                   echo "Searching for last-run.json..."
                   FILE_PATH=$(find "$GITHUB_WORKSPACE" -name "report.jsonl" -type f)
                   if [ -n "$FILE_PATH" ]; then
