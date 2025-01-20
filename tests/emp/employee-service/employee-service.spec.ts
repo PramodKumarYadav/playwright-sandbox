@@ -9,7 +9,7 @@ import { test, expect } from "@playwright/test";
 test.describe("HEAD1-Employee-service", { tag: ["@employee-service"] }, () => {
   test.describe("HEAD2-Employee-service,", { tag: ["@employee-service"] }, () => {
     test.describe("Employee-service", { tag: ["@employee-service"] }, () => {
-      test("has title Playwright", async ({ page }) => {
+      test("Has title Playwright", async ({ page }) => {
         await page.goto("https://playwright.dev/");
 
         // Expect a title "to contain" a substring.
@@ -23,7 +23,7 @@ test.describe("HEAD1-Employee-service", { tag: ["@employee-service"] }, () => {
         await page.goto("https://playwright.dev/");
 
         // Click the get started link.
-        await page.getByRole("link", { name: "Get starteddd" }).click();
+        await page.getByRole("link", { name: "Get started" }).click();
 
         // Expects page to have a heading with the name of Installation.
         await expect(page.getByRole("heading", { name: "Installation" })).toBeVisible();
