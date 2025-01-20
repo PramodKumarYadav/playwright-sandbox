@@ -281,6 +281,7 @@ jobs:
               # Run Playwright command if TEST_LIST is not empty
               # Generate a unique report name
               report_name="blob-report-$RUNNER_KEY-$project.json"
+              echo "Report Name: $report_name"
               if [ -n "$TEST_LIST" ]; then
                   npx playwright test $TEST_LIST --project=$project --reporter=blob --output=blob-report/$report_name
               else
@@ -314,7 +315,8 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           path: all-blob-reports
-          pattern: blob-report-*
+          # pattern: blob-report-*
+          pattern: artifact
           merge-multiple: true
 
       - name: Merge into HTML Report
