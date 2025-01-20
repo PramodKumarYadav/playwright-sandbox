@@ -284,17 +284,10 @@ jobs:
               echo "Report Name: $report_name"
               if [ -n "$TEST_LIST" ]; then
                   echo "Starting tests for project: $project at $(date)"
-                  DEBUG=pw:reporter npx playwright test $TEST_LIST --project=$project --reporter=blob --output=blob-report/$report_name
+                  npx playwright test $TEST_LIST --project=$project --reporter=blob --output=blob-report/$report_name
                   echo "Searching for $report_name..."
                   ls -R blob-report
-                  echo " ---------"
-                  FILE_PATH=$(find "$GITHUB_WORKSPACE" -name "$report_name" -type f)
-                  if [ -n "$FILE_PATH" ]; then
-                    echo "Found $report_name at: $FILE_PATH"
-                    echo "file_path=$FILE_PATH" >> $GITHUB_ENV
-                  else
-                    echo "$report_name not found"
-                  fi               
+                  echo " ---------"           
 
                   echo "finishing tests for project: $project at $(date)"
               else
