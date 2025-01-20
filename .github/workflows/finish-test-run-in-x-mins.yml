@@ -280,7 +280,7 @@ jobs:
 
               # Run Playwright command if TEST_LIST is not empty
               # Generate a unique report name
-              report_name="blob-report-$RUNNER_KEY-$project.json"
+              report_name="blob-report-$RUNNER_KEY"
               echo "Report Name: $report_name"
               if [ -n "$TEST_LIST" ]; then
                   echo "Starting tests for project: $project at $(date)"
