@@ -285,13 +285,8 @@ jobs:
               if [ -n "$TEST_LIST" ]; then
                   echo "Starting tests for project: $project at $(date)"
                   npx playwright test $TEST_LIST --project=$project --reporter=blob --output=blob-report/blob-report-$RUNNER_KEY-$project
-                  cat last-run.json
-                  cd blob-report
-                  cd blob-report-$RUNNER_KEY-$project
-                  ls -la
-                  cat ./last-run.json
-                  cd ..                  
-                  cd ..                  
+                  echo "Searching for last-run.json..."
+                  find "$GITHUB_WORKSPACE" -name "last-run.json" -type f                  
 
                   echo "finishing tests for project: $project at $(date)"
               else
