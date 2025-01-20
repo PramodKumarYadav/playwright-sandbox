@@ -283,7 +283,9 @@ jobs:
               report_name="blob-report-$RUNNER_KEY-$project.json"
               echo "Report Name: $report_name"
               if [ -n "$TEST_LIST" ]; then
+                  echo "Starting tests for project: $project at $(date)"
                   npx playwright test $TEST_LIST --project=$project --reporter=blob --output=blob-report/blob-report-$RUNNER_KEY-$project.json
+                  echo "Starting tests for project: $project at $(date)"
               else
                   echo "No tests to run for project: $project"
               fi
