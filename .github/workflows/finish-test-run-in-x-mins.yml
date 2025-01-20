@@ -299,8 +299,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          path: blob-report
-          name: blob-report-${{ matrix.runner }}
+          path: blob-report-${{ matrix.runner }}
           retention-days: 1
 
   merge-reports:
