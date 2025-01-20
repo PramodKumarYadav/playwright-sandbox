@@ -288,8 +288,8 @@ jobs:
                   cat last-run.json
                   cd blob-report
                   cd blob-report-$RUNNER_KEY-$project
-                  cat last-run.json
                   ls -la
+                  cat ./last-run.json
                   cd ..                  
                   cd ..                  
 
