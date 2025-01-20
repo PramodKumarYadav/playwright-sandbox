@@ -286,6 +286,9 @@ jobs:
                   echo "Starting tests for project: $project at $(date)"
                   DEBUG=pw:reporter npx playwright test $TEST_LIST --project=$project --reporter=blob --output=blob-report/$report_name
                   echo "Searching for $report_name..."
+                  ls -R blob-report
+                  echo " ---------"
+                  ls -R $GITHUB_WORKSPACE
                   FILE_PATH=$(find "$GITHUB_WORKSPACE" -name "$report_name" -type f)
                   if [ -n "$FILE_PATH" ]; then
                     echo "Found $report_name at: $FILE_PATH"
