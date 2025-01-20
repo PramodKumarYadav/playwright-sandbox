@@ -280,7 +280,7 @@ jobs:
 
               # Run Playwright command if TEST_LIST is not empty
               # Generate a unique report directory for each project
-              report_dir="blob-report/$RUNNER_KEY-$project""
+              report_dir="blob-report/$RUNNER_KEY-$project"
               echo "Report Name: $report_name"
               if [ -n "$TEST_LIST" ]; then
                   echo "Starting tests for project: $project at $(date)"
