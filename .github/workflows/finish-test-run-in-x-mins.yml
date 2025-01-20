@@ -286,7 +286,13 @@ jobs:
                   echo "Starting tests for project: $project at $(date)"
                   npx playwright test $TEST_LIST --project=$project --reporter=blob --output=blob-report/blob-report-$RUNNER_KEY-$project
                   echo "Searching for last-run.json..."
-                  find "$GITHUB_WORKSPACE" -name "last-run.json" -type f                  
+                  FILE_PATH=$(find "$GITHUB_WORKSPACE" -name "last-run.json" -type f)
+                  if [ -n "$FILE_PATH" ]; then
+                    echo "Found last-run.json at: $FILE_PATH"
+                    echo "file_path=$FILE_PATH" >> $GITHUB_ENV
+                  else
+                    echo "last-run.json not found"
+                  fi               
 
                   echo "finishing tests for project: $project at $(date)"
               else
