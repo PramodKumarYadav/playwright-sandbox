@@ -279,15 +279,15 @@ jobs:
               echo "Tests: $TEST_LIST"
 
               # Run Playwright command if TEST_LIST is not empty
-              # Generate a unique report name
-              # report_name="blob-report-$RUNNER_KEY"
+              # Generate a unique report directory for each project
+              report_dir="blob-report/$RUNNER_KEY-$project""
               echo "Report Name: $report_name"
               if [ -n "$TEST_LIST" ]; then
                   echo "Starting tests for project: $project at $(date)"
-                  npx playwright test $TEST_LIST --project=$project --reporter=blob
+                  npx playwright test $TEST_LIST --project=$project --reporter=blob --output=$report_dir
                   echo "Searching for $report_name..."
                   echo " ---------"  
-                  ls -R blob-report
+                  ls -R $report_dir
                   echo " ---------"            
                   echo "finishing tests for project: $project at $(date)"
               else
@@ -299,7 +299,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          path: blob-report
+          path: blob-report/
           name: blob-report-${{ matrix.runner }}
           retention-days: 1
 
