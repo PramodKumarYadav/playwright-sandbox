@@ -286,9 +286,12 @@ jobs:
                   echo "Starting tests for project: $project at $(date)"
                   npx playwright test $TEST_LIST --project=$project --reporter=blob --output=blob-report-${{ matrix.runner }}
                   echo "Searching for $report_name..."
-                  ls -la
+                  echo " ---------"  
+                  ls -R blob-report
                   echo " ---------"           
-
+                  echo " ---------"  
+                  ls -R blob-report-1
+                  echo " ---------"   
                   echo "finishing tests for project: $project at $(date)"
               else
                   echo "No tests to run for project: $project"
