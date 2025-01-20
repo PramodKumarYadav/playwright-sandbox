@@ -270,6 +270,7 @@ jobs:
           echo "$PROJECTS"
 
           echo "Now we iterate over projects"
+          mkdir -p add-all-blob-reports
           for project in $PROJECTS; do
               # Get the test list for the current project
               TEST_LIST=$(echo $RUNNER_TESTS | jq -r --arg project "$project" '.[$project] | join(" ")')
@@ -279,20 +280,11 @@ jobs:
               echo "Tests: $TEST_LIST"
 
               # Run Playwright command if TEST_LIST is not empty
-              # Generate a unique report directory for each project
-              report_dir="blob-report/$RUNNER_KEY-$project"
-              echo "Report Name: $report_name"
-
-              # Generate a unique report file name
-                report_path="blob-report-$RUNNER_KEY"
-
               if [ -n "$TEST_LIST" ]; then
                   echo "Starting tests for project: $project at $(date)"
-                  export PWTEST_BLOB_REPORT_NAME="$report_path"
                   npx playwright test $TEST_LIST --project=$project --reporter=blob 
-                  unset PWTEST_BLOB_REPORT_NAME
-                  ls -la
-                  ls -R "blob-report-$RUNNER_KEY"         
+                  mv blob-report/* add-all-blob-reports/
+                  ls -R "add-all-blob-reports"       
                   echo "finishing tests for project: $project at $(date)"
               else
                   echo "No tests to run for project: $project"
@@ -303,8 +295,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          path: blob-report/
-          name: blob-report-${{ matrix.runner }}
+          path: add-all-blob-reports/
           retention-days: 1
 
   merge-reports:
