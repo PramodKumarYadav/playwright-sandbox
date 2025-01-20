@@ -286,7 +286,7 @@ jobs:
                   echo "Starting tests for project: $project at $(date)"
                   npx playwright test $TEST_LIST --project=$project --reporter=blob --output=blob-report-${{ matrix.runner }}
                   echo "Searching for $report_name..."
-                  ls -R blob-report
+                  ls -la
                   echo " ---------"           
 
                   echo "finishing tests for project: $project at $(date)"
