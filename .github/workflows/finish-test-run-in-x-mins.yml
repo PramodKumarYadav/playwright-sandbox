@@ -284,14 +284,14 @@ jobs:
               echo "Report Name: $report_name"
 
               # Generate a unique report file name
-              report_path="blob-report-$RUNNER_KEY"
+                report_path="blob-report-$RUNNER_KEY"
 
               if [ -n "$TEST_LIST" ]; then
                   echo "Starting tests for project: $project at $(date)"
                   export PWTEST_BLOB_REPORT_NAME="$report_path"
                   npx playwright test $TEST_LIST --project=$project --reporter=blob 
                   unset PWTEST_BLOB_REPORT_NAME
-
+                  ls -la
                   ls -R "blob-report-$RUNNER_KEY"         
                   echo "finishing tests for project: $project at $(date)"
               else
