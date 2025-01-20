@@ -288,7 +288,7 @@ jobs:
 
               if [ -n "$TEST_LIST" ]; then
                   echo "Starting tests for project: $project at $(date)"
-                  npx playwright test $TEST_LIST --project=$project --reporter=blob --outputDir=$report_dir
+                  npx playwright test $TEST_LIST --project=$project --reporter=blob 
 
                   # Upload the generated blob report immediately
                   echo "Uploading report: $report_path"
