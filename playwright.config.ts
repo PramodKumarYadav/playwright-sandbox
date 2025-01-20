@@ -28,6 +28,8 @@ export default defineConfig({
   /** By removing OS related info, we can use same snapshots across different OS. */
   snapshotPathTemplate: `.screenshots/{testFilePath}/{arg}{ext}`,
 
+  timeout: 80000,
+
   testDir: "./tests",
   /* Run tests in files in parallel */
   fullyParallel: true,
@@ -39,7 +41,7 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
 
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: [["list"], ["html"], ["github"], ["blob"]],
+  reporter: [["list"], ["html"], ["github"], ["./state-reporter.js"]],
 
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
