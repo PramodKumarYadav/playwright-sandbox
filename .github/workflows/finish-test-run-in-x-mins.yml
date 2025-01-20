@@ -296,6 +296,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           path: add-all-blob-reports/
+          name: blob-report-${{ matrix.runner }}
           retention-days: 1
 
   merge-reports:
