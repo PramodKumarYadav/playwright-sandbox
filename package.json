@@ -52,6 +52,7 @@
     "config": "^3.3.11",
     "cross-env": "^7.0.3",
     "dotenv": "^16.4.1",
-    "pg": "^8.11.3"
+    "pg": "^8.11.3",
+    "playwright-sandbox": "file:"
   }
 }
