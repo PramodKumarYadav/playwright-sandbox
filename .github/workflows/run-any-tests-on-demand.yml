@@ -1,0 +1,25 @@
+name: 🔘 Run tests on demand
+
+on:
+  # Allows us to run this workflow manually from the Actions tab
+  workflow_dispatch:
+    inputs:
+      total-run-time-in-mins:
+        description: "Total expected run time in minutes"
+        required: true
+        default: "2"
+        type: string
+
+      pw-command-to-execute:
+        description: "playwright command to run"
+        required: true
+        default: "npx playwright test --project='chromium'"
+        type: string
+
+jobs:
+  run-tests-on-demand:
+    uses: ./.github/workflows/reusable-workflow.yml
+    with:
+      total-run-time-in-mins: "${{ inputs.total-run-time-in-mins }}"
+      pw-command-to-execute: "${{ inputs.pw-command-to-execute }}"
+    secrets: inherit
