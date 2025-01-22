@@ -19,11 +19,13 @@ test.describe("HEAD1-Employee-service", { tag: ["@employee-service"] }, () => {
       /**
        * Failing this test to test the retry mechanism and get trace in CI
        */
-      test("get started link is visible on page @employee-service", async ({ page }) => {
+      test("get the started link is visible on page @employee-service", async ({
+        page,
+      }) => {
         await page.goto("https://playwright.dev/");
 
         // Click the get started link.
-        await page.getByRole("link", { name: "Get started" }).click();
+        await page.getByRole("link", { name: "Get startedddd" }).click();
 
         // Expects page to have a heading with the name of Installation.
         await expect(page.getByRole("heading", { name: "Installation" })).toBeVisible();
