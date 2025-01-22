@@ -15,7 +15,7 @@ test.describe("New Todo list", () => {
     test.info().annotations.push({
       type: "bug",
       description:
-        "A good article on this here: https://www.workwithloop.com/blog/a-guide-to-human-readable-reports-in-playwright-with-test-step-expect-annotations#:~:text=To%20add%20annotations%20to%20a,and%20detail%20to%20the%20report.",
+        "A good article on this is here: https://www.workwithloop.com/blog/a-guide-to-human-readable-reports-in-playwright-with-test-step-expect-annotations#:~:text=To%20add%20annotations%20to%20a,and%20detail%20to%20the%20report.",
     });
     // create a new todo locator
     const newTodo = page.getByPlaceholder("What needs to be done?");
