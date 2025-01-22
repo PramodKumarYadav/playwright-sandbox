@@ -84,4 +84,3 @@ You should ignore all .env\* files in .gitignore file so that we do not unintent
 - [All prettier options that can be overriden are here](https://prettier.io/docs/en/options). However note that defaults are good enough and need no further changes except one made in `.prettierrc` file for both practical reasons and demo purposes.
 - [Pre Commit hook for Code formatting](https://prettier.io/docs/en/precommit#option-1-lint-stagedhttpsgithubcomokonetlint-staged). We use option 1; and as recommended in their docs, commit `.husky` directory in git to share with all team members.
 - [Runme](https://docs.runme.dev/getting-started).
-- more...
