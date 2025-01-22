@@ -26,11 +26,11 @@ jobs:
         env:
           ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
         run: |
-          tests="@unit-test"
+          tests=""
           for file in ${ALL_CHANGED_FILES}; do
             filename=$(basename "$file")
             echo "$filename was changed"
-            tests="$tests|$filename"
+            tests="$tests $filename"
           done
           echo "--grep input to send: $tests"
           echo "test_files=$tests"  >> "$GITHUB_OUTPUT"
