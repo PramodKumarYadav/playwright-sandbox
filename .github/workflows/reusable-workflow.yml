@@ -27,6 +27,8 @@ jobs:
           pw-command-to-execute: ${{ inputs.pw-command-to-execute }}
 
   test:
+    # Only run this job if test-load-distribution-json has some tests to run.
+    if: ${{ needs.runwright.outputs.test_load_distribution_json != '{}' }}
     timeout-minutes: 60
     needs: runwright
     runs-on: ubuntu-latest
@@ -108,7 +110,7 @@ jobs:
 
   merge-reports:
     # Merge reports after playwright-tests, even if some shards have failed
-    if: ${{ !cancelled() }}
+    if: ${{ needs.test.result != 'cancelled' && needs.test.result != 'skipped' }}
     needs: [test]
     runs-on: ubuntu-latest
     steps:
