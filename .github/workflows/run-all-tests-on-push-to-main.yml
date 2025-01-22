@@ -9,5 +9,5 @@ jobs:
     uses: ./.github/workflows/reusable-workflow.yml
     with:
       total-run-time-in-mins: 2
-      pw-command-to-execute: "npx playwright test demo-todo-app.spec.ts"
+      pw-command-to-execute: "npx playwright test"
     secrets: inherit
