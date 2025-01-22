@@ -23,8 +23,8 @@ jobs:
         uses: PramodKumarYadav/runwright@main
         id: runwright-action
         with:
-          total-run-time-in-mins: 1
-          pw-command-to-execute: "npx playwright test"
+          total-run-time-in-mins: ${{ inputs.total-run-time-in-mins }}
+          pw-command-to-execute: ${{ inputs.pw-command-to-execute }}
 
   test:
     timeout-minutes: 60
@@ -91,7 +91,7 @@ jobs:
 
               # Run Playwright command if TEST_LIST is not empty
               if [ -n "$TEST_LIST" ]; then
-                  npx playwright test $TEST_LIST --project=$project --reporter=blob --workers=${{ needs.runwright.outputs.recommended_workers }}
+                  ${{ inputs.pw-command-to-execute }} $TEST_LIST --project=$project --reporter=blob --workers=${{ needs.runwright.outputs.recommended_workers }}
                   mv blob-report/* add-all-blob-reports/
               else
                   echo "No tests to run for project: $project"
