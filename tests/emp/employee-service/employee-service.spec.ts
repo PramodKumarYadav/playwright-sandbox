@@ -22,10 +22,11 @@ test.describe("HEAD1-Employee-service", { tag: ["@employee-service"] }, () => {
       test("get the started link is visible on page @employee-service", async ({
         page,
       }) => {
+        test.setTimeout(5000);
         await page.goto("https://playwright.dev/");
 
         // Click the get started link.
-        await page.getByRole("link", { name: "Get startedddd" }).click();
+        await page.getByRole("link", { name: "Get starteddddd" }).click();
 
         // Expects page to have a heading with the name of Installation.
         await expect(page.getByRole("heading", { name: "Installation" })).toBeVisible();
