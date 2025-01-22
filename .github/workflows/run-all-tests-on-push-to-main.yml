@@ -1,0 +1,13 @@
+name: Run all tests on push to main
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  run-all-tests-on-push-to-main-in-2-mins:
+    uses: ./.github/workflows/reusable-workflow.yml
+    with:
+      total-run-time-in-mins: 2
+      pw-command-to-execute: "npx playwright test"
+    secrets: inherit

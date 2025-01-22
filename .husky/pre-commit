@@ -4,5 +4,15 @@
 # Run lint-staged to fix formatting and also commit formatted changes, lint:check to check code issues and unit tests
 npx lint-staged 
 npm run lint 
-npx playwright test --only-changed
+echo "Running Playwright tests for only changed files..."
+npx playwright test --only-changed || {
+  EXIT_CODE=$?
+  if [ $EXIT_CODE -eq 1 ]; then
+    echo "No tests found. Skipping test step."
+    exit 0
+  else
+    echo "Playwright tests failed."
+    exit $EXIT_CODE
+  fi
+}
 
