@@ -3038,11 +3038,5 @@
   "[chromium] › emp/employee-service/employee-service.spec.ts:12:11 › HEAD1-Employee-service › HEAD2-Employee-service, › Employee-service › Has another title Playwright": 509,
   "[webkit] › emp/employee-service/employee-service.spec.ts:12:11 › HEAD1-Employee-service › HEAD2-Employee-service, › Employee-service › Has another title Playwright": 818,
   "[webkit] › emp/employee-service/employee-service.spec.ts:22:11 › HEAD1-Employee-service › HEAD2-Employee-service, › Employee-service › get the started link is visible on page @employee-service": 5007,
-  "[chromium] › emp/employee-service/employee-service.spec.ts:22:11 › HEAD1-Employee-service › HEAD2-Employee-service, › Employee-service › get the started link is visible on page @employee-service": 5008,
-  "[chromium] › demo-todo-app.spec.ts:45:7 › Aa New Todo list › should clear text input field when an item is added": 3605,
-  "[chromium] › demo-todo-app.spec.ts:14:7 › Aa New Todo list › should allow me to add todo items @bug": 3741,
-  "[chromium] › demo-todo-app.spec.ts:58:7 › Aa New Todo list › should append new items to the bottom of the list": 3703,
-  "[webkit] › demo-todo-app.spec.ts:45:7 › Aa New Todo list › should clear text input field when an item is added": 2769,
-  "[webkit] › demo-todo-app.spec.ts:14:7 › Aa New Todo list › should allow me to add todo items @bug": 2946,
-  "[webkit] › demo-todo-app.spec.ts:58:7 › Aa New Todo list › should append new items to the bottom of the list": 3122
+  "[chromium] › emp/employee-service/employee-service.spec.ts:22:11 › HEAD1-Employee-service › HEAD2-Employee-service, › Employee-service › get the started link is visible on page @employee-service": 5008
 }
