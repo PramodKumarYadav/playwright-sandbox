@@ -10,7 +10,7 @@ const TODO_ITEMS = ["buy some cheese", "feed the cat", "book a doctors appointme
 /**
  * Failing this test to test the retry mechanism and get trace in CI
  */
-test.describe("New Todo list", () => {
+test.describe("A New Todo list", () => {
   test("should allow me to add todo items @bug", async ({ page }) => {
     test.info().annotations.push({
       type: "bug",
