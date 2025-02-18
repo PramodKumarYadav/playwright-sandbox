@@ -19,9 +19,9 @@ class CustomReporter {
 
     // Extract browser name, file path, and test path from titlePath
     const project = titlePath[0]; // 'chromium'
-    // For mac/linux: 'emp/employee-service/employee-service.spec.ts'
-    // For windows: 'emp\employee-service\employee-service.spec.ts'
     const filePath = titlePath[1];
+    // For mac/linux filePath: 'emp/employee-service/employee-service.spec.ts'
+    // For windows filePath: 'emp\employee-service\employee-service.spec.ts'
     const normalizedPath = path.normalize(filePath).replace(/\\/g, "/");
     console.log("normalizedPath", normalizedPath);
     const testPath = titlePath.slice(2).join(" › "); // Combine the rest with ' › '
