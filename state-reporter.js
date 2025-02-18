@@ -19,13 +19,17 @@ class CustomReporter {
 
     // Extract browser name, file path, and test path from titlePath
     const project = titlePath[0]; // 'chromium'
-    const filePath = titlePath[1]; // 'emp/employee-service/employee-service.spec.ts'
+    // For mac/linux: 'emp/employee-service/employee-service.spec.ts'
+    // For windows: 'emp\employee-service\employee-service.spec.ts'
+    const filePath = titlePath[1];
+    const normalizedPath = path.normalize(filePath).replace(/\\/g, "/");
+    console.log("normalizedPath", normalizedPath);
     const testPath = titlePath.slice(2).join(" › "); // Combine the rest with ' › '
     const line = test.location.line;
     const column = test.location.column;
 
     // Extract the top-level describe block's text (if available)
-    const listTest = `[${project}] › ${filePath}:${line}:${column} › ${testPath}`;
+    const listTest = `[${project}] › ${normalizedPath}:${line}:${column} › ${testPath}`;
 
     this.testResults.push({
       name: listTest, // Full test path
