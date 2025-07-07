@@ -1,13 +1,18 @@
 name: Sandbox - Run all tests on push to main
 
 on:
-  push:
-    branches: [main]
+  workflow_dispatch:
+    inputs:
+      pw-command-to-execute:
+        description: "Playwright command to execute"
+        required: true
+        default: "npx playwright test"
+        type: string
 
 jobs:
   run-all-tests-on-push-to-main-in-2-mins:
     uses: ./.github/workflows/reusable-workflow-sandbox.yml
     with:
       total-run-time-in-mins: 2
-      pw-command-to-execute: "npx playwright test"
+      pw-command-to-execute: ${{ inputs.pw-command-to-execute }}
     secrets: inherit
