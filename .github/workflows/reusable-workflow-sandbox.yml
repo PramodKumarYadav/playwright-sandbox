@@ -89,9 +89,9 @@ jobs:
             
             # Execute the command and move blob reports
             eval "$PLAYWRIGHT_COMMAND"
-            # if [ -d "blob-report" ]; then
-            #   mv blob-report/* add-all-blob-reports/ 2>/dev/null || true
-            # fi
+            if [ -d "blob-report" ]; then
+              mv blob-report/* add-all-blob-reports/ 2>/dev/null || true
+            fi
           else
             echo "⚠️  No tests assigned to Runner $RUNNER_KEY"
           fi
