@@ -67,6 +67,8 @@ jobs:
         run: npm ci
 
       - name: Run Playwright Tests for Runner ${{ matrix.runner }}
+        env:
+          HOME: /root
         run: |
           # Extract the test-load-distribution-json for the current runner
           # NOTE: Keeping json under single quotes to properly parse json.
