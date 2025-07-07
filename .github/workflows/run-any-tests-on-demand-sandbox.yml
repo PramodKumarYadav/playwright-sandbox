@@ -19,8 +19,11 @@ on:
       fully-parallel:
         description: "Run tests in fully parallel mode"
         required: false
-        default: true
-        type: boolean
+        default: "true"
+        type: choice
+        options:
+          - "true"
+          - "false"
 
 jobs:
   run-tests-on-demand:
