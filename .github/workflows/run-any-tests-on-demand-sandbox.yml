@@ -30,7 +30,6 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       dynamic_matrix: ${{ steps.runwright-action.outputs.dynamic-matrix }}
-      test_load_distribution_json: ${{ steps.runwright-action.outputs.test-load-distribution-json }}
       recommended_workers: ${{ steps.runwright-action.outputs.recommended-workers }}
       parallelism-mode: ${{ steps.runwright-action.outputs.parallelism-mode }}
       playwright-args-per-runner: ${{ steps.runwright-action.outputs.playwright-args-per-runner }}
@@ -44,8 +43,8 @@ jobs:
           fully-parallel: ${{ inputs.fully-parallel }}
 
   test:
-    # Only run this job if test-load-distribution-json has some tests to run.
-    if: ${{ needs.runwright.outputs.test_load_distribution_json != '{}' }}
+    # Only run this job if playwright-args-per-runner has some tests to run.
+    if: ${{ needs.runwright.outputs.playwright-args-per-runner != '{}' }}
     timeout-minutes: 60
     needs: runwright
     runs-on: ubuntu-latest
