@@ -23,6 +23,7 @@ jobs:
       dynamic_matrix: ${{ steps.runwright-action.outputs.dynamic-matrix }}
       test_load_distribution_json: ${{ steps.runwright-action.outputs.test-load-distribution-json }}
       recommended_workers: ${{ steps.runwright-action.outputs.recommended-workers }}
+      parallelism-mode: ${{ steps.runwright-action.outputs.parallelism-mode }}
     steps:
       - name: Get runwright parameters
         uses: PramodKumarYadav/runwright@sequential
