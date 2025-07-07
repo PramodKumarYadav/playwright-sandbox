@@ -7,8 +7,8 @@ on:
       total-run-time-in-mins:
         description: "Total expected run time in minutes"
         required: true
-        default: "2"
-        type: string
+        default: 2
+        type: number
 
       pw-command-to-execute:
         description: "playwright command to run"
@@ -26,7 +26,7 @@ jobs:
   run-tests-on-demand:
     uses: ./.github/workflows/reusable-workflow-sandbox.yml
     with:
-      total-run-time-in-mins: "${{ inputs.total-run-time-in-mins }}"
-      pw-command-to-execute: "${{ inputs.pw-command-to-execute }}"
-      fully-parallel: "${{ inputs.fully-parallel }}"
+      total-run-time-in-mins: ${{ inputs.total-run-time-in-mins }}
+      pw-command-to-execute: ${{ inputs.pw-command-to-execute }}
+      fully-parallel: ${{ inputs.fully-parallel }}
     secrets: inherit
