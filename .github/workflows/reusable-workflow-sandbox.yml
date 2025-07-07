@@ -11,6 +11,11 @@ on:
         required: true
         type: string
 
+      fully-parallel:
+        required: false
+        type: boolean
+        default: true
+
 jobs:
   runwright:
     runs-on: ubuntu-latest

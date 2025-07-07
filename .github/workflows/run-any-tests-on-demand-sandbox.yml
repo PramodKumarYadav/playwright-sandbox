@@ -16,6 +16,12 @@ on:
         default: "npx playwright test --project='chromium'"
         type: string
 
+      fully-parallel:
+        description: "Run tests in fully parallel mode"
+        required: false
+        default: true
+        type: boolean
+
 jobs:
   run-tests-on-demand:
     uses: ./.github/workflows/reusable-workflow-sandbox.yml
