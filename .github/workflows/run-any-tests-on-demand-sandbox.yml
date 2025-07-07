@@ -26,10 +26,121 @@ on:
           - "false"
 
 jobs:
-  run-tests-on-demand:
-    uses: ./.github/workflows/reusable-workflow-sandbox.yml
-    with:
-      total-run-time-in-mins: ${{ inputs.total-run-time-in-mins }}
-      pw-command-to-execute: ${{ inputs.pw-command-to-execute }}
-      fully-parallel: ${{ inputs.fully-parallel }}
-    secrets: inherit
+  runwright:
+    runs-on: ubuntu-latest
+    outputs:
+      dynamic_matrix: ${{ steps.runwright-action.outputs.dynamic-matrix }}
+      test_load_distribution_json: ${{ steps.runwright-action.outputs.test-load-distribution-json }}
+      recommended_workers: ${{ steps.runwright-action.outputs.recommended-workers }}
+      parallelism-mode: ${{ steps.runwright-action.outputs.parallelism-mode }}
+      playwright-args-per-runner: ${{ steps.runwright-action.outputs.playwright-args-per-runner }}
+    steps:
+      - name: Get runwright parameters
+        uses: PramodKumarYadav/runwright@ready-to-use
+        id: runwright-action
+        with:
+          total-run-time-in-mins: ${{ inputs.total-run-time-in-mins }}
+          pw-command-to-execute: ${{ inputs.pw-command-to-execute }}
+          fully-parallel: ${{ inputs.fully-parallel }}
+
+  test:
+    # Only run this job if test-load-distribution-json has some tests to run.
+    if: ${{ needs.runwright.outputs.test_load_distribution_json != '{}' }}
+    timeout-minutes: 60
+    needs: runwright
+    runs-on: ubuntu-latest
+    environment: dev
+    container:
+      image: mcr.microsoft.com/playwright:v1.50.1-jammy
+    strategy:
+      fail-fast: false
+      matrix:
+        runner: ${{ fromJSON(needs.runwright.outputs.dynamic_matrix) }}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Mark Repository as Safe
+        run: git config --global --add safe.directory $GITHUB_WORKSPACE
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install project dependencies
+        run: npm ci
+
+      - name: Install jq to parse JSON in the next step
+        run: apt-get update && apt-get install -y jq
+
+      - name: Run Playwright Tests for Runner ${{ matrix.runner }}
+        env:
+          HOME: /root
+        run: |
+          # Get the ready-to-use Playwright command for this runner
+          PLAYWRIGHT_ARGS_JSON='${{ needs.runwright.outputs.playwright-args-per-runner }}'
+          RUNNER_KEY="${{ matrix.runner }}"
+
+          # Extract the command for current runner
+          PLAYWRIGHT_COMMAND=$(echo "$PLAYWRIGHT_ARGS_JSON" | jq -r --arg key "$RUNNER_KEY" '.[$key]')
+
+          if [ "$PLAYWRIGHT_COMMAND" != "null" ] && [ -n "$PLAYWRIGHT_COMMAND" ]; then
+            echo "🚀 Running Playwright tests for Runner $RUNNER_KEY..."
+            echo "⚙️  Parallelism Mode: ${{ needs.runwright.outputs.parallelism-mode }}"
+            echo "👥 Workers: ${{ needs.runwright.outputs.recommended_workers }}"
+            echo "Command: $PLAYWRIGHT_COMMAND"
+            
+            # Create directory for blob reports
+            mkdir -p add-all-blob-reports
+            
+            # Execute the command and move blob reports
+            eval "$PLAYWRIGHT_COMMAND"
+            if [ -d "blob-report" ]; then
+              mv blob-report/* add-all-blob-reports/ 2>/dev/null || true
+            fi
+          else
+            echo "⚠️  No tests assigned to Runner $RUNNER_KEY"
+          fi
+
+      - name: Upload blob report to GitHub Actions Artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          path: add-all-blob-reports/
+          name: blob-report-${{ matrix.runner }}
+          retention-days: 1
+
+  merge-reports:
+    # Merge reports after playwright-tests, even if some shards have failed
+    if: ${{ needs.test.result != 'cancelled' && needs.test.result != 'skipped' }}
+    needs: [test]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Download blob reports from GitHub Actions Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: all-blob-reports
+          pattern: blob-report-*
+          merge-multiple: true
+
+      - name: Merge into HTML Report
+        run: npx playwright merge-reports --reporter html ./all-blob-reports
+
+      - name: Upload HTML report
+        uses: actions/upload-artifact@v4
+        with:
+          name: html-report--attempt-${{ github.run_attempt }}
+          path: playwright-report
+          retention-days: 14
