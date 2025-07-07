@@ -11,6 +11,11 @@ on:
         required: true
         type: string
 
+      fully-parallel:
+        required: false
+        type: string
+        default: "true"
+
 jobs:
   runwright:
     runs-on: ubuntu-latest
@@ -18,13 +23,15 @@ jobs:
       dynamic_matrix: ${{ steps.runwright-action.outputs.dynamic-matrix }}
       test_load_distribution_json: ${{ steps.runwright-action.outputs.test-load-distribution-json }}
       recommended_workers: ${{ steps.runwright-action.outputs.recommended-workers }}
+      parallelism-mode: ${{ steps.runwright-action.outputs.parallelism-mode }}
     steps:
       - name: Get runwright parameters
-        uses: PramodKumarYadav/runwright@main
+        uses: PramodKumarYadav/runwright@sequential
         id: runwright-action
         with:
           total-run-time-in-mins: ${{ inputs.total-run-time-in-mins }}
           pw-command-to-execute: ${{ inputs.pw-command-to-execute }}
+          fully-parallel: ${{ inputs.fully-parallel }}
 
   test:
     # Only run this job if test-load-distribution-json has some tests to run.
@@ -60,6 +67,8 @@ jobs:
         run: npm ci
 
       - name: Run Playwright Tests for Runner ${{ matrix.runner }}
+        env:
+          HOME: /root
         run: |
           # Extract the test-load-distribution-json for the current runner
           # NOTE: Keeping json under single quotes to properly parse json.

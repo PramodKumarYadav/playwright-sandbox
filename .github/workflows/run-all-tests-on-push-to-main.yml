@@ -10,4 +10,5 @@ jobs:
     with:
       total-run-time-in-mins: 2
       pw-command-to-execute: "npx playwright test"
+      fully-parallel: true
     secrets: inherit

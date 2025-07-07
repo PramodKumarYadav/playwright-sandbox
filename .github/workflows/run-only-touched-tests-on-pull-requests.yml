@@ -41,4 +41,5 @@ jobs:
     with:
       total-run-time-in-mins: 2
       pw-command-to-execute: "npx playwright test ${{needs.touched-test-files.outputs.tests_to_run}} --project=chromium"
+      fully-parallel: true
     secrets: inherit

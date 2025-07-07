@@ -1,4 +1,4 @@
-name: 🔘 Run tests on demand
+name: 🔘 Sandbox - Run tests on demand
 
 on:
   # Allows us to run this workflow manually from the Actions tab
@@ -16,10 +16,20 @@ on:
         default: "npx playwright test --project='chromium'"
         type: string
 
+      fully-parallel:
+        description: "Run tests in fully parallel mode"
+        required: false
+        default: "true"
+        type: choice
+        options:
+          - "true"
+          - "false"
+
 jobs:
   run-tests-on-demand:
     uses: ./.github/workflows/reusable-workflow.yml
     with:
-      total-run-time-in-mins: "${{ inputs.total-run-time-in-mins }}"
-      pw-command-to-execute: "${{ inputs.pw-command-to-execute }}"
+      total-run-time-in-mins: ${{ inputs.total-run-time-in-mins }}
+      pw-command-to-execute: ${{ inputs.pw-command-to-execute }}
+      fully-parallel: ${{ inputs.fully-parallel }}
     secrets: inherit
