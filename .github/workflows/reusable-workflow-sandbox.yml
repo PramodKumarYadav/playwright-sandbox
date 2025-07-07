@@ -20,7 +20,7 @@ jobs:
       recommended_workers: ${{ steps.runwright-action.outputs.recommended-workers }}
     steps:
       - name: Get runwright parameters
-        uses: PramodKumarYadav/runwright@readable
+        uses: PramodKumarYadav/runwright@sequential
         id: runwright-action
         with:
           total-run-time-in-mins: ${{ inputs.total-run-time-in-mins }}
