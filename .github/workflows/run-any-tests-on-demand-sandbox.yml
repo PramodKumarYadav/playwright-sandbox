@@ -1,4 +1,4 @@
-name: 🔘 Run tests on demand
+name: 🔘 Sandbox - Run tests on demand
 
 on:
   # Allows us to run this workflow manually from the Actions tab
