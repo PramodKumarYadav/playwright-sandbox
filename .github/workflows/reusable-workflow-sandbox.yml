@@ -5,7 +5,7 @@ on:
     inputs:
       total-run-time-in-mins:
         required: true
-        type: number
+        type: string
 
       pw-command-to-execute:
         required: true

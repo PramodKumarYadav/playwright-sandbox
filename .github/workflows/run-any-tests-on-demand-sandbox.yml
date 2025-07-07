@@ -7,8 +7,8 @@ on:
       total-run-time-in-mins:
         description: "Total expected run time in minutes"
         required: true
-        default: 2
-        type: number
+        default: "2"
+        type: string
 
       pw-command-to-execute:
         description: "playwright command to run"
