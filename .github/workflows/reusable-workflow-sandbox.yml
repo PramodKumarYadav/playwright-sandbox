@@ -5,7 +5,7 @@ on:
     inputs:
       total-run-time-in-mins:
         required: true
-        type: string
+        type: number
 
       pw-command-to-execute:
         required: true
@@ -30,6 +30,7 @@ jobs:
         with:
           total-run-time-in-mins: ${{ inputs.total-run-time-in-mins }}
           pw-command-to-execute: ${{ inputs.pw-command-to-execute }}
+          fully-parallel: ${{ inputs.fully-parallel }}
 
   test:
     # Only run this job if test-load-distribution-json has some tests to run.
