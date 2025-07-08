@@ -102,7 +102,7 @@ jobs:
 
               # Run Playwright command if TEST_LIST is not empty
               if [ -n "$TEST_LIST" ]; then
-                  ${{ inputs.pw-command-to-execute }} $TEST_LIST --project=$project --reporter=blob --workers=${{ needs.runwright.outputs.recommended_workers }}
+                  npx playwright test $TEST_LIST --project=$project --reporter=blob --workers=${{ needs.runwright.outputs.recommended_workers }}
                   mv blob-report/* add-all-blob-reports/
               else
                   echo "No tests to run for project: $project"
