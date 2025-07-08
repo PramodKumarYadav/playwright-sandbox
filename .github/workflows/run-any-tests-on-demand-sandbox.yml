@@ -97,7 +97,7 @@ jobs:
             mkdir -p add-all-blob-reports
             
             # Execute the command and move blob reports
-            eval "npx playwright test $PLAYWRIGHT_COMMAND"
+            npx playwright test $PLAYWRIGHT_COMMAND
             if [ -d "blob-report" ]; then
               mv blob-report/* add-all-blob-reports/ 2>/dev/null || true
             fi
