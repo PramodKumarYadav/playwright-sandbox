@@ -30,12 +30,12 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       dynamic_matrix: ${{ steps.runwright-action.outputs.dynamic-matrix }}
+      test_load_distribution_json: ${{ steps.runwright-action.outputs.test-load-distribution-json }}
       recommended_workers: ${{ steps.runwright-action.outputs.recommended-workers }}
       parallelism-mode: ${{ steps.runwright-action.outputs.parallelism-mode }}
-      playwright-args-per-runner: ${{ steps.runwright-action.outputs.playwright-args-per-runner }}
     steps:
       - name: Get runwright parameters
-        uses: PramodKumarYadav/runwright@ready-to-use
+        uses: PramodKumarYadav/runwright@v2.0.0
         id: runwright-action
         with:
           total-run-time-in-mins: ${{ inputs.total-run-time-in-mins }}
@@ -43,8 +43,8 @@ jobs:
           fully-parallel: ${{ inputs.fully-parallel }}
 
   test:
-    # Only run this job if playwright-args-per-runner has some tests to run.
-    if: ${{ needs.runwright.outputs.playwright-args-per-runner != '{}' }}
+    # Only run this job if test-load-distribution-json has some tests to run.
+    if: ${{ needs.runwright.outputs.test_load_distribution_json != '{}' }}
     timeout-minutes: 60
     needs: runwright
     runs-on: ubuntu-latest
@@ -61,6 +61,9 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Install jq
+        run: apt-get update && apt-get install -y jq
+
       - name: Mark Repository as Safe
         run: git config --global --add safe.directory $GITHUB_WORKSPACE
 
@@ -72,38 +75,50 @@ jobs:
       - name: Install project dependencies
         run: npm ci
 
-      - name: Install jq to parse JSON in the next step
-        run: apt-get update && apt-get install -y jq
-
       - name: Run Playwright Tests for Runner ${{ matrix.runner }}
         env:
           HOME: /root
-        shell: bash
         run: |
-          # Get the ready-to-use Playwright command for this runner
-          PLAYWRIGHT_ARGS_JSON='${{ needs.runwright.outputs.playwright-args-per-runner }}'
+          # Extract the test-load-distribution-json for the current runner
+          # NOTE: Keeping json under single quotes to properly parse json.
+          TEST_LOAD_JSON='${{ needs.runwright.outputs.test_load_distribution_json }}' 
+          echo "$TEST_LOAD_JSON" | jq .
+
           RUNNER_KEY="${{ matrix.runner }}"
+          echo "$RUNNER_KEY"
 
-          # Extract the command for current runner
-          PLAYWRIGHT_COMMAND=$(echo "$PLAYWRIGHT_ARGS_JSON" | jq -r --arg key "$RUNNER_KEY" '.[$key] | @sh')
+          echo "Print tests"
+          RUNNER_TESTS=$(echo "$TEST_LOAD_JSON" | jq -r --arg key "$RUNNER_KEY" '.[$key]')
+          echo "$RUNNER_TESTS"
 
-          if [ "$PLAYWRIGHT_COMMAND" != "null" ] && [ -n "$PLAYWRIGHT_COMMAND" ]; then
-            echo "🚀 Running Playwright tests for Runner $RUNNER_KEY..."
-            echo "⚙️  Parallelism Mode: ${{ needs.runwright.outputs.parallelism-mode }}"
-            echo "👥 Workers: ${{ needs.runwright.outputs.recommended_workers }}"
-            echo "Command: $PLAYWRIGHT_COMMAND"
-            
-            # Create directory for blob reports
-            mkdir -p add-all-blob-reports
-            
-            # Execute the command and move blob reports
-            npx playwright test $PLAYWRIGHT_COMMAND --reporter=blob 
-            if [ -d "blob-report" ]; then
-              mv blob-report/* add-all-blob-reports/ 2>/dev/null || true
-            fi
-          else
-            echo "⚠️  No tests assigned to Runner $RUNNER_KEY"
-          fi
+          # Iterate over projects in the runner
+          echo "Print projects"
+          PROJECTS=$(echo $RUNNER_TESTS | jq -r 'keys[]')
+          echo "$PROJECTS"
+
+          # NOTE: playwright run command overwrites the blob-report directory. Thus we need to 
+          # create a new directory to store the blob reports from all project runs.
+          mkdir -p add-all-blob-reports
+
+          echo "Iterate over projects"
+          for project in $PROJECTS; do
+              # Get the test list for the current project
+              TEST_LIST=$(echo $RUNNER_TESTS | jq -r --arg project "$project" '.[$project] | join(" ")')
+
+              # Debugging outputs
+              echo "parallelism-mode is: ${{ needs.runwright.outputs.parallelism-mode }}"
+              echo "Running tests for project: $project"
+              echo "Tests: $TEST_LIST"
+
+              # Run Playwright command if TEST_LIST is not empty
+              if [ -n "$TEST_LIST" ]; then
+                  # NOTE: We use npx playwright test and not pw-command-to-execute because that would multiply the scope of tests to run when projects are explicitly passed.
+                  npx playwright test $TEST_LIST --project=$project --reporter=blob --workers=${{ needs.runwright.outputs.recommended_workers }}
+                  mv blob-report/* add-all-blob-reports/
+              else
+                  echo "No tests to run for project: $project"
+              fi
+          done
 
       - name: Upload blob report to GitHub Actions Artifacts
         if: always()
