@@ -102,6 +102,7 @@ jobs:
 
               # Run Playwright command if TEST_LIST is not empty
               if [ -n "$TEST_LIST" ]; then
+                  # NOTE: We use npx playwright test and not pw-command-to-execute because that would multiply the scope of tests to run when projects are explicitly passed.
                   npx playwright test $TEST_LIST --project=$project --reporter=blob --workers=${{ needs.runwright.outputs.recommended_workers }}
                   mv blob-report/* add-all-blob-reports/
               else
