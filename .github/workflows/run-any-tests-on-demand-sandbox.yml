@@ -85,7 +85,7 @@ jobs:
           RUNNER_KEY="${{ matrix.runner }}"
 
           # Extract the command for current runner
-          PLAYWRIGHT_COMMAND=$(echo "$PLAYWRIGHT_ARGS_JSON" | jq -r --arg key "$RUNNER_KEY" '.[$key]')
+          PLAYWRIGHT_COMMAND=$(echo "$PLAYWRIGHT_ARGS_JSON" | jq -r --arg key "$RUNNER_KEY" '.[$key] | @sh')
 
           if [ "$PLAYWRIGHT_COMMAND" != "null" ] && [ -n "$PLAYWRIGHT_COMMAND" ]; then
             echo "🚀 Running Playwright tests for Runner $RUNNER_KEY..."
