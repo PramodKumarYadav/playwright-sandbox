@@ -103,6 +103,7 @@ jobs:
           else
             echo "⚠️  No tests assigned to Runner $RUNNER_KEY"
           fi
+        shell: bash
 
       - name: Upload blob report to GitHub Actions Artifacts
         if: always()
