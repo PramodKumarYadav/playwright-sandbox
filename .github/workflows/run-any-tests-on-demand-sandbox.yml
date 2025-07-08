@@ -78,6 +78,7 @@ jobs:
       - name: Run Playwright Tests for Runner ${{ matrix.runner }}
         env:
           HOME: /root
+        shell: bash
         run: |
           # Get the ready-to-use Playwright command for this runner
           PLAYWRIGHT_ARGS_JSON='${{ needs.runwright.outputs.playwright-args-per-runner }}'
