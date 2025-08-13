@@ -28,8 +28,8 @@ on:
       max-allowed-runners:
         description: "Maximum allowed runners"
         required: false
-        default: "20"
-        type: string
+        default: 20
+        type: number
 
 jobs:
   runwright:
