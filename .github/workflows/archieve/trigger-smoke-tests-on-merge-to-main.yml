@@ -1,8 +1,8 @@
 # Trigger smoke tests on merge to main in dev
 name: ☁️ Trigger smoke tests
 on:
-  # push:
-  #   branches: [main]
+  push:
+    branches: [main]
 
   # Allows us to run this workflow manually from the Actions tab
   workflow_dispatch:

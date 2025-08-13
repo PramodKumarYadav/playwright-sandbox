@@ -2,8 +2,8 @@
 name: 🆕 Trigger Unit and new Tests
 
 on:
-  # pull_request:
-  #   branches: [main]
+  pull_request:
+    branches: [main]
 
   # Allows us to run this workflow manually from the Actions tab
   workflow_dispatch:

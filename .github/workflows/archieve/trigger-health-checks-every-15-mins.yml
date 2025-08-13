@@ -2,11 +2,11 @@
 name: 💓 Trigger Health Checks
 
 on:
-  # schedule:
-  # * is a special character in YAML so you have to quote this string
-  # To set a new schedule use this: https://crontab.guru/
-  # To get the right time for your timezone use : https://www.worldtimebuddy.com/
-  # - cron: "*/15 * * * MON-FRI" # “At every 15 minutes on every week day. ”
+  schedule:
+    # * is a special character in YAML so you have to quote this string
+    # To set a new schedule use this: https://crontab.guru/
+    # To get the right time for your timezone use : https://www.worldtimebuddy.com/
+    - cron: "*/15 * * * MON-FRI" # “At every 15 minutes on every week day. ”
 
   # Allows us to run this workflow manually from the Actions tab
   workflow_dispatch:
