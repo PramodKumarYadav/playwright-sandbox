@@ -38,4 +38,5 @@ jobs:
       total-run-time-in-mins: ${{ inputs.total-run-time-in-mins }}
       pw-command-to-execute: ${{ inputs.pw-command-to-execute }}
       fully-parallel: ${{ inputs.fully-parallel }}
+      max-allowed-runners: ${{ inputs.max-allowed-runners }}
     secrets: inherit
