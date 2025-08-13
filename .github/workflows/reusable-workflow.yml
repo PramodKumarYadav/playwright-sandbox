@@ -16,10 +16,6 @@ on:
         type: string
         default: "true"
 
-      max-allowed-runners:
-        required: false
-        type: string
-
 jobs:
   runwright:
     runs-on: ubuntu-latest
@@ -48,7 +44,7 @@ jobs:
       image: mcr.microsoft.com/playwright:v1.50.1-jammy
     strategy:
       fail-fast: false
-      max-parallel: ${{ inputs.max-allowed-runners }}
+      max-parallel: 20
       matrix:
         runner: ${{ fromJSON(needs.runwright.outputs.dynamic_matrix) }}
     steps:
