@@ -17,7 +17,6 @@ on:
         default: "true"
 
       max-allowed-runners:
-        description: "Maximum allowed runners"
         required: false
         default: 20
         type: number
