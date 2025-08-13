@@ -18,7 +18,6 @@ on:
 
       max-allowed-runners:
         required: false
-        default: 20
         type: number
 
 jobs:
