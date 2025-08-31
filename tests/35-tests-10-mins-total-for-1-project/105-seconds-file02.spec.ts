@@ -1,6 +1,6 @@
 /* eslint-disable playwright/no-wait-for-timeout */
 import { test, expect } from "@playwright/test";
-import { runLoadTest } from "../../utils/load-test-helpers";
+import { runLoadTest } from "@utils/load-test-helpers";
 
 // Individual test functions for better distribution across runners
 test("Wait for 5 seconds", async ({ page }) => {

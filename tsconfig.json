@@ -1,1 +1,9 @@
-{}
+{
+  "compilerOptions": {
+    // ...existing options...
+    "baseUrl": ".", // This sets the root directory for imports
+    "paths": {
+      "@utils/*": ["utils/*"], // This allows you to use '@utils/...' as an import
+    },
+  },
+}
