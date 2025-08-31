@@ -1,0 +1,42 @@
+name: e2e-affected-tags
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  detect:
+    runs-on: ubuntu-latest
+    outputs:
+      tags: ${{ steps.aff.outputs.tags }}
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - run: git fetch origin ${{ github.base_ref || 'main' }} --depth=1
+      - id: aff
+        run: echo "tags=$(node ./affected-apps.js | tr -d '\n')" >> $GITHUB_OUTPUT
+
+  test:
+    needs: detect
+    if: ${{ needs.detect.outputs.tags != '[]' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+
+      - uses: actions/setup-node@v4
+        with: { node-version: 20, cache: "npm" }
+
+      - run: npm ci
+
+      - run: npx playwright install --with-deps
+
+      - name: Run only affected tags
+        env:
+          TAGS_JSON: ${{ needs.detect.outputs.tags }}
+        run: |
+          REGEX=$(node -e "const a=process.env.TAGS_JSON?JSON.parse(process.env.TAGS_JSON):[]; console.log(a.map(t=>`(?=.*${t})`).join('|')||'@never');")
+          echo "Grep: $REGEX"
+          npx playwright test --grep "$REGEX"

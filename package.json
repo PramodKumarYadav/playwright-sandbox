@@ -28,31 +28,31 @@
   "author": "Power Tester",
   "license": "ISC",
   "devDependencies": {
-    "@azure/microsoft-playwright-testing": "^1.0.0-beta.3",
-    "@playwright/test": "^1.50.1",
-    "@types/dotenv": "^8.2.0",
-    "@types/node": "^20.11.10",
-    "@typescript-eslint/eslint-plugin": "^6.21.0",
-    "@typescript-eslint/parser": "^6.20.0",
-    "browserstack-node-sdk": "^1.22.0",
-    "eslint": "^8.56.0",
-    "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-playwright": "^1.5.2",
+    "@azure/microsoft-playwright-testing": "^1.0.0-beta.7",
+    "@playwright/test": "^1.55.0",
+    "@types/dotenv": "^8.2.3",
+    "@types/node": "^24.3.0",
+    "@typescript-eslint/eslint-plugin": "^8.41.0",
+    "@typescript-eslint/parser": "^8.41.0",
+    "browserstack-node-sdk": "^1.42.0",
+    "eslint": "^9.34.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-playwright": "^2.2.2",
     "husky": "^9.1.7",
-    "lint-staged": "^15.2.0",
+    "lint-staged": "^16.1.5",
     "playwright-cli-select": "^1.0.6",
-    "prettier": "3.2.4",
-    "typescript": "^5.3.3"
+    "prettier": "3.6.2",
+    "typescript": "^5.9.2"
   },
   "lint-staged": {
     "*.{ts,js,json,yml,css,md}": "npx prettier --write ."
   },
   "dependencies": {
-    "@axe-core/playwright": "^4.9.1",
-    "config": "^3.3.11",
-    "cross-env": "^7.0.3",
-    "dotenv": "^16.4.1",
-    "pg": "^8.11.3",
+    "@axe-core/playwright": "^4.10.2",
+    "config": "^4.1.1",
+    "cross-env": "^10.0.0",
+    "dotenv": "^17.2.1",
+    "pg": "^8.16.3",
     "playwright-sandbox": "file:"
   }
 }
