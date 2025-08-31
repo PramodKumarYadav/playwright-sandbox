@@ -1,4 +1,8 @@
 #!/usr/bin/env node
+import fs from "fs";
+import path from "path";
+import { execSync } from "child_process";
+
 /**
  * Auto "affected apps" → Playwright tags for non-Nx monorepos.
  * - Scans apps/* and libs/* for package.json (workspace packages)
@@ -14,10 +18,6 @@
  *   - Internal libs live under libs/* (can depend on each other)
  *   - package.json "name" is present for each internal package
  */
-
-import fs from "fs";
-import path from "path";
-import { execSync } from "child_process";
 
 const BASE_REF = process.env.BASE_REF || "origin/main";
 const ROOT = process.cwd();

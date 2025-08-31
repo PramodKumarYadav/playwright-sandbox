@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "My Playground for learning Playwright",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "test": "npx playwright test",
     "test:headed": "npx playwright test --headed",
