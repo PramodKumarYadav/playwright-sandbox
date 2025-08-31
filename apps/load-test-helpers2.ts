@@ -21,4 +21,5 @@ export async function runLoadTest(page: Page, duration: number): Promise<void> {
   const elapsedTime = Date.now() - startTime;
   expect(elapsedTime).toBeGreaterThanOrEqual(duration * 1000);
   console.log(`Load test completed in ${elapsedTime / 1000} seconds`);
+  console.log(`Load test helpers from apps/load-test-helpers2.ts`);
 }
