@@ -70,7 +70,6 @@ export default [
       ...typescript.configs.recommended.rules,
       ...playwright.configs.recommended.rules,
       "@typescript-eslint/no-floating-promises": "error",
-      "playwright/missing-playwright-await": "off",
       "@typescript-eslint/ban-types": "off", // Disable this rule as it's causing issues
       "@typescript-eslint/no-unsafe-function-type": "off", // Disable this rule to allow Function type
       "no-import-assign": "off", // Allow import assignment for testing purposes
