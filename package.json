@@ -1,6 +1,7 @@
 {
   "name": "playwright-sandbox",
   "version": "1.0.0",
+  "type": "module",
   "description": "My Playground for learning Playwright",
   "main": "index.js",
   "scripts": {
@@ -29,6 +30,7 @@
   "license": "ISC",
   "devDependencies": {
     "@azure/microsoft-playwright-testing": "^1.0.0-beta.7",
+    "@eslint/js": "^9.36.0",
     "@playwright/test": "^1.55.0",
     "@types/dotenv": "^8.2.3",
     "@types/node": "^24.3.0",
@@ -45,7 +47,8 @@
     "typescript": "^5.9.2"
   },
   "lint-staged": {
-    "*.{ts,js,json,yml,css,md}": "npx prettier --write ."
+    "*.{ts,js,json,yml,css,md}": "npx prettier --write",
+    "*.{ts,js}": "npx eslint --fix"
   },
   "dependencies": {
     "@axe-core/playwright": "^4.10.2",

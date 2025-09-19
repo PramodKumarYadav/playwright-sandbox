@@ -4,7 +4,7 @@
     "baseUrl": ".", // This sets the root directory for imports
     "paths": {
       "@utils/*": ["utils/*"], // This allows you to use '@utils/...' as an import
-      "@apps/*": ["apps/*"], // This allows you to use '@apps/...' as an import
-    },
-  },
+      "@apps/*": ["apps/*"] // This allows you to use '@apps/...' as an import
+    }
+  }
 }
