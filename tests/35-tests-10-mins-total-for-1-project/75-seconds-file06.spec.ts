@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test";
 import { runLoadTest } from "@apps/load-test-helpers2";
 
 // Individual test functions for better distribution across runners
-test("Wait for 5 seconds", async ({ page }) => {
+test("Wait for 5 seconds @beta", async ({ page }) => {
   await runLoadTest(page, 5);
   // Additional assertion to satisfy linter
   expect(true).toBe(true);
