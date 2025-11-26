@@ -54,4 +54,4 @@ class CustomReporter {
   }
 }
 
-module.exports = CustomReporter;
+export default CustomReporter;

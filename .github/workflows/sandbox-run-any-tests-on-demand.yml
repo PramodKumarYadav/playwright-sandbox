@@ -50,7 +50,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: dev
     container:
-      image: mcr.microsoft.com/playwright:v1.55.0
+      image: mcr.microsoft.com/playwright:v1.57.0
     strategy:
       fail-fast: false
       max-parallel: 20
