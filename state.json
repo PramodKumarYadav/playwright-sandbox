@@ -103,5 +103,8 @@
   "[firefox] › 35-tests-10-mins-total-for-1-project/75-seconds-file06.spec.ts:17:1 › Wait for 15 seconds": 16094,
   "[firefox] › 35-tests-10-mins-total-for-1-project/105-seconds-file05.spec.ts:36:1 › Wait for 30 seconds": 31094,
   "[firefox] › 35-tests-10-mins-total-for-1-project/75-seconds-file06.spec.ts:23:1 › Wait for 20 seconds": 23138,
-  "[firefox] › 35-tests-10-mins-total-for-1-project/75-seconds-file06.spec.ts:29:1 › Wait for 25 seconds": 26120
+  "[firefox] › 35-tests-10-mins-total-for-1-project/75-seconds-file06.spec.ts:29:1 › Wait for 25 seconds": 26120,
+  "[webkit] › seed.spec.ts:5:3 › Test group › seed": 5905,
+  "[firefox] › seed.spec.ts:5:3 › Test group › seed": 7249,
+  "[chromium] › seed.spec.ts:5:3 › Test group › seed": 8377
 }
