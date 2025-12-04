@@ -14,7 +14,7 @@
     "lint:fix": "npx eslint . --fix",
     "prettier": "npx prettier --check .",
     "prettier:fix": "npx prettier --write .",
-    "prepare": "husky install",
+    "prepare": "husky",
     "lint-staged": "lint-staged --allow-empty",
     "test-browserstack": "npx browserstack-node-sdk playwright test",
     "test:headed-browserstack": "npx browserstack-node-sdk playwright test --headed",
