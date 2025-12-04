@@ -1,4 +1,4 @@
-# Run lint-staged to fix formatting and also commit formatted changes, lint:check to check code issues and unit tests
+# Run lint-staged to fix formatting and also stage formatted changes, lint:check to check code issues and unit tests
 npm run lint-staged 
 
 echo "Running Playwright tests for only changed files..."

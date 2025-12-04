@@ -48,8 +48,11 @@
     "typescript": "^5.9.2"
   },
   "lint-staged": {
-    "*.{ts,js,json,yml,css,md}": "npx prettier --write",
-    "*.{ts,js}": "npx eslint --fix"
+    "*.{json,yml,css,md}": "npx prettier --write",
+    "*.{ts,js}": [
+      "npx eslint --fix",
+      "npx prettier --write"
+    ]
   },
   "dependencies": {
     "@axe-core/playwright": "^4.10.2",
