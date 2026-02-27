@@ -6,6 +6,7 @@ export class TodoPage {
 
   /**
    * @param page
+   * Parameter properties (like page) are assigned at the very start of the constructor (before field initializers run), which is why field initializers like todoInput can safely reference this.page - even if they appear earlier in the source code.
    * when you use constructor(private readonly page: Page), the page property is
    * immediately initialized when a new instance of the class is created,
    * before any other code in the constructor is executed.
