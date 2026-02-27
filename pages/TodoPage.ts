@@ -12,7 +12,11 @@ export class TodoPage {
    * At the time todoInput is initialized, this.page has already been initialized,
    * so there's no "used before initialization" error.
    */
-  constructor(private readonly page: Page) {}
+  constructor(private readonly page: Page) {
+    // TypeScript automatically generates this property:
+    // private readonly page: Page;
+    // and assigns it: this.page = page;
+  }
   /**
    * FIRST THOUGHT WAS TO USE THIS APPROACH:
    * If a locator field is used more than once, extract it as a property of the page object.
